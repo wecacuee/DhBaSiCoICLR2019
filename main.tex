@@ -97,7 +97,7 @@
 % The file aaai.sty is the style file for AAAI Press 
 % proceedings, working notes, and technical reports.
 %
-\title{Floyd warshall deep reinforcement learning}
+\title{Floyd-Warshall Deep Reinforcement Learning}
 \author{}
 \maketitle
 \begin{abstract}
@@ -124,29 +124,76 @@ plan over graph over higher ranges.
 \end{abstract}
 
 
-%\section{ Introduction}
-%Navigation is the problem of finding shortest path from one point to another.
-%Multi-goal navigation is the problem of reaching a sequence of goals in a specified order.
-%Multi-goal navigation requires one to remember the map to accomplish the goal faster.
-%If we include exploration as a part of navigation, then we need to explore what paths are
-%available from one point to another and we also need to find the shortest path among those
-%paths and the paths formed by joining those paths.
-%The space can be thought of an unexplored graph with nodes as the states $\st \in \St$ and
-%transition probabilities $P(\st_{t+1} | \st_t, a_t)$ as weighted edges.
-%The problem of constructing a representation of the map is building a representation that
-%explores the connectivity between different states by taking different actions.
-%How much does change the shortest path from any point to any other point?
-%Do we need to capture the details that we are within visible region from a point?
-%Assuming that we have a closed loop system at the time of execution, we can execute shortest
-%path planning at a higher detail in the visible area.
-%We only need to capture the shortest path on a resolution coarser than visible area.
-%How much area is visible are when there are no walls?
-%Dependent upon the size of the robot, we need to know the
-%minimum size of obstacle that will obstruct the robot.
-%Depending upon the resolution of obstacle detection, what is the maximum distance at which we
-%can detect the minimum sized obstacle that will obstruct the robot.
-%Let us call this distance as local planning threshold $\lpt$.
-%In an open space there should be a node at least in a radius of $\lpt$.
+\section{ Introduction}
+
+The navigation problem in mobile robotics, oftentimes encompassed as the
+fields of localization, mapping and path-planning, has seen significant
+progress in recent decades with the rise of autonomous cars almost upon
+us. Traditionally, tasks of navigation are split up in to two main
+steps: \emph{exploration}, wherein the mobile robot explores an
+environment and builds up a map-like data structure of that environment
+and \emph{exploitation}, where the robot performs some kind of a task
+efficiently while exploiting information from the previously stored
+data-structure. While massively succesful, in the current era of
+navigation based mobile robots, both the steps of \emph{exploration} and
+\emph{exploitation} require significant environment-specific
+hand-engineered design to work reliably.
+
+A different approach has arisen as an offshoot of the recently massively
+succesful paradigm of deep reinforcement learning (DRL). In DRL for
+navigation, the completion of the navigation-based objective task within
+an environment is grounded with a positive reward. To achieve this
+reward, DRL agents have been shown to be able to learn to chain together
+navigation derived local actions so as to best maximize the
+reinforcement learning objective.  This arisal of navigational abilities
+via the long-term planning based chaining together of actions that arise
+from agents trained via DRL has several potentional benefits. In their
+ultimate form, agents thus trained may perhaps more efficiently utilize
+environmental information to perform navigational tasks without the need
+for complicated, environment-specific map-like data-structures that
+dominates most of the navigation based mobile robotics literature.
+
+Unfortunately, the very absence of any form of \emph{exploration} and
+\emph{exploitation} has been shown to be detrimental to navigational
+abilities of DRL agents when compared metrically with the abilities of
+traditional SLAM derived agents.  \cite{dhiman2018critical}. Inspired by
+the need to integrate these steps in a differentiable manner within the
+workings of these DRL agents, we introduce a mechanism for integrating
+the Floyd-Warshall algorithm within the learning of the state-value
+function of a DRL agent. 
+
+
+Navigation is the problem of finding shortest path from one point to another.
+Multi-goal navigation is the problem of reaching a sequence of goals in a specified order.
+Multi-goal navigation requires one to remember the map to accomplish the goal faster.
+\textbf{Mention dataset specific examples here such as recent work in
+following natural language instructions via DRL in hyper-realistic
+environments etc}
+If we include exploration as a part of navigation, then we need to explore what paths are
+available from one point to another and we also need to find the shortest path among those
+paths and the paths formed by joining those paths.
+The space can be thought of an unexplored graph with nodes as the states $\st \in \St$ and
+transition probabilities $P(\st_{t+1} | \st_t, a_t)$ as weighted edges.
+The problem of constructing a representation of the map is building a representation that
+explores the connectivity between different states by taking different actions.
+How much does change the shortest path from any point to any other point?
+Do we need to capture the details that we are within visible region from a point?
+Assuming that we have a closed loop system at the time of execution, we can execute shortest
+path planning at a higher detail in the visible area.
+We only need to capture the shortest path on a resolution coarser than visible area.
+How much area is visible are when there are no walls?
+Dependent upon the size of the robot, we need to know the
+minimum size of obstacle that will obstruct the robot.
+Depending upon the resolution of obstacle detection, what is the maximum distance at which we
+can detect the minimum sized obstacle that will obstruct the robot.
+Let us call this distance as local planning threshold $\lpt$.
+In an open space there should be a node at least in a radius of $\lpt$.
+
+In our experiments, we showcase how our modifications (FWDRL) improves
+the abilities of agents across a variety of navigation based tasks
+ranging from simple goal-directed navigation in video-game environments
+to natural language instruction following in hyper-realistic ones. We
+open source all our code on github.  
 
 \subsection{Claims}
 \begin{itemize} \item
