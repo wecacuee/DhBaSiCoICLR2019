@@ -7,6 +7,7 @@
 \usepackage{courier}  %Required
 \usepackage{url}  %Required
 \usepackage{graphicx}  %Required
+\usepackage{amsmath}
 \frenchspacing  %Required
 \setlength{\pdfpagewidth}{8.5in}  %Required
 \setlength{\pdfpageheight}{11in}  %Required
@@ -44,6 +45,7 @@
 \def\TransObs{T_c}
 \def\Rew{R}
 \def\rew{r}
+\newcommand{\vect}[1]{\mathbf{#1}}
 \def\rewards{\vect{r}_{1:t}}
 \def\rewt{\rew_t}
 \def\rewtp{\rew_{t-1}}
@@ -85,6 +87,8 @@
 
 \newcommand{\fwcost}{F}
 \newcommand{\qValue}{Q}
+\newcommand{\prew}{\Upsilon}
+\newcommand{\epiT}{T}
 \newcommand{\vma}{\alpha_\Value}
 \newcommand{\qma}{\alpha_\qValue}
 \newcommand{\prewma}{\alpha_\prew}
@@ -97,104 +101,96 @@
 % The file aaai.sty is the style file for AAAI Press 
 % proceedings, working notes, and technical reports.
 %
-\title{Floyd-Warshall Deep Reinforcement Learning}
-\author{}
+\title{Floyd-Warshall RL: Combining model-free and model-based algorithms}
+\author{Vikas Dhiman}
 \maketitle
 \begin{abstract}
-Problem: Multi-goal navigation without mapping
-\\
-Model free deep reinforcement learning is to learn $\policy(\act | \st)$ or $\Q(\st, \act)$
-\\
-Model based deep reinforcement learning is to learn $\trans(\stn| \stt, \actt)$ and $\V(\st)$.
-and planning on a graph to get the shortest path.
-Note that $\trans(.)$ is highly sparse and keeping a list of non-zero $\stn$ is much better than
-keeping all the value of $\trans(.)$ for all $\stn \in \St$.
-\\
-Floyd-Warshall deep reinforcement learning is to generalize model based DRL to
-directly learn the $\fw(\stj|\sti, \acti)$ which is the cost of reaching state $\stj$
-starting from $\sti$ when the first action taken is $\acti$.
-If we directly try to learn $\fw(.)$ we are likely to get conflicting results
-that do not obey FW identity
-$\fw(\stj|\sti, \acti) = \min_{\stk} \min_\act \fw(\stj|\stk, \act) + \fw(\stk | \sti, \acti)$
-It is expected that since we will be visiting nearby states more often, so the
-$\fw(.)$ will be consistent over small distances but will grow inconsistent over
-large distances.
-We can draw few samples from $\fw(.)$ to check for it's inconsistencies and then 
-plan over graph over higher ranges.
+The Reinforcement learning algorithms are classified on the basis of whether
+the state-transition model is learned explicitly into \emph{model-based}
+and \emph{model-free} algorithms.
+%
+The \emph{model-free} algorithms like Q-learning and policy gradients are easier to learn in cases when model is more complex than the policy.
+However, model-free algorithms are harder to transfer in cases when the reward function changes while the state-transition model remains the same.
+The \emph{model-based} algorithms learn the state-transition model explicitly hence making it
+easier to separate the environment transition from the reward distribution.
+However, model-based algorithms require an additional planning step on the model dynamics
+which make it expensive to compute the policy.
+%
+We propose a novel algorithm that is based on a combination of model-free and model-based approaches.
+Due to it's similarity to Floyd-Warshall algorithm in path-planning on graphs, we call
+it Floyd-Warshall reinforcement learning (FWRL).
+We show (DONE) that FWRL transfers the knowledge about the environment when the reward location is dynamic as compared to the model-based Q-learning algorithm.
+We hypothesize (TODO: show with our experiments) that FWRL meets the ground between model-free and model-based algorithms by being model-free in the more frequently visited regions while being model-based in less visited paths.
 \end{abstract}
 
 
 \section{ Introduction}
 
-The navigation problem in mobile robotics, oftentimes encompassed as the
-fields of localization, mapping and path-planning, has seen significant
-progress in recent decades with the rise of autonomous cars almost upon
-us. Traditionally, tasks of navigation are split up in to two main
-steps: \emph{exploration}, wherein the mobile robot explores an
-environment and builds up a map-like data structure of that environment
-and \emph{exploitation}, where the robot performs some kind of a task
-efficiently while exploiting information from the previously stored
-data-structure. While massively succesful, in the current era of
-navigation based mobile robots, both the steps of \emph{exploration} and
-\emph{exploitation} require significant environment-specific
-hand-engineered design to work reliably.
+The Reinforcement learning algorithms are classified on the basis of whether
+the state-transition model is learned explicitly into \emph{model-based}
+and \emph{model-free} algorithms.
+%
+The \emph{model-free} algorithms like Q-learning and policy gradients are easier to learn in cases when model is more complex than the policy.
+However, model-free algorithms are harder to transfer in cases when the reward function changes while the state-transition model remains the same.
+One example of such a problem is traveling salesman problem.
+Although classical traveling salesman problem is a posed as a planning problem where the space has already been explored, however it is not hard to recognize that someone has to create a map of the map through exploration and sometimes it has to be the agent them-self.
+In such a scenario, the traveling salesman has a dynamic reward with a static map that needs to be
+explored.
+The model-free approach fails to generalize to new rewards in these scenarios, because of the conflated representation of environment model and resulting reward.
+In spite of these limitations, model-free approaches have been applied to multi-goal navigation
+scenarios with considerable success \cite{Piotr Mirowski's multi-landmark paper, Universal planning functions}.
+However, all these methods depend upon exploring the entire space being a candidate goal space.
+Not only model-free approaches are sample inefficient, multi-goal navigation problem exaggerates this problem.
 
-A different approach has arisen as an offshoot of the recently massively
-succesful paradigm of deep reinforcement learning (DRL). In DRL for
-navigation, the completion of the navigation-based objective task within
-an environment is grounded with a positive reward. To achieve this
-reward, DRL agents have been shown to be able to learn to chain together
-navigation derived local actions so as to best maximize the
-reinforcement learning objective.  This arisal of navigational abilities
-via the long-term planning based chaining together of actions that arise
-from agents trained via DRL has several potentional benefits. In their
-ultimate form, agents thus trained may perhaps more efficiently utilize
-environmental information to perform navigational tasks without the need
-for complicated, environment-specific map-like data-structures that
-dominates most of the navigation based mobile robotics literature.
+The \emph{model-based} algorithms learn the state-transition model explicitly hence making it
+easier to separate the environment transition from the reward distribution. Also model-based
+algorithms are known to be sample efficient than model-free algorithms especially in cases when
+the state-transition model is translation invariant in the environment. 
+However, model-based algorithms require an additional planning step on the model dynamics
+which make it expensive to compute the policy on the fly.
 
-Unfortunately, the very absence of any form of \emph{exploration} and
-\emph{exploitation} has been shown to be detrimental to navigational
-abilities of DRL agents when compared metrically with the abilities of
-traditional SLAM derived agents.  \cite{dhiman2018critical}. Inspired by
-the need to integrate these steps in a differentiable manner within the
-workings of these DRL agents, we introduce a mechanism for integrating
-the Floyd-Warshall algorithm within the learning of the state-value
-function of a DRL agent. 
+Taking inspiration from the Floyd-Warshall algorithm in graph-based path planning domain, we propose Floyd-Warshall reinforcement learning (FWRL) algorithm that combines the benefits of both
+model-based and model-free methods.
+We define the Floyd-Warshall function $F$ between two states $\state_i$, $\state_j$ as the maximum reward that can be gained by following a between a two states.
+\begin{align}
+F(\state_i, \act_i, \state_j) = \E_{\pi}\left[
+\sum_{k \in p_{ij} } \discount^{t} r_{k} \right.\left| \state_i, \act_i, \state_j\Biggr],
+\end{align}
+where $p_{ij}$ is a possible path from $\state_i, \act_i$ to $\state_j$ while following policy $\pi$. For an optimal policy $
+F^*(\state_i, \act_i, \state_j) = \max_{p_{ij}} \sum_{k \in p_{ij} } \discount^{t} r_{k}$.
+
+In terms of Q-function and Value function the Floyd-Warshall function has the following relationships
+\begin{align}
+V(\state_i) &= \E_{\act}[Q(\state_i, \act)|\state_i] \\
+F(\state_i, \act_i, \state_j) &= V(\state_j) - Q(\state_i, \act_i).
+\end{align}
+For the optimal policy the expectation is replaced by the max operator, that is $F^*(\state_i, \act_i, \state_j) = \max_{\act} Q^*(\state_j, \act) - Q^*(\state_i, \act_i)$.
+
+Due to this formulation, the optimal Floyd-Warshall function should satisfy the transitive property
+\begin{align}
+F^*(\state_i, \act_i, \state_j) = \max_{\state_k} F^*(\state_i, \act_i, \state_k)
++ \max_{\act_k}F^*(\state_k, \act_k, \state_j)
+\label{eq:transitive-fw}
+\end{align}
+
+The advantage of this formulation is that as soon as the goal state $\state_g$, the Q-function and
+hence the policy can be estimated from $Q(\state, \act) = F(\state, \act, \state_g) + \Rew(\state_g)$.
+This might look as a model-free approach because the transition model is not being learned explicitly but $F(\state_i, \act_i, \state_j)$ is also a proxy for transition model as the transition probability can be estimated  from $F$ given $\state_i$, $\state_j$ are neighbors.
+\begin{align}
+T(\state_j | \state_i, \act_i) = \frac{\exp(-F(\state_i, \act_i, \state_j))}
+{\sum_{\state_k \in N(\state_i)} \exp(-F(\state_i, \act_i, \state_k))}
+\end{align}
+
+In fact, the above expression is the natural generalization of transition probability over the entire state space starting with $\state_i, \act_i$ state-action pair.
+
+Hence, the Floyd-Warshall function acts a common representation between model-free Q-function and
+model-based Transition function. In fact, it can be checked for optimality by checking for
+transitive constraint \label{eq:transitive-fw}.
+
+In our experiments, we show how our approach is better than both model-free Q-learning and model-based approaches. We also show how our approach can be switch between either approaches depending upon traversal experience in the state space.
 
 
-Navigation is the problem of finding shortest path from one point to another.
-Multi-goal navigation is the problem of reaching a sequence of goals in a specified order.
-Multi-goal navigation requires one to remember the map to accomplish the goal faster.
-\textbf{Mention dataset specific examples here such as recent work in
-following natural language instructions via DRL in hyper-realistic
-environments etc}
-If we include exploration as a part of navigation, then we need to explore what paths are
-available from one point to another and we also need to find the shortest path among those
-paths and the paths formed by joining those paths.
-The space can be thought of an unexplored graph with nodes as the states $\st \in \St$ and
-transition probabilities $P(\st_{t+1} | \st_t, a_t)$ as weighted edges.
-The problem of constructing a representation of the map is building a representation that
-explores the connectivity between different states by taking different actions.
-How much does change the shortest path from any point to any other point?
-Do we need to capture the details that we are within visible region from a point?
-Assuming that we have a closed loop system at the time of execution, we can execute shortest
-path planning at a higher detail in the visible area.
-We only need to capture the shortest path on a resolution coarser than visible area.
-How much area is visible are when there are no walls?
-Dependent upon the size of the robot, we need to know the
-minimum size of obstacle that will obstruct the robot.
-Depending upon the resolution of obstacle detection, what is the maximum distance at which we
-can detect the minimum sized obstacle that will obstruct the robot.
-Let us call this distance as local planning threshold $\lpt$.
-In an open space there should be a node at least in a radius of $\lpt$.
-
-In our experiments, we showcase how our modifications (FWDRL) improves
-the abilities of agents across a variety of navigation based tasks
-ranging from simple goal-directed navigation in video-game environments
-to natural language instruction following in hyper-realistic ones. We
-open source all our code on github.  
-
+\section{Related work}
 \subsection{Claims}
 \begin{itemize} \item
 Using Floyd Warshall value function leads to better generalization in case of static maps and
@@ -281,6 +277,7 @@ Deepmind Lab: Set up a random goal static maze scenario, compare with normal Q-l
 Atari games: Compare performance with normal Q-learning.
 Analyze games in which FW does better.
 Show that those games have dynamic goals rather than static.
+\end{itemize}
 
 \bibliography{main_filtered,main}
 \bibliographystyle{aaai}
