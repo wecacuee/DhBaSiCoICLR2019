@@ -8,6 +8,7 @@
 \usepackage{url}  %Required
 \usepackage{graphicx}  %Required
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \frenchspacing  %Required
 \setlength{\pdfpagewidth}{8.5in}  %Required
 \setlength{\pdfpageheight}{11in}  %Required
@@ -138,7 +139,7 @@ In such a scenario, the traveling salesman has a dynamic reward with a static ma
 explored.
 The model-free approach fails to generalize to new rewards in these scenarios, because of the conflated representation of environment model and resulting reward.
 In spite of these limitations, model-free approaches have been applied to multi-goal navigation
-scenarios with considerable success \cite{Piotr Mirowski's multi-landmark paper, Universal planning functions}.
+scenarios with considerable success \cite{mirowski2018learning,schaul2015universal}.
 However, all these methods depend upon exploring the entire space being a candidate goal space.
 Not only model-free approaches are sample inefficient, multi-goal navigation problem exaggerates this problem.
 
@@ -154,7 +155,7 @@ model-based and model-free methods.
 We define the Floyd-Warshall function $F$ between two states $\state_i$, $\state_j$ as the maximum reward that can be gained by following a between a two states.
 \begin{align}
 F(\state_i, \act_i, \state_j) = \E_{\pi}\left[
-\sum_{k \in p_{ij} } \discount^{t} r_{k} \right.\left| \state_i, \act_i, \state_j\Biggr],
+\sum_{k \in p_{ij} } \discount^{t} r_{k} \right| \state_i, \act_i, \state_j\Biggr],
 \end{align}
 where $p_{ij}$ is a possible path from $\state_i, \act_i$ to $\state_j$ while following policy $\pi$. For an optimal policy $
 F^*(\state_i, \act_i, \state_j) = \max_{p_{ij}} \sum_{k \in p_{ij} } \discount^{t} r_{k}$.
@@ -279,7 +280,8 @@ Atari games: Compare performance with normal Q-learning.
 Analyze games in which FW does better.
 Show that those games have dynamic goals rather than static.
 \end{itemize}
-
+\def\localbib{/home/dhiman/wrk/group-bib/shared.bib}
+\IfFileExists{\localbib}{\bibliography{\localbib}}{}
 \bibliography{main_filtered,main}
 \bibliographystyle{aaai}
 \end{document}
