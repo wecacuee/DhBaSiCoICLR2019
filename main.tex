@@ -176,25 +176,23 @@ F^*(\state_i, \act_i, \state_j) = \max_{\state_k} F^*(\state_i, \act_i, \state_k
 
 The advantage of this formulation is that as soon as the goal state $\state_g$, the Q-function and
 hence the policy can be estimated from $Q(\state, \act) = F(\state, \act, \state_g) + \Rew(\state_g)$.
-This might look as a model-free approach because the transition model is not being learned explicitly but $F(\state_i, \act_i, \state_j)$ is also a proxy for transition model as the transition probability can be estimated  from $F$ given $\state_i$, $\state_j$ are neighbors.
-\begin{align}
-T(\state_j | \state_i, \act_i) = \frac{\exp(-F(\state_i, \act_i, \state_j))}
-{\sum_{\state_k \in N(\state_i)} \exp(-F(\state_i, \act_i, \state_k))}
-\end{align}
-
-In fact, the above expression is the natural generalization of transition probability over the entire state space starting with $\state_i, \act_i$ state-action pair.
-
-Hence, the Floyd-Warshall function acts a common representation between model-free Q-function and
-model-based Transition function. In fact, it can be checked for optimality by checking for
-transitive constraint \label{eq:transitive-fw}.
 
 In our experiments, we show how our approach is better than both model-free Q-learning and model-based approaches. We also show how our approach can be switch between either approaches depending upon traversal experience in the state space.
 
 It is clear that another equivalent way of transferring knowledge from Q-function is to keep it's derivative and transfer that instead of transferring the Q-function.
 
 \section{Related work}
+
+\subsection{Universal value function approximators and derivatives}
+\cite{schaul2015universal} proposed an architecture and a matrix factorization based algorithm for faster learning of UVFA (Universal value function approximators).
+
+\cite{pong2018temporal} propose temporal difference models that estimate goal directed Q function for a specific kind of reward function, in particular the distance from the goal and in contrast with limited temporal horizon.
+They do not use the transitive property of goal directed value functions.
+
 \subsection{Claims}
 \begin{itemize} \item
+Using FW is better than Q function in terms of generalizing to dynamic goals, static maps.
+\item 
 Using Floyd Warshall value function leads to better generalization in case of static maps and
 random goals.
 \item
