@@ -1,0 +1,25 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Andrychowicz and
+  Kurach}{2016}]{andrychowicz2016learning}
+Andrychowicz, M., and Kurach, K.
+\newblock 2016.
+\newblock Learning efficient algorithms with hierarchical attentive memory.
+\newblock {\em arXiv preprint arXiv:1602.03218}.
+
+\bibitem[\protect\citeauthoryear{Pong \bgroup et al\mbox.\egroup
+  }{2018}]{pong2018temporal}
+Pong, V.; Gu, S.; Dalal, M.; and Levine, S.
+\newblock 2018.
+\newblock Temporal difference models: Model-free deep rl for model-based
+  control.
+\newblock {\em arXiv preprint arXiv:1802.09081}.
+
+\bibitem[\protect\citeauthoryear{Schaul \bgroup et al\mbox.\egroup
+  }{2015}]{schaul2015universal}
+Schaul, T.; Horgan, D.; Gregor, K.; and Silver, D.
+\newblock 2015.
+\newblock Universal value function approximators.
+\newblock In {\em International Conference on Machine Learning},  1312--1320.
+
+\end{thebibliography}
