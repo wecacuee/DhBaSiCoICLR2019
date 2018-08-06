@@ -1,0 +1,311 @@
+\def\year{2019}\relax
+%File: formatting-instruction.tex
+\documentclass[letterpaper]{article} %DO NOT CHANGE THIS
+\usepackage{aaai18}  %Required
+\usepackage{times}  %Required
+\usepackage{helvet}  %Required
+\usepackage{courier}  %Required
+\usepackage{url}  %Required
+\usepackage{graphicx}  %Required
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\frenchspacing  %Required
+\setlength{\pdfpagewidth}{8.5in}  %Required
+\setlength{\pdfpageheight}{11in}  %Required
+%PDF Info Is Required:
+  \pdfinfo{
+/Title (2018 Formatting Instructions for Authors Using LaTeX)
+/Author (AAAI Press Staff)}
+\setcounter{secnumdepth}{0}  
+
+\usepackage[ruled,vlined]{algorithm2e}
+
+\def\state{s}
+\def\statet{\state_t}
+\def\statetp{\state_{t-1}}
+\def\statehist{\state_{1:t-1}}
+\def\statetn{\state_{t+1}}
+\def\obs{\meas}
+\def\obst{\obs_t}
+\def\act{a}
+\def\actt{\act_t}
+\def\acttp{\act_{t-1}}
+\def\acttn{\act_{t+1}}
+\def\Obs{\mathcal{O}}
+\def\ObsEnc{\Phi_o}
+\def\ObsProb{P_o}
+\def\ObsFunc{C}
+\def\ObsFuncFull{\ObsFunc(\statet, \actt) \rightarrow \obst}
+\def\ObsFuncInv{\ObsFunc^{-1}}
+\def\ObsFuncInvFull{\ObsFuncInv(\obst, \statetp, \actt) \rightarrow \statet}
+\def\State{\mathcal{S}}
+\def\Action{\mathcal{A}}
+\def\TransP{P_{T}}
+\def\Trans{T}
+\def\TransFull{\Trans(\statet, \actt) \rightarrow \statetn}
+\def\TransObs{T_c}
+\def\Rew{R}
+\def\rew{r}
+\newcommand{\vect}[1]{\mathbf{#1}}
+\def\rewards{\vect{r}_{1:t}}
+\def\rewt{\rew_t}
+\def\rewtp{\rew_{t-1}}
+\def\rewtn{\rew_{t+1}}
+\def\RewFull{\Rew(\statet, \actt) \rightarrow \rewtn}
+\def\TransObsFull{\TransObs(\statet, \obst, \actt, \rewt; \theta_T) \rightarrow \statetn}
+\def\Value{V}
+\def\pit{\pi_t}
+\def\piDef{\pi(\acttn|\statet, \obst, \actt, \rewt; \theta_\pi) \rightarrow \pit(\acttn ; \theta_\pi)}
+\def\Valuet{\Value_t}
+\def\ValueDef{\Value(\statet, \obst, \actt, \rewt; \theta_\Value) \rightarrow \Valuet(\theta_\Value)}
+\def\R{\mathbb{R}}
+\def\E{\mathbb{E}}
+\newcommand{\meas}{z}
+\newcommand{\measurements}{\vect{\meas}_{1:t}}
+\newcommand{\meast}[1][t]{\meas_{#1}}
+\newcommand{\param}{\theta}
+\newcommand{\policy}{\chi}
+\newcommand{\graph}{G}
+\newcommand{\vtces}{V}
+\newcommand{\edges}{E}
+\newcommand{\state}[2]{\mathbf{s}^{#1}(#2)}
+\newcommand{\egos}[1][t]{\state{c}{#1}}
+\newcommand{\st}{\state}
+\newcommand{\stn}{\st_{t+1}}
+\newcommand{\stt}{\st_t}
+\newcommand{\stk}{\st_k}
+\newcommand{\stj}{\st_j}
+\newcommand{\sti}{\st_i}
+\newcommand{\St}{\mathcal{S}}
+\newcommand{\Act}{\mathcal{A}}
+\newcommand{\acti}{\act_i}
+\newcommand{\actt}{\act_t}
+\newcommand{\lpt}{\delta}
+\newcommand{\trans}{P_T}
+\newcommand{\Q}{\qValue}
+\newcommand{\V}{V}
+\newcommand{\fw}{\fwcost}
+
+\newcommand{\fwcost}{F}
+\newcommand{\qValue}{Q}
+\newcommand{\prew}{\Upsilon}
+\newcommand{\epiT}{T}
+\newcommand{\vma}{\alpha_\Value}
+\newcommand{\qma}{\alpha_\qValue}
+\newcommand{\prewma}{\alpha_\prew}
+\newcommand{\fwma}{\alpha_\fwcost}
+\newcommand{\maxValueBeam}{\vect{\state}_{\Value:\text{max}(m)}}
+\newcommand{\nil}{\emptyset}
+\newcommand{\discount}{\gamma}
+\newcommand{\minedgecost}{\fwcost_0}
+\begin{document}
+% The file aaai.sty is the style file for AAAI Press 
+% proceedings, working notes, and technical reports.
+%
+\title{Floyd-Warshall RL: Combining model-free and model-based algorithms}
+\author{Vikas Dhiman}
+\maketitle
+\begin{abstract}
+
+Reinforcement learning algorithms are often broadly classified along the
+lines of being \emph{model-based} or \emph{model-free}. In
+\emph{model-based} RL, a model of an agent's environment is explicitly
+learned. For a given observed state, the agent learns to predict future
+states and subsequent rewards based on actions that it can undertake and 
+this information is in
+turned used to discover a policy that maximizes expected future reward. 
+In contrast, \emph{model-free} RL learns such optimal policies are
+learned without any requirement of environment modelling. 
+
+the discovery of a policy that maximizes expected
+future reward is performed via each agent's learning of a model of it's
+environment. Given its current state an agents learns to predict the
+effect of its actions on the environment and uses this information to
+learn the optimal action at every point. 
+
+\emph{model-free} or \emph{model-based}. In the
+
+
+Reinforcement learning algorithms can broadly be classified in terms of
+being \emph{model-free} or \emph{model-based}. In \emph{model-free}
+algorithms, such as Q-learning and policy gradients, 
+    
+The Reinforcement learning algorithms are classified on the basis of whether
+the state-transition model is learned explicitly into \emph{model-based}
+and \emph{model-free} algorithms.
+%
+The \emph{model-free} algorithms like Q-learning and policy gradients are easier to learn in cases when model is more complex than the policy.
+However, model-free algorithms are harder to transfer in cases when the reward function changes while the state-transition model remains the same.
+The \emph{model-based} algorithms learn the state-transition model explicitly hence making it
+easier to separate the environment transition from the reward distribution.
+However, model-based algorithms require an additional planning step on the model dynamics
+which make it expensive to compute the policy.
+%
+We propose a novel algorithm that is based on a combination of model-free and model-based approaches.
+Due to it's similarity to Floyd-Warshall algorithm in path-planning on graphs, we call
+it Floyd-Warshall reinforcement learning (FWRL).
+We show (DONE) that FWRL transfers the knowledge about the environment when the reward location is dynamic as compared to the model-based Q-learning algorithm.
+We hypothesize (TODO: show with our experiments) that FWRL meets the ground between model-free and model-based algorithms by being model-free in the more frequently visited regions while being model-based in less visited paths.
+\end{abstract}
+
+
+\section{ Introduction}
+
+The Reinforcement learning algorithms are classified on the basis of whether
+the state-transition model is learned explicitly into \emph{model-based}
+and \emph{model-free} algorithms.
+%
+The \emph{model-free} algorithms like Q-learning and policy gradients are easier to learn in cases when model is more complex than the policy.
+However, model-free algorithms are harder to transfer in cases when the reward function changes while the state-transition model remains the same.
+One example of such a problem is traveling salesman problem.
+Although classical traveling salesman problem is a posed as a planning problem where the space has already been explored, however it is not hard to recognize that someone has to create a map of the map through exploration and sometimes it has to be the agent them-self.
+In such a scenario, the traveling salesman has a dynamic reward with a static map that needs to be
+explored.
+The model-free approach fails to generalize to new rewards in these scenarios, because of the conflated representation of environment model and resulting reward.
+In spite of these limitations, model-free approaches have been applied to multi-goal navigation
+scenarios with considerable success \cite{mirowski2018learning,schaul2015universal}.
+However, all these methods depend upon exploring the entire space being a candidate goal space.
+Not only model-free approaches are sample inefficient, multi-goal navigation problem exaggerates this problem.
+
+The \emph{model-based} algorithms learn the state-transition model explicitly hence making it
+easier to separate the environment transition from the reward distribution. Also model-based
+algorithms are known to be sample efficient than model-free algorithms especially in cases when
+the state-transition model is translation invariant in the environment. 
+However, model-based algorithms require an additional planning step on the model dynamics
+which make it expensive to compute the policy on the fly.
+
+Taking inspiration from the Floyd-Warshall algorithm in graph-based path planning domain, we propose Floyd-Warshall reinforcement learning (FWRL) algorithm that combines the benefits of both
+model-based and model-free methods.
+We define the Floyd-Warshall function $F$ between two states $\state_i$, $\state_j$ as the maximum reward that can be gained by following a between a two states.
+\begin{align}
+F(\state_i, \act_i, \state_j) = \E_{\pi}\left[
+\sum_{k \in p_{ij} } \discount^{t} r_{k} \right| \state_i, \act_i, \state_j\Biggr],
+\end{align}
+where $p_{ij}$ is a possible path from $\state_i, \act_i$ to $\state_j$ while following policy $\pi$. For an optimal policy $
+F^*(\state_i, \act_i, \state_j) = \max_{p_{ij}} \sum_{k \in p_{ij} } \discount^{t} r_{k}$.
+
+In terms of Q-function and Value function the Floyd-Warshall function has the following relationships
+\begin{align}
+V(\state_i) &= \E_{\act}[Q(\state_i, \act)|\state_i] \\
+F(\state_i, \act_i, \state_j) &= V(\state_j) - Q(\state_i, \act_i).
+\end{align}
+For the optimal policy the expectation is replaced by the max operator, that is $F^*(\state_i, \act_i, \state_j) = \max_{\act} Q^*(\state_j, \act) - Q^*(\state_i, \act_i)$.
+
+Due to this formulation, the optimal Floyd-Warshall function should satisfy the transitive property
+\begin{align}
+F^*(\state_i, \act_i, \state_j) = \max_{\state_k} F^*(\state_i, \act_i, \state_k)
++ \max_{\act_k}F^*(\state_k, \act_k, \state_j)
+\label{eq:transitive-fw}
+\end{align}
+
+The advantage of this formulation is that as soon as the goal state $\state_g$, the Q-function and
+hence the policy can be estimated from $Q(\state, \act) = F(\state, \act, \state_g) + \Rew(\state_g)$.
+This might look as a model-free approach because the transition model is not being learned explicitly but $F(\state_i, \act_i, \state_j)$ is also a proxy for transition model as the transition probability can be estimated  from $F$ given $\state_i$, $\state_j$ are neighbors.
+\begin{align}
+T(\state_j | \state_i, \act_i) = \frac{\exp(-F(\state_i, \act_i, \state_j))}
+{\sum_{\state_k \in N(\state_i)} \exp(-F(\state_i, \act_i, \state_k))}
+\end{align}
+
+In fact, the above expression is the natural generalization of transition probability over the entire state space starting with $\state_i, \act_i$ state-action pair.
+
+Hence, the Floyd-Warshall function acts a common representation between model-free Q-function and
+model-based Transition function. In fact, it can be checked for optimality by checking for
+transitive constraint \label{eq:transitive-fw}.
+
+In our experiments, we show how our approach is better than both model-free Q-learning and model-based approaches. We also show how our approach can be switch between either approaches depending upon traversal experience in the state space.
+
+It is clear that another equivalent way of transferring knowledge from Q-function is to keep it's derivative and transfer that instead of transferring the Q-function.
+
+\section{Related work}
+\subsection{Claims}
+\begin{itemize} \item
+Using Floyd Warshall value function leads to better generalization in case of static maps and
+random goals.
+\item
+Hypothesis: Multi-goal navigation is more common than we think. Does FW algo improves performance in attari games.
+\end{itemize}
+
+\section{Related work}
+\subsection{Navigation with mapping}
+ (1) CMP from Saurabh Gupta: is metric, might not working in continuous spaces.
+ (2) Semi-parameteric Topological mapping: is not end to end.
+ (3) Neural Map: Is actually not mapping
+
+\subsection{Model free DRL }
+does not generalize to multi-goal environments.
+
+\subsection{Model based DRL}
+Needs more exploration.
+Find the paper that shows that Model based DRL can actually compete with Model free DRL as long as it models uncertainty.
+
+\subsection{Multi-goal navigation based papers}
+Mirowski 2017, 2018: No one shot map learning, does not generalizes to new maps.
+
+
+\section{Method}
+
+See Alg~\ref{alg:floyd-warshall-small}
+Over simplified. Ignoring the cost of going through the entire state space.
+    \begin{algorithm}
+      \KwData{Graph $\graph_0 = (\vtces, \edges)$\;}
+      Initialize $\fwcost(\state_i, \act_i, \state_j; \param_{\fwcost}) = 100$ \;
+      Initialize $\qValue(\state_i,\act_i; \param_{\qValue}) = 1$ \;
+      Initialize $\vma = 0.1$, $\prewma = 0.9$ \;
+      Let minimum path cost $\minedgecost = 0.05$ \;
+      Observe $\meas_0$ from environment \;
+      $\state_0 = \ObsEnc(\meas_0; \param_E)$ \;
+      \For{$t \leftarrow 1$ \KwTo $\epiT$}{
+        Take action $\act_{t-1}$\;
+        Observe $\meas_t$, $\rew_t$\;
+        Encode state $\state_t = \ObsEnc(\measurements; \param_E)$\;
+        \tcc{Initialize new FW values}
+        $\fwcost(\state, \act, \state_{t})
+        = \min \{
+               \fwcost(\state, \act, \state_t),
+                \fwcost(\state, \act, \state_{t-1}) + \minedgecost
+            \}
+        \qquad \forall \state \in \State, \act \in \Action$ \;
+        \tcc{Q-Value update}
+        $\qValue(\state_{t-1}, \act_{t-1}) = (1-\qma) (\rew_t + \discount \max_{\act_k}\qValue(\state_t, \act_k)) + \qma \qValue(\state_{t-1}, \act_{t-1})$\;
+        \If{$\state_t$ is visited the first time}{
+            \For{$(\state_i, \state_k, \act_k) \in (\State \times \State \times \Action)$}{
+                \tcc{Run the Floyd Warshall update}
+                $\fwcost(\state_k, \act_k, \state_i) =
+                \min \{
+                    \fwcost(\state_k, \act_k, \state_i),
+                    \fwcost(\state_k, \act_k, \state_t) + \min_{\act \in \Action}\fwcost(\state_t, \act, \state_i)
+                \}$
+                \;
+
+                $\qValue(\state_k, \act_k) = \max \{
+                        \qValue(\state_k, \act_k),
+                        \max_{\act} \qValue(\state_i, \act) - \fwcost(\state_k, \act_k, \state_i)
+                        \}$
+                    \;
+
+            }
+        }
+      }
+      \KwResult{To follow the shortest path $\state_i$ to $\state_j$, follow the
+        neighbors with highest $\qValue$\;
+        $\policy(\state_k) = \arg \max_{\act_k \in \Action} \qValue(\state_k, \act_k)$\;
+      }
+      \caption{\small How to solve small windy grid world with randomized goals?}
+      \label{alg:floyd-warshall-small}
+  \end{algorithm}
+
+\section{Experiments}
+\begin{itemize}\item
+Grid world: Set up a random goal static maze scenario, compare with normal Q-learning.
+\item
+Deepmind Lab: Set up a random goal static maze scenario, compare with normal Q-learning. 
+\item
+Atari games: Compare performance with normal Q-learning.
+Analyze games in which FW does better.
+Show that those games have dynamic goals rather than static.
+\end{itemize}
+\def\localbib{/home/dhiman/wrk/group-bib/shared.bib}
+\IfFileExists{\localbib}{\bibliography{\localbib}}{}
+\bibliography{main_filtered,main}
+\bibliographystyle{aaai}
+\end{document}

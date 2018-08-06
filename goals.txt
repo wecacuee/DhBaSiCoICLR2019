@@ -1,0 +1,6 @@
+- Finish Vikas rewrite
+    * all of it
+
+- Reorient the journal article
+    * introduction for sure
+    * maybe preliminary evaluations
