@@ -9,16 +9,16 @@
 \usepackage{graphicx}  %Required
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{natbib}
+\usepackage{xcolor}
 \frenchspacing  %Required
 \setlength{\pdfpagewidth}{8.5in}  %Required
 \setlength{\pdfpageheight}{11in}  %Required
 %PDF Info Is Required:
-  \pdfinfo{
-/Title (2018 Formatting Instructions for Authors Using LaTeX)
-/Author (AAAI Press Staff)}
 \setcounter{secnumdepth}{0}  
 
 \usepackage[ruled,vlined]{algorithm2e}
+\newcommand{\TODO}[1]{{\color{red}TODO: {#1}}}
 
 \def\state{s}
 \def\statet{\state_t}
@@ -68,8 +68,6 @@
 \newcommand{\graph}{G}
 \newcommand{\vtces}{V}
 \newcommand{\edges}{E}
-\newcommand{\state}[2]{\mathbf{s}^{#1}(#2)}
-\newcommand{\egos}[1][t]{\state{c}{#1}}
 \newcommand{\st}{\state}
 \newcommand{\stn}{\st_{t+1}}
 \newcommand{\stt}{\st_t}
@@ -79,7 +77,6 @@
 \newcommand{\St}{\mathcal{S}}
 \newcommand{\Act}{\mathcal{A}}
 \newcommand{\acti}{\act_i}
-\newcommand{\actt}{\act_t}
 \newcommand{\lpt}{\delta}
 \newcommand{\trans}{P_T}
 \newcommand{\Q}{\qValue}
@@ -98,12 +95,16 @@
 \newcommand{\nil}{\emptyset}
 \newcommand{\discount}{\gamma}
 \newcommand{\minedgecost}{\fwcost_0}
-\begin{document}
 % The file aaai.sty is the style file for AAAI Press 
 % proceedings, working notes, and technical reports.
 %
 \title{Floyd-Warshall RL: Combining model-free and model-based algorithms}
 \author{Vikas Dhiman}
+\pdfinfo{
+/Title ()
+/Author ()}
+\begin{document}
+
 \maketitle
 \begin{abstract}
 The Reinforcement learning algorithms are classified on the basis of whether
@@ -120,8 +121,8 @@ which make it expensive to compute the policy.
 We propose a novel algorithm that is based on a combination of model-free and model-based approaches.
 Due to it's similarity to Floyd-Warshall algorithm in path-planning on graphs, we call
 it Floyd-Warshall reinforcement learning (FWRL).
-We show (DONE) that FWRL transfers the knowledge about the environment when the reward location is dynamic as compared to the model-based Q-learning algorithm.
-We hypothesize (TODO: show with our experiments) that FWRL meets the ground between model-free and model-based algorithms by being model-free in the more frequently visited regions while being model-based in less visited paths.
+We show that FWRL transfers the knowledge about the environment when the reward location is dynamic as compared to the model-based Q-learning algorithm.
+We show (\TODO{fill in the results when exp done}) that FWRL meets the ground between model-free and model-based algorithms by being model-free in the more frequently visited regions while being model-based in less visited paths.
 \end{abstract}
 
 
@@ -139,7 +140,7 @@ In such a scenario, the traveling salesman has a dynamic reward with a static ma
 explored.
 The model-free approach fails to generalize to new rewards in these scenarios, because of the conflated representation of environment model and resulting reward.
 In spite of these limitations, model-free approaches have been applied to multi-goal navigation
-scenarios with considerable success \cite{mirowski2018learning,schaul2015universal}.
+scenarios with considerable success \cite{mirowski2018learning}.
 However, all these methods depend upon exploring the entire space being a candidate goal space.
 Not only model-free approaches are sample inefficient, multi-goal navigation problem exaggerates this problem.
 
@@ -149,16 +150,27 @@ algorithms are known to be sample efficient than model-free algorithms especiall
 the state-transition model is translation invariant in the environment. 
 However, model-based algorithms require an additional planning step on the model dynamics
 which make it expensive to compute the policy on the fly.
+Although model-based algorithms fail to find an optimal policy, because small errors in models can add up and lead to wrong prediction over larger state spaces. 
 
-Taking inspiration from the Floyd-Warshall algorithm in graph-based path planning domain, we propose Floyd-Warshall reinforcement learning (FWRL) algorithm that combines the benefits of both
-model-based and model-free methods.
-We define the Floyd-Warshall function $F$ between two states $\state_i$, $\state_j$ as the maximum reward that can be gained by following a between a two states.
+Taking inspiration from the Floyd-Warshall algorithm in graph-based path planning domain,
+we propose Floyd-Warshall reinforcement learning (FWRL) algorithm that combines the
+benefits of both model-based and model-free methods.
+We define the Floyd-Warshall function $F$ for a goal state $\state_j$ starting from a
+state-action pair $\state_i$, $\act_i$
+as the expected reward through all possible paths $p_{ij}$ between the starting and
+destination state.
+%
+\begin{multline}
+F(\state_j | \state_i, \act_k) \\
+= \E_{p_{ij} \sim \pi}\left[
+\sum_{\state, \act \in p_{ij} } \discount^{t} r(\state, \act) \right| p_{ij} = (\state_i, \act_k, \dots, \state_J) \Biggr] \, .
+\end{multline}
+%
+For an optimal policy
 \begin{align}
-F(\state_i, \act_i, \state_j) = \E_{\pi}\left[
-\sum_{k \in p_{ij} } \discount^{t} r_{k} \right| \state_i, \act_i, \state_j\Biggr],
+F^*(\state_i, \act_i, \state_j) =
+\max_{p_{ij}} \sum_{k \in p_{ij} } \discount^{t} r(\state_k, \act_k) .
 \end{align}
-where $p_{ij}$ is a possible path from $\state_i, \act_i$ to $\state_j$ while following policy $\pi$. For an optimal policy $
-F^*(\state_i, \act_i, \state_j) = \max_{p_{ij}} \sum_{k \in p_{ij} } \discount^{t} r_{k}$.
 
 In terms of Q-function and Value function the Floyd-Warshall function has the following relationships
 \begin{align}
@@ -169,37 +181,49 @@ For the optimal policy the expectation is replaced by the max operator, that is 
 
 Due to this formulation, the optimal Floyd-Warshall function should satisfy the transitive property
 \begin{align}
-F^*(\state_i, \act_i, \state_j) = \max_{\state_k} F^*(\state_i, \act_i, \state_k)
-+ \max_{\act_k}F^*(\state_k, \act_k, \state_j)
+F^*(\state_i, \act_i, \state_j) = \max_{\state_k} \left[ F^*(\state_i, \act_i, \state_k)
++ \max_{\act_k}F^*(\state_k, \act_k, \state_j) \right]
 \label{eq:transitive-fw}
 \end{align}
 
 The advantage of this formulation is that as soon as the goal state $\state_g$, the Q-function and
 hence the policy can be estimated from $Q(\state, \act) = F(\state, \act, \state_g) + \Rew(\state_g)$.
+Even if the path between two states has not been ever traversed, the value function
+can be computed using the transitive property in Eq~\ref{eq:transitive-fw}. 
 
 In our experiments, we show how our approach is better than both model-free Q-learning and model-based approaches. We also show how our approach can be switch between either approaches depending upon traversal experience in the state space.
 
-It is clear that another equivalent way of transferring knowledge from Q-function is to keep it's derivative and transfer that instead of transferring the Q-function.
-
-\section{Related work}
-
-\subsection{Universal value function approximators and derivatives}
-\cite{schaul2015universal} proposed an architecture and a matrix factorization based algorithm for faster learning of UVFA (Universal value function approximators).
-
-\cite{pong2018temporal} propose temporal difference models that estimate goal directed Q function for a specific kind of reward function, in particular the distance from the goal and in contrast with limited temporal horizon.
-They do not use the transitive property of goal directed value functions.
-
 \subsection{Claims}
 \begin{itemize} \item
-Using FW is better than Q function in terms of generalizing to dynamic goals, static maps.
+Using FWRL is better than model-free learning like Q-learning in terms of generalizing to dynamic goals, static maps.
 \item 
-Using Floyd Warshall value function leads to better generalization in case of static maps and
-random goals.
-\item
-Hypothesis: Multi-goal navigation is more common than we think. Does FW algo improves performance in attari games.
+Using FWRL is better than model-based learning because of less accumulation over long term, hence more accurate value functions.
+\item FWRL is better than Hindsight Experience Replay (HER) \cite{andrychowicz2016learning} because it is a parametric representation of hindsight.
+\item FWRL is better than TDM~\cite{pong2018temporal} because it does not require the distance reward function.
 \end{itemize}
 
 \section{Related work}
+\subsection{Goal-conditioned value functions}
+The idea of goal-conditioned value function is not new but has got attention because of revival of reinforcement learning based on deep neural networks.
+We build upon the goal-conditioned value functions of \citet{schaul2015universal}.
+\citet{schaul2015universal} proposed an architecture and a matrix factorization based algorithm for faster learning of UVFA (Universal value function approximators).
+UVFA focused on fast estimation of goal-conditioned value functions using sparse
+matrix factorization but not on bridging the gap between model-based and model-free
+algorithms.
+
+
+\citet{andrychowicz2016learning} introduced the idea of Hindsight experience replay (HER) two learn about the model from previous episodes even when the goal location has changed or not been achieved.
+Our method can be seen as parametric approximation of ``Hindsight memory'',
+that can help compress information from previous episodes instead of maintaining the
+entire history of replay memory.
+
+\cite{pong2018temporal} propose temporal difference models that estimate goal directed Q function for a specific kind of reward function, in particular the distance from the goal and in contrast with limited temporal horizon.
+
+\subsection{Combining model-based and model-free methods}
+
+
+
+
 \subsection{Navigation with mapping}
  (1) CMP from Saurabh Gupta: is metric, might not working in continuous spaces.
  (2) Semi-parameteric Topological mapping: is not end to end.
@@ -219,67 +243,93 @@ Mirowski 2017, 2018: No one shot map learning, does not generalizes to new maps.
 \section{Method}
 
 See Alg~\ref{alg:floyd-warshall-small}
-Over simplified. Ignoring the cost of going through the entire state space.
-    \begin{algorithm}
-      \KwData{Graph $\graph_0 = (\vtces, \edges)$\;}
-      Initialize $\fwcost(\state_i, \act_i, \state_j; \param_{\fwcost}) = 100$ \;
-      Initialize $\qValue(\state_i,\act_i; \param_{\qValue}) = 1$ \;
-      Initialize $\vma = 0.1$, $\prewma = 0.9$ \;
-      Let minimum path cost $\minedgecost = 0.05$ \;
-      Observe $\meas_0$ from environment \;
-      $\state_0 = \ObsEnc(\meas_0; \param_E)$ \;
-      \For{$t \leftarrow 1$ \KwTo $\epiT$}{
-        Take action $\act_{t-1}$\;
-        Observe $\meas_t$, $\rew_t$\;
-        Encode state $\state_t = \ObsEnc(\measurements; \param_E)$\;
-        \tcc{Initialize new FW values}
-        $\fwcost(\state, \act, \state_{t})
-        = \min \{
-               \fwcost(\state, \act, \state_t),
-                \fwcost(\state, \act, \state_{t-1}) + \minedgecost
-            \}
-        \qquad \forall \state \in \State, \act \in \Action$ \;
-        \tcc{Q-Value update}
-        $\qValue(\state_{t-1}, \act_{t-1}) = (1-\qma) (\rew_t + \discount \max_{\act_k}\qValue(\state_t, \act_k)) + \qma \qValue(\state_{t-1}, \act_{t-1})$\;
-        \If{$\state_t$ is visited the first time}{
-            \For{$(\state_i, \state_k, \act_k) \in (\State \times \State \times \Action)$}{
-                \tcc{Run the Floyd Warshall update}
-                $\fwcost(\state_k, \act_k, \state_i) =
-                \min \{
-                    \fwcost(\state_k, \act_k, \state_i),
-                    \fwcost(\state_k, \act_k, \state_t) + \min_{\act \in \Action}\fwcost(\state_t, \act, \state_i)
-                \}$
-                \;
 
-                $\qValue(\state_k, \act_k) = \max \{
-                        \qValue(\state_k, \act_k),
-                        \max_{\act} \qValue(\state_i, \act) - \fwcost(\state_k, \act_k, \state_i)
-                        \}$
-                    \;
+\subsection{Future work}
+Items to improve the algorithm:
+\begin{itemize} \item
+\TODO{Justify the computational cost of constraint} The cost of going through the entire state space.
+How do you extend to a network? and large state spaces.
+\begin{enumerate}\item
+Observation 1: If there is only one goal, then the computation should not be any more than Q-learning.
+This can be accomplished by assuming that transitivity is satisfied till
+$\state_{t-1}$ and needs to be extend to only the next step. This sounds similar to the
+ Floyd-Warshall dynamic programming update.
+However, this assumes that $\state_t$ is being visited for the first time.
+If the state $\state_t$ is being visited for the second time, the earlier
+value may be the shorter path for it.
+\end{enumerate}
+\item
+\TODO{Drop Q Value} Maintains another Q-value. Why do you need Q-value apart from FW-value?
+We need only goal reward and add it to the entire state space.
+\end{itemize}
 
-            }
+\begin{algorithm}
+  Let $\rew_g \leftarrow 10$\;
+  Initialize $\fwcost(\state_i, \act_i, \state_j; \param_{\fwcost}) \leftarrow -100$ \;
+  Let minimum path reward $\minedgecost \leftarrow -0.05$ \;
+  Initialize empty replay memory $\mathcal{R} \leftarrow \{\} $\;
+  Initialize empty key frames $\State_K \leftarrow \{\} $\;
+  Observe $\meas_0$ \;
+  $\state_0 = \ObsEnc(\meas_0; \param_E)$ \;
+  \For{$t \leftarrow 1$ \KwTo $\epiT$}{
+    Take action $\act_{t-1}$ \;
+    Observe $\meas_t$, $\rew_t$ \;
+    $\state_t = \ObsEnc(\meas_t; \param_E)$ \;
+    \If{$\rew_t > \rew_g$}{
+      $\state_g = \state_t$ \;
+      break\;
+    }
+    Record transition $\mathcal{R} \leftarrow
+    \{(\state_{t-1}, \act_{t-1}, \rew_t, \state_t)\} \cup \mathcal{R}$ \;
+    $\fwcost(\state_{t-1}, \act_{t-1}, \state_t) \leftarrow \rew_t + \minedgecost$ \;
+    \For{$\state_k \in \mathcal{R}[\state < \state_t], \act_k \in \Act$ }{
+      $\fwcost(\state_k, \act_k, \state_t) \leftarrow
+        \max \{
+        \fwcost(\state_k, \act_k, \state_t),
+        \fwcost(\state_k, \act_k, \state_{t-1})
+        + \fwcost(\state_{t-1}, \act_t, \state_t) \}$ \;
+      \If{ $\state_t \in \mathcal{R}$ }{
+         $\State_K \leftarrow \{ \state_t \} \cup \State_K$ \;
+         \For{$\state_g \in \mathcal{R}[\state > \state_t]$ }{
+            \tcc{Floyd-Warshall update}
+            $\fwcost(\state_k, \act_k, \state_g) \leftarrow
+              \max \{
+              \fwcost(\state_k, \act_k, \state_g),
+              \fwcost(\state_k, \act_k, \state_t) + \max_{\act \in \Action} \fwcost(\state_t, \act, \state_g)
+              \}$
+              \;
         }
       }
-      \KwResult{To follow the shortest path $\state_i$ to $\state_j$, follow the
-        neighbors with highest $\qValue$\;
-        $\policy(\state_k) = \arg \max_{\act_k \in \Action} \qValue(\state_k, \act_k)$\;
-      }
-      \caption{\small How to solve small windy grid world with randomized goals?}
-      \label{alg:floyd-warshall-small}
-  \end{algorithm}
+    }
+  }
+  \KwResult{To follow the shortest path $\state_i$ to $\state_j$, follow the
+    neighbors with highest $\qValue$\;
+    $\policy(\state_k) = \arg \max_{\act_k \in \Action} \fwcost(\state_k, \act_k, \state_g)$\;
+  }
+  \caption{\small How to solve small windy grid world with randomized goals?}
+  \label{alg:floyd-warshall-small}
+\end{algorithm}
 
 \section{Experiments}
+
 \begin{itemize}\item
 Grid world: Set up a random goal static maze scenario, compare with normal Q-learning.
 \item
-Deepmind Lab: Set up a random goal static maze scenario, compare with normal Q-learning. 
+\TODO{Lava world}: Set up a Lava world like \cite{schaul2015universal} and test on it.
 \item
-Atari games: Compare performance with normal Q-learning.
-Analyze games in which FW does better.
-Show that those games have dynamic goals rather than static.
+\TODO{Atari games}: Compare performance with normal Q-learning.
+\item
+\TODO{Deepmind Lab}: Set up a random goal static maze scenario, compare with normal Q-learning. 
 \end{itemize}
-\def\localbib{/home/dhiman/wrk/group-bib/shared.bib}
-\IfFileExists{\localbib}{\bibliography{\localbib}}{}
-\bibliography{main_filtered,main}
+
+\subsection{Grid world with dynamic goals}
+
+We setup a randomly generated grid world and select a randomly generated goal state.
+
+
+\def\localbib{/home/dhiman/wrk/group-bib/shared}
+\IfFileExists{\localbib.bib}{
+\bibliography{\localbib,main_filtered,main}}{
+\bibliography{main_filtered,main}}
 \bibliographystyle{aaai}
 \end{document}
