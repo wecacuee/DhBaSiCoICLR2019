@@ -7,6 +7,7 @@
 \usepackage{courier}  %Required
 \usepackage{url}  %Required
 \usepackage{graphicx}  %Required
+\usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{natbib}
@@ -95,6 +96,7 @@
 \newcommand{\nil}{\emptyset}
 \newcommand{\discount}{\gamma}
 \newcommand{\minedgecost}{\fwcost_0}
+\newcommand{\goal}{g}
 % The file aaai.sty is the style file for AAAI Press 
 % proceedings, working notes, and technical reports.
 %
@@ -187,34 +189,23 @@ Although model-based algorithms fail to find an optimal policy, because small er
 Taking inspiration from the Floyd-Warshall algorithm in graph-based path planning domain,
 we propose Floyd-Warshall reinforcement learning (FWRL) algorithm that combines the
 benefits of both model-based and model-free methods.
-We define the Floyd-Warshall function $F$ for a goal state $\state_j$ starting from a
+We define the Floyd-Warshall function $\fwcost$ for a goal state $\state_j$ starting from a
 state-action pair $\state_i$, $\act_i$
 as the expected reward through all possible paths $p_{ij}$ between the starting and
-destination state.
+destination state while following policy $\pi_{j}$ to the destination $j$.
 %
 \begin{multline}
-F(\state_j | \state_i, \act_k) \\
-= \E_{p_{ij} \sim \pi}\left[
+\fwcost(\state_j | \state_i, \act_k) \\
+= \E_{p_{ij} \sim \pi_{j}}\left[
 \sum_{\state, \act \in p_{ij} } \discount^{t} r(\state, \act) \right| p_{ij} = (\state_i, \act_k, \dots, \state_J) \Biggr] \, .
 \end{multline}
 %
-For an optimal policy
-\begin{align}
-F^*(\state_i, \act_i, \state_j) =
-\max_{p_{ij}} \sum_{k \in p_{ij} } \discount^{t} r(\state_k, \act_k) .
-\end{align}
-
-In terms of Q-function and Value function the Floyd-Warshall function has the following relationships
-\begin{align}
-V(\state_i) &= \E_{\act}[Q(\state_i, \act)|\state_i] \\
-F(\state_i, \act_i, \state_j) &= V(\state_j) - Q(\state_i, \act_i).
-\end{align}
-For the optimal policy the expectation is replaced by the max operator, that is $F^*(\state_i, \act_i, \state_j) = \max_{\act} Q^*(\state_j, \act) - Q^*(\state_i, \act_i)$.
 
 Due to this formulation, the optimal Floyd-Warshall function should satisfy the transitive property
 \begin{align}
-F^*(\state_i, \act_i, \state_j) = \max_{\state_k} \left[ F^*(\state_i, \act_i, \state_k)
-+ \max_{\act_k}F^*(\state_k, \act_k, \state_j) \right]
+\fwcost^*(\state_i, \act_i, \state_j) = \max_{\state_k} \left[
+\fwcost^*(\state_i, \act_i, \state_k)
++ \max_{\act_k}\fwcost^*(\state_k, \act_k, \state_j) \right]
 \label{eq:transitive-fw}
 \end{align}
 
@@ -255,7 +246,6 @@ entire history of replay memory.
 
 
 
-
 \subsection{Navigation with mapping}
  (1) CMP from Saurabh Gupta: is metric, might not working in continuous spaces.
  (2) Semi-parameteric Topological mapping: is not end to end.
@@ -271,10 +261,114 @@ Find the paper that shows that Model based DRL can actually compete with Model f
 \subsection{Multi-goal navigation based papers}
 Mirowski 2017, 2018: No one shot map learning, does not generalizes to new maps.
 
+\section{Problem definition}
+\newcommand{\Rgoal}{R_{\text{goal}}}
+Let the agent and its environment be represented by a state space $\State$ and the
+agent can traverse through state space by taking actions $\act \in \Act$ in a
+fixed action space $\Act$. At every time step $t$, the agent takes action $\act_t$
+and observes state $\state_t \in \State$ and reward
+$\rew_t \in [-\Rgoal, \Rgoal]$.
+Consider an episode of $T$ time steps.
+For every episode the environment chooses one of the states in the state space is
+the goal state $\goal \in \State$.
+We want to find the sequence of actions to take that
+maximizes the total reward over $T$ time steps.
+Once the agent reaches the goal $\|\state_t - \goal\| < \delta$, the agent receives the highest reward possible $\Rgoal$ in the game and gets respawned in the environment at a randomg \emph{spawn} state.
+This cycle continues enabling the agent to reach the goal multiple times,
+incentivizing rapid exploration and finding the shortest path to the goal.
+For the new episode a new goal location is chosen, but rest of the environment stays the same.
+The agent is allowed to remember about the environment from previous episode and use
+it for this episode.
+
+%
+\begin{align}
+\policy^*(\state_t ; \goal) = \act^*_t = \arg \max_{\act_t} \E_{\policy}\left[ \sum_{t=0}^T \rew_t \right]
+\end{align}%
+%
+
+\subsection{Why is this problem important?}
+Many real world problems can be formulated in this context.
+Consider a traveling postman problem who has moved into a new city. The postman has
+to explore the city and find the buildings that match the given address.
+The next time the postman gets the same address, they can use their experience to find out the building.
+Even when a new address is provided (in the next episode), the postman can use
+experience to find the new episode more quickly.
+
+In robotics, tasks like picking and placing the object at a desired location can be
+formulated as goal-directed navigation.
+
+\subsection{Why is the problem hard?}
+Model-free Reinforcement learning methods assume that the rewards are being sampled
+from the a static reward function.
+In a problem where the goal location changes, hence the reward function also changes,
+it becomes hard to transfer the learned value-function or action-value function to
+the changed location.
+One alternative is to concatenate the goal location the state, making the new state space
+$[\state_t, \goal]^\top \in \State^2$ larger.
+This method is wasteful in computation and more importantly in sample complexity.
 
 \section{Method}
+We present a model-free reinforcement learning method that easily transfers when goal
+location is dynamic.
+We accomplish this by maintaining a path based expected reward function from any state to any goal state.
+We call this algorithm Floyd-Warshall Reinforcement Learning, because of its
+similarity to Floyd-Warshall algorithm : a shortest-path planning algorithm on graphs.
+We define Floyd-Warshall value function as
+%
+\begin{align}
+\fwcost_{\policy}(i, l,  j) =
+\E_{\policy}\left[ \sum_{t=0}^{t=k} \rew_t \middle\vert \state_0 = i, \act_0 = l, \state_k = j \right] .
+\end{align}%
+%
+When the policy is optimal, the Floyd-Warshall function should satisfy the constraint
+%
+\begin{align}
+\fwcost^*(\state_i, \act_i, \state_j) = \max_{\state_k} \left[
+\fwcost^*(\state_i, \act_i, \state_k)
++ \max_{\act_k}\fwcost^*(\state_k, \act_k, \state_j) \right] .
+\end{align}%
+%
 
-See Alg~\ref{alg:floyd-warshall-small}
+We summarize the algorithm in Alg~\ref{alg:floyd-warshall-small}.
+
+\section{Experiments}
+We setup two environments in the grid world and windy grid world.
+\subsection{Four room grid world}
+
+Four room grid world is a grid world with four rooms connected to each other as shown in Figure~\ref{fig:four-room-grid-world}.
+
+\subsection{Four room windy world}
+
+Four room windy world is a grid world with four rooms connected to each other as shown in Figure~\ref{fig:four-room-grid-world}.
+Some of the grid cells in have wind shown by arrow and the agent gets pushed around by
+the wind with 0.25 probability irrespective of the action taken.
+
+
+%
+\begin{figure}%
+\includegraphics[width=0.48\columnwidth]{media/4-room-grid-world.pdf}
+\hfill
+\includegraphics[width=0.48\columnwidth]{media/4-room-windy-world.pdf}%
+\caption{Left: Four room grid world. Right: Four room windy grid world with wind direction shown by arrows. The windy pushes the agent in the direction of wind with 0.25 probability irrespective of the action taken.}
+\label{fig:four-room-grid-world}%
+\end{figure}%
+%
+
+\section{Results}
+
+Fig~\ref{fig:ql-fw-grid-world-results} and Fig~\ref{fig:ql-fw-windy-world-results} show the results.
+
+\begin{figure}%
+\includegraphics[width=\columnwidth]{./media/ql-fw-grid-world.pdf}\\
+\caption{Results on Grid world}
+\label{fig:ql-fw-grid-world-results}%
+\end{figure}
+\begin{figure}
+\includegraphics[width=\columnwidth]{./media/ql-fw-windy-world.pdf}%
+\caption{Results on windy world}
+\label{fig:ql-fw-windy-world-results}%
+\end{figure}
+
 
 \subsection{Future work}
 Items to improve the algorithm:
@@ -291,72 +385,70 @@ If the state $\state_t$ is being visited for the second time, the earlier
 value may be the shorter path for it.
 \end{enumerate}
 \item
-\TODO{Drop Q Value} Maintains another Q-value. Why do you need Q-value apart from FW-value?
-We need only goal reward and add it to the entire state space.
+We need Q-value for exploration.
 \end{itemize}
+
+\begin{function}
+\eIf{$\state_g = \phi$ or $\text{all}(\fwcost(\state_t, :, \state_g) = -\infty)$ }{
+  \tcc{Exploration mode}
+  $\act^* = \arg\max_{\act} Q(\state_t, \act)$\;
+}{
+  \tcc{Exploitation mode}
+  $\act^* = \arg\max_{\act} F(\state_t, \act, \state_g)$\;
+}
+
+\caption{$\policy^*$($\state_t$, $\state_g$, $Q(., .)$, $\fwcost(.,.,.)$)}
+\label{func:policy}
+\KwRet{$\act^*$}
+\end{function}
 
 \begin{algorithm}
   Let $\rew_g \leftarrow 10$\;
-  Initialize $\fwcost(\state_i, \act_i, \state_j; \param_{\fwcost}) \leftarrow -100$ \;
-  Let minimum path reward $\minedgecost \leftarrow -0.05$ \;
-  Initialize empty replay memory $\mathcal{R} \leftarrow \{\} $\;
-  Initialize empty key frames $\State_K \leftarrow \{\} $\;
-  Observe $\meas_0$ \;
-  $\state_0 = \ObsEnc(\meas_0; \param_E)$ \;
+  \tcc{By default all states are unreachable}
+  Initialize $\fwcost(\state_i, \act_i, \state_j; \param_{\fwcost}) \leftarrow -\infty$ \;
+  Initialize $Q(\state_i, \act_i) \leftarrow 1$ \;
+  Initialize $\state_g = \phi$ \;
+  Set $t \leftarrow 0$\;
+  Observe $\meas_t$ \;
+  $\state_t = \ObsEnc(\meas_t; \param_E)$ \;
   \For{$t \leftarrow 1$ \KwTo $\epiT$}{
-    Take action $\act_{t-1}$ \;
+  \tcc{See Function~\ref{func:policy}}
+    Take action $\act_{t-1} \sim \text{Egreedy}(\policy^*(\state_{t-1}, \state_g, Q, \fwcost))$ \;
     Observe $\meas_t$, $\rew_t$ \;
     $\state_t = \ObsEnc(\meas_t; \param_E)$ \;
-    \If{$\rew_t > \rew_g$}{
-      $\state_g = \state_t$ \;
-      break\;
+    \If{$\rew_t >= \rew_g$}{
+      \tcc{Reached the goal}
+      $\state_g \leftarrow \state_t$ \;
+      \tcc{Respawning does not need update of value functions}
+      continue\;
     }
-    Record transition $\mathcal{R} \leftarrow
-    \{(\state_{t-1}, \act_{t-1}, \rew_t, \state_t)\} \cup \mathcal{R}$ \;
-    $\fwcost(\state_{t-1}, \act_{t-1}, \state_t) \leftarrow \rew_t + \minedgecost$ \;
-    \For{$\state_k \in \mathcal{R}[\state < \state_t], \act_k \in \Act$ }{
-      $\fwcost(\state_k, \act_k, \state_t) \leftarrow
+    $Q(\state_{t-1}, \act_{t-1}) \leftarrow \rew_t + \max_{\act} Q(\state_t, \act)$ \;
+    $\fwcost(\state_{t-1}, \act_{t-1}, \state_t) \leftarrow \rew_t$ \;
+    \For{$\state_k \in \State, \act_k \in \Act, \state_l \in \State$}{
+      $\fwcost(\state_k, \act_k, \state_l) \leftarrow
         \max \{
-        \fwcost(\state_k, \act_k, \state_t),
-        \fwcost(\state_k, \act_k, \state_{t-1})
-        + \fwcost(\state_{t-1}, \act_t, \state_t) \}$ \;
-      \If{ $\state_t \in \mathcal{R}$ }{
-         $\State_K \leftarrow \{ \state_t \} \cup \State_K$ \;
-         \For{$\state_g \in \mathcal{R}[\state > \state_t]$ }{
-            \tcc{Floyd-Warshall update}
-            $\fwcost(\state_k, \act_k, \state_g) \leftarrow
-              \max \{
-              \fwcost(\state_k, \act_k, \state_g),
-              \fwcost(\state_k, \act_k, \state_t) + \max_{\act \in \Action} \fwcost(\state_t, \act, \state_g)
-              \}$
-              \;
-        }
-      }
+        \fwcost(\state_k, \act_k, \state_l),
+        \fwcost(\state_k, \act_k, \state_t)
+        + \max_{\act_p \in \Act} \fwcost(\state_t, \act_p, \state_l)
+        \}$
+        \;
     }
   }
-  \KwResult{To follow the shortest path $\state_i$ to $\state_j$, follow the
-    neighbors with highest $\qValue$\;
-    $\policy(\state_k) = \arg \max_{\act_k \in \Action} \fwcost(\state_k, \act_k, \state_g)$\;
-  }
-  \caption{\small How to solve small windy grid world with randomized goals?}
+  \KwResult{$\policy^*(\state_k, \state_g, Q, \fwcost)$}
+  \caption{\small Floyd-Warshall Reinforcement Learning (Tabular setting)}
   \label{alg:floyd-warshall-small}
 \end{algorithm}
-
-\section{Experiments}
 
 \begin{itemize}\item
 Grid world: Set up a random goal static maze scenario, compare with normal Q-learning.
 \item
-\TODO{Lava world}: Set up a Lava world like \cite{schaul2015universal} and test on it.
+Lava world: Set up a Lava world like \cite{schaul2015universal} and test on it.
 \item
 \TODO{Atari games}: Compare performance with normal Q-learning.
 \item
 \TODO{Deepmind Lab}: Set up a random goal static maze scenario, compare with normal Q-learning. 
 \end{itemize}
 
-\subsection{Grid world with dynamic goals}
-
-We setup a randomly generated grid world and select a randomly generated goal state.
 
 
 \def\localbib{/home/dhiman/wrk/group-bib/shared}

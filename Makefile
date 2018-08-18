@@ -12,4 +12,7 @@ maybe_shared_bib=$(wildcard /home/dhiman/wrk/group-bib/shared.bib)
 main_filtered.bib: main.bib $(maybe_shared_bib)
 	aux2bib $(OO)/main.aux > $@
 
+media/%:
+	$(MAKE) -C media/ $*
+
 include pdflatex.mk
