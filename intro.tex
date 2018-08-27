@@ -1,36 +1,36 @@
-Reinforcement learning is an attractive field of research as it allows
+Reinforcement learning (RL) is an exciting field of research as it allows
 for agents to learn complex, autonomous behaviors in a multitude of
-environments while requiring minimal supervision in the form of reward
-signals. This is readily evidenced from RL's recent well publicised
-successes from goal-agnostic activites such as playing atari games from
-purely visual input and  defeating world GO and starcraft champions, to
+environments while requiring minimal supervision only in the form of reward
+signals. This is readily evidenced from RL's recent successes from goal-agnostic
+activites such as playing Atari games~\cite{MnKaSiNATURE2015} from purely visual
+input and defeating world GO~\cite{gibney2016google} and Starcraft champions
+(\TODO{really? citation}), to
 goal-driven ones such as recent applications in robotic navigation and
-manipulation. In the realm of goal-conditioned value functions, this
-work introduces Floyd-Warshall Reinforcement Learning, a new framework
-intended for goal-driven domains with specific consideration for
-transferring learned behaviours to environments in which the underlying
-reward distribution is dynamic.
+manipulation. In the realm of goal-conditioned tasks, this
+work introduces Floyd-Warshall Reinforcement Learning (FWRL), a new algorithm
+that allows transferring learned behaviours to environments in which the
+underlying reward distribution is dynamic.
 
 Algorithms that underly RL are often classified as being either
 \emph{model-based} or \emph{model-free}, the distinction being whether
 an environment state-transition function is learned explicitly or
 implicitly.  In \emph{model-based} RL, the dynamics that govern an
 environment's transitions is modelled as separate step for policy
-computation. At any point in an episode, agent's use this model to
+computation. At any point in an episode, agents use this model to
 predict future states and utilize this information to maximize possible
 reward. This formulation is known to be sample-efficient while normally
-not achieving asymptomatic performance.  Due to the requirement of
+not achieving high asymptomatic performance.  Due to the requirement of
 planning steps to predict future states, policy computation can be an
 expensive process. In contrast, in \emph{model-free} RL, algorithms such
-as policy gradients and Q-learing learn the optimal state-action value
-function that maximizes expected future reward for every state-action
-tuple that the agent perceives.  While highly sample-inefficient, agents
-trained under this paradigm have been shown to achieve asymptomatic
+as policy gradients and Q-learning learn the optimal action value
+function by maximizing expected future reward for every state-action
+pair that the agent perceives.  While highly sample-inefficient, agents
+trained under this paradigm have been shown to achieve high asymptomatic
 performance in a variety of different problem spheres.
 
 Both paradigms of RL suffer different disadvantages in transferring
 learned behaviors to \emph{reward-dynamic} settings i.e.  environments
-in which the underlying reward distrbution changes.  While model-based
+in which the underlying reward distribution changes.  While model-based
 RL allows for the separation of environment dynamics and reward, small
 errors in the modelling function lead to significant drops in
 performance. In \emph{model-free} RL, on the other hand, the conflated
@@ -41,12 +41,20 @@ Inspired by the idea of combining advantages from both RL paradigms and
 the Floyd-Warshall algorithm in graph-based path planning, this work
 introduces Floyd-Warshall Reinforcement Learning, a new framework for
 combining model-based and model-free RL in goal-driven reward-dynamic
-settings. \textbf{Two line description of floyd-warshall's workings.
-don't think there should be equations.}
+settings. FWRL works by modeling a goal-conditioned action-value function
+where every state in the state space can be a valid goal. This allows
+FWRL to remember the paths even if they do not lead to the
+goal location during a particular episode.
+This motivation is similar to the Hindsight Experience Replay 
+\cite{anderson2017vision}, however, we use the parameteric representation
+for ``hindsight experience'' instead of the replay memory.
 
 Ideas of combining both RL paradigms to improve agent performance are
-not new. In Temporal-Difference modelling, etc. et al derive's an exact
-relationship between both both of them. In Hindsight Experience Replay,
+not new. In Temporal-Difference modelling \cite{pong2018temporal} 
+model a goal conditioned action-value function that is also conditioned
+on the number of time-steps. In contrast our proposed value function
+is independent of the time-steps.
+In Hindsight Experience Replay \cite{andrychowicz2016learning},
 previous episode experience is used augment and bootstrap learning. 
 
 Experimentally, FWRL is shown to outperform both model-based, model-free
