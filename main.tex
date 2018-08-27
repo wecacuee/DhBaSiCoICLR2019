@@ -100,9 +100,11 @@
 % The file aaai.sty is the style file for AAAI Press 
 % proceedings, working notes, and technical reports.
 %
-\title{Floyd-Warshall Reinforcement Learning: \\Combining advantages from
-model-free and model-based RL}
-\author{Vikas Dhiman}
+\title{Floyd-Warshall Reinforcement Learning: \\Combining Advantages from
+Model-Free and Model-Based RL \\ Improving Performance in Multi-Goal
+Environments}
+\author{Vikas Dhiman, Shurjo Banerjee, Jeffrey M. Siskind and Jason J.
+Corso}
 \pdfinfo{
 /Title ()
 /Author ()}
@@ -110,34 +112,32 @@ model-free and model-based RL}
 
 \maketitle
 \begin{abstract}
-Reinforcement Learning (RL) algorithms are often discriminated on the
-basis of whether a state-transition model is learned implicitly
-(\emph{model-free}) or explicitly (\emph{model-based}). In the implicit
-case i.e.\ \emph{model-free} RL, algorithms such as Q-learning and
-policy gradients learn a joint state-action function that maps
-state-action pairs to expected future reward in an agent's environment.
-The reward distribution that governs an agent's environment is thus
-implicity memorized in the learning of this function.  Due to this
-combined learning of state-transition dynamics and the reward
-distribution, learned behaviors in \emph{model-free} RL are hard to
-transfer to environments where the state-transition model remains the
-same while the reward-distribution changes.  In contrast,
-\emph{model-based} RL explicity learns the state transition function
-allowing for the decoupling of learned behaviours to environments in
-which only the reward distribution changes. Oftentimes, this explicit
-modelling leads to the requirement of an additional planning step to
-compute model dynamics which can make policy computation in such
-algorithms expensive.  Inspired by both these RL paradigms and the
-Floyd-Warshall algorithm for path-planning on graphs, we propose
-Floyd-Warshall Reinforcement Learning (FWRL), a novel algorithm that
-combines advantages from both \emph{model-based} and \emph{model-free}
-approaches. Our main contribution is an algorithm that learns a
-goal-conditioned value function which transitions from model-based
+Reinforcement learning algorithms are oftentimes classified as either
+\emph{model-free} or \emph{model-based} conditioned on whether a
+state-transition function is learned implicitly or explicitly.  In the
+\emph{model-free} case, algorithms such as Q-learning and policy
+gradients attempt to learn the optimal state-action value function that
+maximizes expected future reward for all state-action pairs percieved by
+an agent in an environment.  The reward distribution and state dynamics
+that governs the agent's environment are implicitly memorized in the
+learning of this function.  Due to the implicit nature of this process,
+\emph{model-free} RL struggles with transferring learned behaviours to
+environments in which only the underlying reward distribution changes.
+In contrast, \emph{model-based} RL explicity learns the state transition
+function allowing for the decoupling of an agent's learned behaviours to
+environments in which only the reward distribution changes. Oftentimes,
+this explicit modelling requires  an additional planning step to predict
+state-transition dynamics making policy computation in such algorithms
+an expensive process.  Inspired by both these paradigms and the
+Floyd-Warshall algorithm for path-planning on graphs,  this work
+introduced Floyd-Warshall Reinforcement Learning (FWRL), a novel
+algorithm that combines advantages from both \emph{model-based} and
+\emph{model-free} approaches.  The algorithm works by learning a
+goal-conditioned value function that transitions from model-based
 behavior to model-free behavior in well explored regions of an agent's
-state space.  We show that FWRL transfers knowledge about the
-environment when the reward location is dynamic compared to a
-model-based Q-learning baseline.  We show (\TODO{fill in the results
-when exp done}) that FWRL meets the ground between model-free and
+state space.  FWRL is shown to transfer knowledge about an environment
+when the reward location is dynamic compared to a model-based Q-learning
+baseline.  FWRL is shown to meet the ground between model-free and
 model-based algorithms by being model-free in the more frequently
 visited regions while being model-based on less visited paths.
 
@@ -162,59 +162,8 @@ visited regions while being model-based on less visited paths.
 
 \section{ Introduction}
 
-The Reinforcement learning algorithms are classified on the basis of whether
-the state-transition model is learned explicitly into \emph{model-based}
-and \emph{model-free} algorithms.
-%
-The \emph{model-free} algorithms like Q-learning and policy gradients are easier to learn in cases when model is more complex than the policy.
-However, model-free algorithms are harder to transfer in cases when the reward function changes while the state-transition model remains the same.
-One example of such a problem is traveling salesman problem.
-Although classical traveling salesman problem is a posed as a planning problem where the space has already been explored, however it is not hard to recognize that someone has to create a map of the map through exploration and sometimes it has to be the agent them-self.
-In such a scenario, the traveling salesman has a dynamic reward with a static map that needs to be
-explored.
-The model-free approach fails to generalize to new rewards in these scenarios, because of the conflated representation of environment model and resulting reward.
-In spite of these limitations, model-free approaches have been applied to multi-goal navigation
-scenarios with considerable success \cite{mirowski2018learning}.
-However, all these methods depend upon exploring the entire space being a candidate goal space.
-Not only model-free approaches are sample inefficient, multi-goal navigation problem exaggerates this problem.
+\input{intro}
 
-The \emph{model-based} algorithms learn the state-transition model explicitly hence making it
-easier to separate the environment transition from the reward distribution. Also model-based
-algorithms are known to be sample efficient than model-free algorithms especially in cases when
-the state-transition model is translation invariant in the environment. 
-However, model-based algorithms require an additional planning step on the model dynamics
-which make it expensive to compute the policy on the fly.
-Although model-based algorithms fail to find an optimal policy, because small errors in models can add up and lead to wrong prediction over larger state spaces. 
-
-Taking inspiration from the Floyd-Warshall algorithm in graph-based path planning domain,
-we propose Floyd-Warshall reinforcement learning (FWRL) algorithm that combines the
-benefits of both model-based and model-free methods.
-We define the Floyd-Warshall function $\fwcost$ for a goal state $\state_j$ starting from a
-state-action pair $\state_i$, $\act_i$
-as the expected reward through all possible paths $p_{ij}$ between the starting and
-destination state while following policy $\pi_{j}$ to the destination $j$.
-%
-\begin{multline}
-\fwcost(\state_j | \state_i, \act_k) \\
-= \E_{p_{ij} \sim \pi_{j}}\left[
-\sum_{\state, \act \in p_{ij} } \discount^{t} r(\state, \act) \right| p_{ij} = (\state_i, \act_k, \dots, \state_J) \Biggr] \, .
-\end{multline}
-%
-
-Due to this formulation, the optimal Floyd-Warshall function should satisfy the transitive property
-\begin{align}
-\fwcost^*(\state_i, \act_i, \state_j) = \max_{\state_k} \left[
-\fwcost^*(\state_i, \act_i, \state_k)
-+ \max_{\act_k}\fwcost^*(\state_k, \act_k, \state_j) \right]
-\label{eq:transitive-fw}
-\end{align}
-
-The advantage of this formulation is that as soon as the goal state $\state_g$, the Q-function and
-hence the policy can be estimated from $Q(\state, \act) = F(\state, \act, \state_g) + \Rew(\state_g)$.
-Even if the path between two states has not been ever traversed, the value function
-can be computed using the transitive property in Eq~\ref{eq:transitive-fw}. 
-
-In our experiments, we show how our approach is better than both model-free Q-learning and model-based approaches. We also show how our approach can be switch between either approaches depending upon traversal experience in the state space.
 
 \subsection{Claims}
 \begin{itemize} \item

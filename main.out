@@ -1,0 +1,18 @@
+\BOOKMARK [1][-]{section*.1}{ Introduction}{}% 1
+\BOOKMARK [2][-]{section*.2}{Claims}{section*.1}% 2
+\BOOKMARK [1][-]{section*.3}{Related work}{}% 3
+\BOOKMARK [2][-]{section*.4}{Goal-conditioned value functions}{section*.3}% 4
+\BOOKMARK [2][-]{section*.5}{Combining model-based and model-free methods}{section*.3}% 5
+\BOOKMARK [2][-]{section*.6}{Navigation with mapping}{section*.3}% 6
+\BOOKMARK [2][-]{section*.7}{Model free DRL }{section*.3}% 7
+\BOOKMARK [2][-]{section*.8}{Model based DRL}{section*.3}% 8
+\BOOKMARK [2][-]{section*.9}{Multi-goal navigation based papers}{section*.3}% 9
+\BOOKMARK [1][-]{section*.10}{Problem definition}{}% 10
+\BOOKMARK [2][-]{section*.11}{Why is this problem important?}{section*.10}% 11
+\BOOKMARK [2][-]{section*.12}{Why is the problem hard?}{section*.10}% 12
+\BOOKMARK [1][-]{section*.13}{Method}{}% 13
+\BOOKMARK [1][-]{section*.14}{Experiments}{}% 14
+\BOOKMARK [2][-]{section*.15}{Four room grid world}{section*.14}% 15
+\BOOKMARK [2][-]{section*.16}{Four room windy world}{section*.14}% 16
+\BOOKMARK [1][-]{section*.17}{Results}{}% 17
+\BOOKMARK [2][-]{section*.18}{Future work}{section*.17}% 18
