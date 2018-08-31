@@ -1,21 +1,22 @@
 \section{Problem definition}
 \newcommand{\Rgoal}{R_{\text{goal}}}
-Let the agent and its environment be represented by a state space $\State$ and the
-agent can traverse through state space by taking actions $\act \in \Act$ in a
-fixed action space $\Act$. At every time step $t$, the agent takes action $\act_t$
-and observes state $\state_t \in \State$ and reward
-$\rew_t \in [-\Rgoal, \Rgoal]$.
-Consider an episode of $T$ time steps.
-For every episode the environment chooses one of the states in the state space is
-the goal state $\goal \in \State$.
-We want to find the sequence of actions to take that
-maximizes the total reward over $T$ time steps.
-Once the agent reaches the goal $\|\state_t - \goal\| < \delta$, the agent receives the highest reward possible $\Rgoal$ in the game and gets respawned in the environment at a randomg \emph{spawn} state.
-This cycle continues enabling the agent to reach the goal multiple times,
-incentivizing rapid exploration and finding the shortest path to the goal.
-For the new episode a new goal location is chosen, but rest of the environment stays the same.
-The agent is allowed to remember about the environment from previous episode and use
-it for this episode.
+Let the agent and its environment be represented by a state space
+$\State$ and the agent can traverse through state space by taking
+actions $\act \in \Act$ in a fixed action space $\Act$. At every time
+step $t$, the agent takes action $\act_t$ and observes state $\state_t
+\in \State$ and reward $\rew_t \in [-\Rgoal, \Rgoal]$.  Consider an
+episode of $T$ time steps.  For every episode the environment chooses
+one of the states in the state space is the goal state $\goal \in
+\State$.  We want to find the sequence of actions to take that maximizes
+the total reward over $T$ time steps.  Once the agent reaches the goal
+$\|\state_t - \goal\| < \delta$, the agent receives the highest reward
+possible $\Rgoal$ in the game and gets respawned in the environment at a
+randomg \emph{spawn} state.  This cycle continues enabling the agent to
+reach the goal multiple times, incentivizing rapid exploration and
+finding the shortest path to the goal.  For the new episode a new goal
+location is chosen, but rest of the environment stays the same.  The
+agent is allowed to remember about the environment from previous episode
+and use it for this episode.
 
 %
 \begin{align}

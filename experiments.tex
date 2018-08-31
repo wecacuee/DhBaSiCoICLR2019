@@ -1,7 +1,7 @@
 \section{Experiments}
 We setup two environments in the grid world and windy grid world.
-\subsection{Four room grid world}
 
+\subsection{Four room grid world}
 Four room grid world is a grid world with four rooms connected to each other as shown in Figure~\ref{fig:four-room-grid-world}.
 
 \subsection{Four room windy world}
@@ -11,11 +11,28 @@ Some of the grid cells in have wind shown by arrow and the agent gets pushed aro
 the wind with 0.25 probability irrespective of the action taken.
 
 \subsection{Metrics}
-We describe our metrics.
+We describe the metrics used to quantify and compare agent performance
+in these environments.
 
-\subsubsection{Latency-1:1}
+\begin{enumerate}
+    \item \textbf{Reward}\\\noindent
+        As in typical in reinforcement learning, the reward earned by
+        the agent is treated as a metric of success. Since the
+        environments used are finite MDPs, Q-Learning is known to learn
+        the optimal policy given enough exploration time. 
 
-\subsubsection{Distance Inefficiency}
+    \item \textbf{\Loo}}\\
+        First defined in \cite{MiPaViICLR2017}, \Loo is the ratio of the
+        amount of time taken to hit the goal for the first time to the
+        average amount of time taken to hit goals subsequently. It is
+        the ratio of the exploration time over the exploitation time. 
+
+    \item \textbf{Distance-Inefficiency}\\
+        Introduced in \cite{dhiman2018critical}, the
+        distance-inefficiency is the ratio of the distances travelled by
+        the agent during an episode to the sum of the shortest path to
+        the goal at every point of initialization. 
+\end{enumerate}
 
 
 %
