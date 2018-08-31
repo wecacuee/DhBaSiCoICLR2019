@@ -1,0 +1,51 @@
+\begin{algorithm}
+  Let $\rew_g \leftarrow 10$\;
+  \tcc{By default all states are unreachable}
+  Initialize $\fwcost(\state_i, \act_i, \state_j; \param_{\fwcost}) \leftarrow -\infty$ \;
+  Initialize $Q(\state_i, \act_i) \leftarrow 1$ \;
+  Initialize $\state_g = \phi$ \;
+  Set $t \leftarrow 0$\;
+  Observe $\meas_t$ \;
+  $\state_t = \ObsEnc(\meas_t; \param_E)$ \;
+  \For{$t \leftarrow 1$ \KwTo $\epiT$}{
+  \tcc{See Function~\ref{func:policy}}
+    Take action $\act_{t-1} \sim \text{Egreedy}(\policy^*(\state_{t-1}, \state_g, Q, \fwcost))$ \;
+    Observe $\meas_t$, $\rew_t$ \;
+    $\state_t = \ObsEnc(\meas_t; \param_E)$ \;
+    \If{$\rew_t >= \rew_g$}{
+      \tcc{Reached the goal}
+      $\state_g \leftarrow \state_t$ \;
+      \tcc{Respawning does not need update of value functions}
+      continue\;
+    }
+    $Q(\state_{t-1}, \act_{t-1}) \leftarrow \rew_t + \max_{\act} Q(\state_t, \act)$ \;
+    $\fwcost(\state_{t-1}, \act_{t-1}, \state_t) \leftarrow \rew_t$ \;
+    \For{$\state_k \in \State, \act_k \in \Act, \state_l \in \State$}{
+      $\fwcost(\state_k, \act_k, \state_l) \leftarrow
+        \max \{
+        \fwcost(\state_k, \act_k, \state_l),
+        \fwcost(\state_k, \act_k, \state_t)
+        + \max_{\act_p \in \Act} \fwcost(\state_t, \act_p, \state_l)
+        \}$
+        \;
+    }
+  }
+  \KwResult{$\policy^*(\state_k, \state_g, Q, \fwcost)$}
+  \caption{\small Floyd-Warshall Reinforcement Learning (Tabular setting)}
+  \label{alg:floyd-warshall-small}
+\end{algorithm}
+
+
+%\begin{function}
+%\eIf{$\state_g = \phi$ or $\text{all}(\fwcost(\state_t, :, \state_g) = -\infty)$ }{
+%  \tcc{Exploration mode}
+%  $\act^* = \arg\max_{\act} Q(\state_t, \act)$\;
+%}{
+%  \tcc{Exploitation mode}
+%  $\act^* = \arg\max_{\act} F(\state_t, \act, \state_g)$\;
+%}
+%
+%\caption{Policy()}%$\policy^*(\state_t, \state_g, Q(., .), \fwcost(.,.,.))$}
+%\label{func:policy}
+%\KwRet{$\act^*$}
+%\end{function}

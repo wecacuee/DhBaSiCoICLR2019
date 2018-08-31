@@ -1,0 +1,72 @@
+\section{Problem definition}
+\newcommand{\Rgoal}{R_{\text{goal}}}
+Let the agent and its environment be represented by a state space $\State$ and the
+agent can traverse through state space by taking actions $\act \in \Act$ in a
+fixed action space $\Act$. At every time step $t$, the agent takes action $\act_t$
+and observes state $\state_t \in \State$ and reward
+$\rew_t \in [-\Rgoal, \Rgoal]$.
+Consider an episode of $T$ time steps.
+For every episode the environment chooses one of the states in the state space is
+the goal state $\goal \in \State$.
+We want to find the sequence of actions to take that
+maximizes the total reward over $T$ time steps.
+Once the agent reaches the goal $\|\state_t - \goal\| < \delta$, the agent receives the highest reward possible $\Rgoal$ in the game and gets respawned in the environment at a randomg \emph{spawn} state.
+This cycle continues enabling the agent to reach the goal multiple times,
+incentivizing rapid exploration and finding the shortest path to the goal.
+For the new episode a new goal location is chosen, but rest of the environment stays the same.
+The agent is allowed to remember about the environment from previous episode and use
+it for this episode.
+
+%
+\begin{align}
+\policy^*(\state_t ; \goal) = \act^*_t = \arg \max_{\act_t} \E_{\policy}\left[ \sum_{t=0}^T \rew_t \right]
+\end{align}%
+%
+
+\subsection{Why is this problem important?}
+Many real world problems can be formulated in this context.
+Consider a traveling postman problem who has moved into a new city. The postman has
+to explore the city and find the buildings that match the given address.
+The next time the postman gets the same address, they can use their experience to find out the building.
+Even when a new address is provided (in the next episode), the postman can use
+experience to find the new episode more quickly.
+
+In robotics, tasks like picking and placing the object at a desired location can be
+formulated as goal-directed navigation.
+
+\subsection{Why is the problem hard?}
+Model-free Reinforcement learning methods assume that the rewards are being sampled
+from the a static reward function.
+In a problem where the goal location changes, hence the reward function also changes,
+it becomes hard to transfer the learned value-function or action-value function to
+the changed location.
+One alternative is to concatenate the goal location the state, making the new state space
+$[\state_t, \goal]^\top \in \State^2$ larger.
+This method is wasteful in computation and more importantly in sample complexity.
+
+\section{Method}
+We present a model-free reinforcement learning method that easily transfers when goal
+location is dynamic.
+We accomplish this by maintaining a path based expected reward function from any state to any goal state.
+We call this algorithm Floyd-Warshall Reinforcement Learning, because of its
+similarity to Floyd-Warshall algorithm : a shortest-path planning algorithm on graphs.
+We define Floyd-Warshall value function as
+%
+\begin{align}
+\fwcost_{\policy}(i, l,  j) =
+\E_{\policy}\left[ \sum_{t=0}^{t=k} \rew_t \middle\vert \state_0 = i, \act_0 = l, \state_k = j \right] .
+\end{align}%
+%
+When the policy is optimal, the Floyd-Warshall function should satisfy the constraint
+%
+\begin{align}
+\fwcost^*(\state_i, \act_i, \state_j) = \max_{\state_k} \left[
+\fwcost^*(\state_i, \act_i, \state_k)
++ \max_{\act_k}\fwcost^*(\state_k, \act_k, \state_j) \right] .
+\end{align}%
+%
+
+We summarize the algorithm in Alg~\ref{alg:floyd-warshall-small}.
+
+\input{algorithm}
+

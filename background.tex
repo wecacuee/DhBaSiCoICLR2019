@@ -1,0 +1,29 @@
+\section{Background}
+
+\subsection{Floyd-Warshall Algorithm for Path-Planning}
+
+Consider an arbitrary weighted graph, $G$, with both positive and
+negative edges. Note that the algorithm does not work if negative cycles
+are present. The Floyd-Warshall algorithm is a mechanism for finding the
+shortest distances from every node to every other node in the graph. 
+
+
+\subsection{Q-Learning}
+Q-learning is an off-policy model-free method used to learn the optimal
+behaviors in any environment. 
+
+\begin{equation}
+    R_t = \sum_{t^{'}=t}^{T} \gamma^{t^{'}-t} r_{t^{'}}
+\end{equation}
+
+\begin{equation}
+    Q^*(s, a) = \max_{\pi} E[R_t \mid s_t=s, a_t=a, \pi]
+\end{equation}
+
+
+\noindent
+Which derives from the Bellman equation.
+\begin{equation}
+    Q^*(s, a) = E[r + \gamma \max_{a^{'}} Q^*(s^{'}, a^{'}) \mid s, a]
+\end{equation}
+

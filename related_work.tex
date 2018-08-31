@@ -1,0 +1,36 @@
+
+\section{Related work}
+\subsection{Goal-conditioned value functions}
+The idea of goal-conditioned value function is not new but has got attention because of revival of reinforcement learning based on deep neural networks.
+We build upon the goal-conditioned value functions of \citet{schaul2015universal}.
+\citet{schaul2015universal} proposed an architecture and a matrix factorization based algorithm for faster learning of UVFA (Universal value function approximators).
+UVFA focused on fast estimation of goal-conditioned value functions using sparse
+matrix factorization but not on bridging the gap between model-based and model-free
+algorithms.
+
+
+\citet{andrychowicz2016learning} introduced the idea of Hindsight experience replay (HER) two learn about the model from previous episodes even when the goal location has changed or not been achieved.
+Our method can be seen as parametric approximation of ``Hindsight memory'',
+that can help compress information from previous episodes instead of maintaining the
+entire history of replay memory.
+
+\cite{pong2018temporal} propose temporal difference models that estimate goal directed Q function for a specific kind of reward function, in particular the distance from the goal and in contrast with limited temporal horizon.
+
+\subsection{Combining model-based and model-free methods}
+
+
+
+\subsection{Navigation with mapping}
+ (1) CMP from Saurabh Gupta: is metric, might not working in continuous spaces.
+ (2) Semi-parameteric Topological mapping: is not end to end.
+ (3) Neural Map: Is actually not mapping
+
+\subsection{Model free DRL }
+does not generalize to multi-goal environments.
+
+\subsection{Model based DRL}
+Needs more exploration.
+Find the paper that shows that Model based DRL can actually compete with Model free DRL as long as it models uncertainty.
+
+\subsection{Multi-goal navigation based papers}
+Mirowski 2017, 2018: No one shot map learning, does not generalizes to new maps.
