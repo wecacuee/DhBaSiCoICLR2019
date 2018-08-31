@@ -19,7 +19,8 @@
 \setcounter{secnumdepth}{0}  
 
 \usepackage[ruled,vlined]{algorithm2e}
-\newcommand{\TODO}[1]{{\color{red}TODO: {#1}}}
+%\newcommand{\TODO}[1]{{\color{red}TODO: {#1}}}
+\newcommand{\TODO}[1]{}
 
 \def\state{s}
 \def\statet{\state_t}
@@ -308,37 +309,55 @@ the wind with 0.25 probability irrespective of the action taken.
 
 \section{Results}
 
-Fig~\ref{fig:ql-fw-grid-world-results} and Fig~\ref{fig:ql-fw-windy-world-results} show the results.
+We evaluate Q-learning and Floyd-Warshall Reinforcement Learning (FWRL)  on two
+metrics in two different environments. The two metrics we use are Latency Ratio
+and average reward per episode. The Latency ratio metric was introduced in
+\citet{MiPaViICLR2017}, which is defined as the ratio of time taken to reach the
+goal for the first to time to the average time taken to hit the goal thereafter.
+The Latency ratio thus measures the ratio of exploration time for first time
+finding the goal to the average exploitation time to reach the goal. Hence,
+higher latency ratio is better.
+Fig~\ref{fig:ql-fw-grid-world-results} and
+Fig~\ref{fig:ql-fw-windy-world-results} show the results.
 
 \begin{figure}%
 \includegraphics[width=\columnwidth]{./media/ql-fw-grid-world.pdf}\\
-\caption{Results on Grid world}
+\caption{Results on grid world. FWRL beats Q-Learning consistently. Higher is
+  better in both the metrics (higher is better).}
 \label{fig:ql-fw-grid-world-results}%
 \end{figure}
 \begin{figure}
 \includegraphics[width=\columnwidth]{./media/ql-fw-windy-world.pdf}%
-\caption{Results on windy world}
+\caption{Results on windy world. FWRL beats Q-Learning consistently. Higher is
+  better in both the metrics (higher is better).}
 \label{fig:ql-fw-windy-world-results}%
 \end{figure}
 
+\subsection{Conclusion}
+Floyd-Warshall Reinforcement Learning (FWRL) allows us to learn a goal
+conditioned action-value function which is invariant to the change in goal
+location as compared to the action-value function used in typical Q-learning.
+This allows FWRL to transfer learned behaviors about the environment when the
+goal location changes. Many tasks like navigation, robotic pick and place are
+examples of goal-conditioned tasks that can benefit from this framework.
 
-\subsection{Future work}
-Items to improve the algorithm:
-\begin{itemize} \item
-\TODO{Justify the computational cost of constraint} The cost of going through the entire state space.
-How do you extend to a network? and large state spaces.
-\begin{enumerate}\item
-Observation 1: If there is only one goal, then the computation should not be any more than Q-learning.
-This can be accomplished by assuming that transitivity is satisfied till
-$\state_{t-1}$ and needs to be extend to only the next step. This sounds similar to the
- Floyd-Warshall dynamic programming update.
-However, this assumes that $\state_t$ is being visited for the first time.
-If the state $\state_t$ is being visited for the second time, the earlier
-value may be the shorter path for it.
-\end{enumerate}
-\item
-We need Q-value for exploration.
-\end{itemize}
+%\subsection{Future work}
+%Items to improve the algorithm:
+%\begin{itemize} \item
+%\TODO{Justify the computational cost of constraint} The cost of going through the entire state space.
+%How do you extend to a network? and large state spaces.
+%\begin{enumerate}\item
+%Observation 1: If there is only one goal, then the computation should not be any more than Q-learning.
+%This can be accomplished by assuming that transitivity is satisfied till
+%$\state_{t-1}$ and needs to be extend to only the next step. This sounds similar to the
+% Floyd-Warshall dynamic programming update.
+%However, this assumes that $\state_t$ is being visited for the first time.
+%If the state $\state_t$ is being visited for the second time, the earlier
+%value may be the shorter path for it.
+%\end{enumerate}
+%\item
+%We need Q-value for exploration.
+%\end{itemize}
 
 \begin{function}
 \eIf{$\state_g = \phi$ or $\text{all}(\fwcost(\state_t, :, \state_g) = -\infty)$ }{
@@ -349,7 +368,7 @@ We need Q-value for exploration.
   $\act^* = \arg\max_{\act} F(\state_t, \act, \state_g)$\;
 }
 
-\caption{$\policy^*$($\state_t$, $\state_g$, $Q(., .)$, $\fwcost(.,.,.)$)}
+\caption{Policy()}%$\policy^*(\state_t, \state_g, Q(., .), \fwcost(.,.,.))$}
 \label{func:policy}
 \KwRet{$\act^*$}
 \end{function}
@@ -405,7 +424,7 @@ Lava world: Set up a Lava world like \cite{schaul2015universal} and test on it.
 
 \def\localbib{/home/dhiman/wrk/group-bib/shared}
 \IfFileExists{\localbib.bib}{
-\bibliography{\localbib,main_filtered,main}}{
-\bibliography{main_filtered,main}}
+\bibliography{\localbib,main,main_filtered}}{
+\bibliography{main,main_filtered}}
 \bibliographystyle{aaai}
 \end{document}
