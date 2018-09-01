@@ -2,7 +2,7 @@
 
 \subsection{Floyd-Warshall Algorithm for Path-Planning}
 
-Consider an arbitrary weighted graph, $G$, with both positive and
+Consider an arbitrary weighted graph, $G = (V, E)$, with both positive and
 negative edges. Note that the algorithm does not work if negative cycles
 are present. The Floyd-Warshall algorithm is a mechanism for finding the
 shortest distances from every node to every other node in the graph. 
@@ -26,4 +26,32 @@ Which derives from the Bellman equation.
 \begin{equation}
     Q^*(s, a) = E[r + \gamma \max_{a^{'}} Q^*(s^{'}, a^{'}) \mid s, a]
 \end{equation}
+
+\subsection{Floyd-Warshall Algorithm}
+\newcommand{\vertices}{\mathcal{V}}
+\newcommand{\wts}{W}
+% Floyd warshall data structure
+\newcommand{\fwds}{D}
+
+Floyd-Warshall algorithm~\citep{floydwarshall1962} is a shortest path finding
+algorithm from any vertex in a graph to any other vertex in the graph.
+For a weighted graph $G = (\vertices, \edges)$, Floyd-Warshall algorithm
+finds the shortest path by keeping maintaining a shortest distance
+data-structure $\fwds : \vertices \times \vertices \rightarrow \R$.
+This data-structure represents the shortest known distance between any
+two pair of vertices $i, j \in \vertices$.
+The data-structure $\fwds$ is initialized with edges costs
+$\fwds[i, j] \leftarrow \edges_{(i, j)} \, \forall (i, j) \in \edges$
+and the uninitialized edges are assigned a high value
+$\fwds[i, j] \leftarrow \infty \, \forall i, j \in \vertices$.
+The algorithm works by sequentially observing all the nodes in the graph and
+updating $\fwds$ as with the shortest path known so far:
+%
+\begin{align}
+  \fwds[i, j] \leftarrow \min\{ \fwds[i, j], \fwds[i, k] + \fwds[k, j] \} \quad
+  \forall i, j, k \in \vertices \, .
+\end{align}%
+%
+
+\subsection{Goal conditioned value functions}
 
