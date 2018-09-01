@@ -10,7 +10,7 @@ $(OO)/main.pdf: main_filtered.bib
 maybe_shared_bib=$(wildcard /home/dhiman/wrk/group-bib/shared.bib)
 
 main_filtered.bib: main.bib $(OO)/main.aux $(maybe_shared_bib)
-	aux2bib $(OO)/main.aux > $@
+	aux2bib $(OO)/main.aux | tail -n +4 > $@
 
 media/%:
 	$(MAKE) -C media/ $*
