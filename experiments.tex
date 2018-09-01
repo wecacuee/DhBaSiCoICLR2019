@@ -1,25 +1,49 @@
 \section{Experiments}
-We setup two environments in the grid world and windy grid world.
+
+Experiments are conducted in a grid-world like setup as displayed in
+figure \ref{fig:four-room-grid-world}. The agent can occupy any one of
+the white blank squares. The agent's observations is the numbered
+location of each square i.e. each squares x,y coordinate with the origin
+being the top left corner of the environment i.e. $s_t = (x, y)$. Agents
+can act by moving in the four different cardinal directions, $\{up,
+down, left, right\}$. Grid-world is chosen since due to it's simplicity
+it easily highlights differences between baseline models and FWRL.
+Several different grid-world setups are investigated to test the
+abilities of FWRL.
+
 
 \subsection{Four room grid world}
-Four room grid world is a grid world with four rooms connected to each other as shown in Figure~\ref{fig:four-room-grid-world}.
+Four room grid world is a grid world with four rooms connected to each
+other as shown in Figure~\ref{fig:four-room-grid-world}. This example is
+chosen due to it's intentional difficulty for random exploration based
+agents. Since the exit points, are narrow, random agents tend to get
+stuck in individual rooms. 
 
 \subsection{Four room windy world}
 
-Four room windy world is a grid world with four rooms connected to each other as shown in Figure~\ref{fig:four-room-grid-world}.
-Some of the grid cells in have wind shown by arrow and the agent gets pushed around by
-the wind with 0.25 probability irrespective of the action taken.
+In four room windy world, the previous setup is augmented with
+\emph{wind}. In cells that  wind, shown by arrows, the agent gets pushed
+around by the wind with 0.25 probability in the direction of the arrow
+irrespective of the action taken. Concieved by \cite{}, the setup
+increases the dependence of the dynamics model upon environment
+specifics.
+
+\subsection{Random Grid Worlds}
+While the prevoius experiments were chosen for the ability to study a
+specific property of these algorithms, random grid-world maps are
+created and tested upon.
 
 \subsection{Metrics}
-We describe the metrics used to quantify and compare agent performance
-in these environments.
+The metrics used to quantify and compare agent performance across
+both baseline methods and FWRL are described here.
 
 \begin{enumerate}
     \item \textbf{Reward}\\\noindent
         As in typical in reinforcement learning, the reward earned by
         the agent is treated as a metric of success. Since the
         environments used are finite MDPs, Q-Learning is known to learn
-        the optimal policy given enough exploration time. 
+        the optimal policy given enough exploration time. Of interest is
+        thus the amount of time taken for reward to climb.
 
     \item \textbf{\Loo}\\
         First defined in \cite{MiPaViICLR2017}, \Loo is the ratio of the
@@ -36,7 +60,7 @@ in these environments.
 
 
 %
-\begin{figure}%
+\begin{figure}[h!]%
 \includegraphics[width=0.48\columnwidth]{media/4-room-grid-world.pdf}
 \hfill
 \includegraphics[width=0.48\columnwidth]{media/4-room-windy-world.pdf}%

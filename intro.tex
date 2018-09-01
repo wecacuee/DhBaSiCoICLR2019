@@ -168,11 +168,6 @@ made available.
 
 
 
-
-\newpage
-\newpage
-
-
 %Reinforcement learning algorithms are classified on
 %the basis of whether the state-transition model is learned explicitly
 %into \emph{model-based} and \emph{model-free} algorithms.
@@ -194,32 +189,32 @@ made available.
 %which make it expensive to compute the policy on the fly.
 %Although model-based algorithms fail to find an optimal policy, because small errors in models can add up and lead to wrong prediction over larger state spaces. 
 %
-Taking inspiration from the Floyd-Warshall algorithm in graph-based path planning domain,
-we propose Floyd-Warshall reinforcement learning (FWRL) algorithm that combines the
-benefits of both model-based and model-free methods.
-We define the Floyd-Warshall function $\fwcost$ for a goal state $\state_j$ starting from a
-state-action pair $\state_i$, $\act_i$
-as the expected reward through all possible paths $p_{ij}$ between the starting and
-destination state while following policy $\pi_{j}$ to the destination $j$.
+%Taking inspiration from the Floyd-Warshall algorithm in graph-based path planning domain,
+%we propose Floyd-Warshall reinforcement learning (FWRL) algorithm that combines the
+%benefits of both model-based and model-free methods.
+%We define the Floyd-Warshall function $\fwcost$ for a goal state $\state_j$ starting from a
+%state-action pair $\state_i$, $\act_i$
+%as the expected reward through all possible paths $p_{ij}$ between the starting and
+%destination state while following policy $\pi_{j}$ to the destination $j$.
+%%
+%\begin{multline}
+%\fwcost(\state_j | \state_i, \act_k) \\
+%= \E_{p_{ij} \sim \pi_{j}}\left[
+%\sum_{\state, \act \in p_{ij} } \discount^{t} r(\state, \act) \right| p_{ij} = (\state_i, \act_k, \dots, \state_J) \Biggr] \, .
+%\end{multline}
+%%
 %
-\begin{multline}
-\fwcost(\state_j | \state_i, \act_k) \\
-= \E_{p_{ij} \sim \pi_{j}}\left[
-\sum_{\state, \act \in p_{ij} } \discount^{t} r(\state, \act) \right| p_{ij} = (\state_i, \act_k, \dots, \state_J) \Biggr] \, .
-\end{multline}
+%Due to this formulation, the optimal Floyd-Warshall function should satisfy the transitive property
+%\begin{align}
+%\fwcost^*(\state_i, \act_i, \state_j) = \max_{\state_k} \left[
+%\fwcost^*(\state_i, \act_i, \state_k)
+%+ \max_{\act_k}\fwcost^*(\state_k, \act_k, \state_j) \right]
+%\label{eq:transitive-fw}
+%\end{align}
 %
-
-Due to this formulation, the optimal Floyd-Warshall function should satisfy the transitive property
-\begin{align}
-\fwcost^*(\state_i, \act_i, \state_j) = \max_{\state_k} \left[
-\fwcost^*(\state_i, \act_i, \state_k)
-+ \max_{\act_k}\fwcost^*(\state_k, \act_k, \state_j) \right]
-\label{eq:transitive-fw}
-\end{align}
-
-The advantage of this formulation is that as soon as the goal state $\state_g$, the Q-function and
-hence the policy can be estimated from $Q(\state, \act) = F(\state, \act, \state_g) + \Rew(\state_g)$.
-Even if the path between two states has not been ever traversed, the value function
-can be computed using the transitive property in Eq~\ref{eq:transitive-fw}. 
-
-In our experiments, we show how our approach is better than both model-free Q-learning and model-based approaches. We also show how our approach can be switch between either approaches depending upon traversal experience in the state space.
+%The advantage of this formulation is that as soon as the goal state $\state_g$, the Q-function and
+%hence the policy can be estimated from $Q(\state, \act) = F(\state, \act, \state_g) + \Rew(\state_g)$.
+%Even if the path between two states has not been ever traversed, the value function
+%can be computed using the transitive property in Eq~\ref{eq:transitive-fw}. 
+%
+%In our experiments, we show how our approach is better than both model-free Q-learning and model-based approaches. We also show how our approach can be switch between either approaches depending upon traversal experience in the state space.
