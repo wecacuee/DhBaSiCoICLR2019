@@ -14,3 +14,9 @@ SHELL=python
 4-room-windy-world.pdf:
 	$(call DRAW_MAZE, "4-room-windy-world", "$@")
 
+define PLOT_METRICS
+from fwrl.plots.plot_metrics import main; main(figdir = $1)
+endef
+
+metrics-grid-world.pdf metrics-windy-world.pdf:
+	$(call PLOT_METRICS, "./")
