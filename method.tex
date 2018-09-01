@@ -40,32 +40,34 @@ from episode to episode.
 \subsection{Why is this problem important?}
 Many real world problems can be formulated in this context.
 
-Consider a traveling postman problem who has moved into a new city. The postman has
-to explore the city and find the buildings that match the given address.
-The next time the postman gets the same address, they can use their experience to find out the building.
-Even when a new address is provided (in the next episode), the postman can use
+Consider a traveling postman problem who has moved into a new city. The
+postman has to explore the city and find the buildings that match the
+given address.  The next time the postman gets the same address, they
+can use their experience to find out the building.  Even when a new
+address is provided (in the next episode), the postman can use
 experience to find the new episode more quickly.
 
-In robotics, tasks like picking and placing the object at a desired location can be
-formulated as goal-directed navigation.
+In robotics, tasks like picking and placing the object at a desired
+location can be formulated as goal-directed navigation.
 
 \subsection{Why is the problem hard?}
-Model-free Reinforcement learning methods assume that the rewards are being sampled
-from the a static reward function.
-In a problem where the goal location changes, hence the reward function also changes,
-it becomes hard to transfer the learned value-function or action-value function to
-the changed location.
-One alternative is to concatenate the goal location the state, making the new state space
-$[\state_t, \goal]^\top \in \State^2$ larger.
-This method is wasteful in computation and more importantly in sample complexity.
+Model-free Reinforcement learning methods assume that the rewards are
+being sampled from the a static reward function.  In a problem where the
+goal location changes, hence the reward function also changes, it
+becomes hard to transfer the learned value-function or action-value
+function to the changed location.  One alternative is to concatenate the
+goal location the state, making the new state space $[\state_t,
+\goal]^\top \in \State^2$ larger.  This method is wasteful in
+computation and more importantly in sample complexity.
 
 \section{Method}
-We present a model-free reinforcement learning method that easily transfers when goal
-location is dynamic.
-We accomplish this by maintaining a path based expected reward function from any state to any goal state.
-We call this algorithm Floyd-Warshall Reinforcement Learning, because of its
-similarity to Floyd-Warshall algorithm : a shortest-path planning algorithm on graphs.
-We define Floyd-Warshall value function as
+We present a model-free reinforcement learning method that easily
+transfers when goal location is dynamic.  We accomplish this by
+maintaining a path based expected reward function from any state to any
+goal state.  We call this algorithm Floyd-Warshall Reinforcement
+Learning, because of its similarity to Floyd-Warshall algorithm : a
+shortest-path planning algorithm on graphs.  We define Floyd-Warshall
+value function as
 %
 \begin{align}
 \fwcost_{\policy}(i, l,  j) =
