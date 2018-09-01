@@ -40,7 +40,7 @@ finds the shortest path by keeping maintaining a shortest distance
 data-structure $\fwds : \vertices \times \vertices \rightarrow \R$.
 This data-structure represents the shortest known distance between any
 two pair of vertices $i, j \in \vertices$.
-The data-structure $\fwds$ is initialized with edges costs
+The data-structure $\fwds$ is initialized with edges weights
 $\fwds[i, j] \leftarrow \edges_{(i, j)} \, \forall (i, j) \in \edges$
 and the uninitialized edges are assigned a high value
 $\fwds[i, j] \leftarrow \infty \, \forall i, j \in \vertices$.
@@ -52,6 +52,28 @@ updating $\fwds$ as with the shortest path known so far:
   \forall i, j, k \in \vertices \, .
 \end{align}%
 %
+
+The shortest path $(v_t, v_{t+1}, \dots, g)$ starting from vertex $v_t \in
+\vertices$ to a goal $\goal \in \vertices$ can be read from $\fwds$ following
+nearest neighbor towards minimum $\fwds$ towards the goal
+%
+\begin{align}
+  v_{t+1} = \arg \min_{i \in \text{Nbr}(v_t)} D[i, \goal] \, ,
+\end{align}%
+%
+where $\text{Nbr}(v_t) = \{ i | (i, v_t) \in \edges \} $ denotes the
+neighborhood of $v_t$.
+
+The update equation in the algorithm depends upon triangular inequality for
+shortest paths distances ($\fwds[i, j] < \fwds[i, k] + \fwds[k, j]$) and hence
+works only in the absence of negative cycles in the graph. Fortunately, many
+practical problems can be formulated such that there are no negative cycles
+in the graph. Although, Floyd-Warshall algorithm runs in $O(|\vertices|^3)$
+and is suitable for dense graphs, there exists extensions of the algorithm
+like Johnson's algorithm~\citep{johnson1977efficient} that run in
+$O(|\vertices|^2\log|\vertices| + |\vertices||\edges|)$ and work on the same
+principle.
+
 
 \subsection{Goal conditioned value functions}
 
