@@ -1,7 +1,6 @@
 \section{Problem definition}
 
 \subsection{Environment Setup}
-\newcommand{\Rgoal}{R_{\text{goal}}}
 Consider an agent interacting with an environment, $\varepsilon$. At
 every time step, $t$, the agent observes a state, $\state_t \in \State$,
 where $\State$ is the observation state space. The agent can traverse
@@ -70,16 +69,17 @@ shortest-path planning algorithm on graphs.  We define Floyd-Warshall
 value function as
 %
 \begin{align}
-\fwcost_{\policy}(i, l,  j) =
+\fwargs{i}{l}{j}{\policy}{} =
 \E_{\policy}\left[ \sum_{t=0}^{t=k} \rew_t \middle\vert \state_0 = i, \act_0 = l, \state_k = j \right] .
 \end{align}%
 %
 When the policy is optimal, the Floyd-Warshall function should satisfy the constraint
 %
 \begin{align}
-\fwcost^*(\state_i, \act_i, \state_j) = \max_{\state_k} \left[
-\fwcost^*(\state_i, \act_i, \state_k)
-+ \max_{\act_k}\fwcost^*(\state_k, \act_k, \state_j) \right] .
+\fwargs{\state_i}{\act_i}{\state_j}{}{*}
+ = \max_{\state_k} \left[
+\fwargs{\state_i}{\act_i}{\state_k}{}{*}
++ \max_{\act_k}\fwargs{\state_k}{\act_k}{\state_j}{}{*} \right] .
 \end{align}%
 %
 
