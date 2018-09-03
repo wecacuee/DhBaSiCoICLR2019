@@ -1,32 +1,31 @@
-Reinforcement learning (RL) is an exciting field of research as it allows
-for agents to learn complex, autonomous behaviors in a multitude of
-environments while requiring minimal supervision only in the form of reward
-signals. This is readily evidenced from RL's recent successes from goal-agnostic
-activites such as playing Atari games~\cite{MnKaSiNATURE2015} from purely visual
-input and defeating world GO~\cite{gibney2016google} and Starcraft champions
-(\TODO{really? citation}), to
-goal-driven ones such as recent applications in robotic navigation and
-manipulation. In the realm of goal-conditioned tasks, this
-work introduces Floyd-Warshall Reinforcement Learning (FWRL), a new algorithm
-that allows transferring learned behaviours to environments in which the
-underlying reward distribution is dynamic.
+% Objective of the paragraph: setup the hype context and importance of the problem
+Reinforcement learning (RL) is an exciting field of research as it allows for
+agents to learn complex behaviors in a multitude of environments while requiring
+minimal supervision only in the form of reward signals. This is readily
+evidenced from RL's recent successes in various domains such as playing Atari
+games~\cite{MnKaSiNATURE2015} from purely visual input and defeating world GO
+champion~\cite{gibney2016google}, to goal-driven ones such as recent
+applications in robotic navigation~\cite{mirowski2018learning} and
+manipulation~\cite{pong2018temporal}. In the realm of goal-conditioned tasks,
+this work introduces Floyd-Warshall Reinforcement Learning (FWRL), a new
+algorithm that allows transferring learned behaviours to environments in which
+the underlying reward distribution is dynamic.
 
+% brief background on model-based and model-free learning.
 Algorithms that underly RL are often classified as being either
 \emph{model-based} or \emph{model-free}, the distinction being whether
 an environment state-transition function is learned explicitly or
 implicitly.  In \emph{model-based} RL, the dynamics that govern an
-environment's transitions is modelled as separate step for policy
-computation. At any point in an episode, agents use this model to
+environment's transitions is explicitly modelled.
+At any point in an episode, agents use this model to
 predict future states and utilize this information to maximize possible
 reward. This formulation is known to be sample-efficient while normally
-not achieving high asymptomatic performance.  Due to the requirement of
-planning steps to predict future states, policy computation can be an
-expensive process. In contrast, in \emph{model-free} RL, algorithms such
-as policy gradients and Q-learning learn the optimal action value
-function by maximizing expected future reward for every state-action
-pair that the agent perceives.  While highly sample-inefficient, agents
-trained under this paradigm have been shown to achieve high asymptomatic
-performance in a variety of different problem spheres.
+not achieving high asymptomatic performance.
+In contrast, in \emph{model-free} RL, algorithms such as policy gradients,
+actor-critic and Q-learning directly learn the expected ``value'' for each
+state without explicitly learning the environment-dynamics. This paradigm has
+been behind most of the recent success stories of high performance in diverse
+applications like Atari games, Go championships etc.
 
 Both paradigms of RL suffer different disadvantages in transferring
 learned behaviors to \emph{reward-dynamic} settings i.e.  environments
