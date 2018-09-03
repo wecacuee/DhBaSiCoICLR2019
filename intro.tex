@@ -27,40 +27,41 @@ state without explicitly learning the environment-dynamics. This paradigm has
 been behind most of the recent success stories of high performance in diverse
 applications like Atari games, Go championships etc.
 
-Both paradigms of RL suffer different disadvantages in transferring
-learned behaviors to \emph{reward-dynamic} settings i.e.  environments
-in which the underlying reward distribution changes.  While model-based
-RL allows for the separation of environment dynamics and reward, small
-errors in the modelling function lead to significant drops in
-performance. In \emph{model-free} RL, on the other hand, the conflated
-representation of environment and reward makes any form of transfer
-difficult. These problems are exacerbated in multi-goal settings. 
+% Goal-conditioned tasks
+Many problems in robotics, like navigation, reach, pick and place tasks, can be
+formulated as goal-conditioned tasks where task to be completed depends on a
+goal information. However, for such tasks model-free RL fails to transfer
+learned behavior from one goal location to to another goal location within the
+same environment. This happens because model-free RL represents the environment
+as value functions which conflate the state-dynamics and reward distributions into a single representation.
+On the other hand, model-based RL allows for the separation of environment
+dynamics and reward, small errors in the modelling function lead to significant
+drops in performance.
 
-Inspired by the idea of combining advantages from both RL paradigms and
-the Floyd-Warshall algorithm in graph-based path planning, this work
-introduces Floyd-Warshall Reinforcement Learning, a new framework for
-combining model-based and model-free RL in goal-driven reward-dynamic
-settings. FWRL works by modeling a goal-conditioned action-value function
-where every state in the state space can be a valid goal. This allows
-FWRL to remember the paths even if they do not lead to the
-goal location during a particular episode.
-This motivation is similar to the Hindsight Experience Replay 
-\cite{anderson2017vision}, however, we use the parameteric representation
-for ``hindsight experience'' instead of the replay memory.
+To address goal-conditioned RL problems, we take inspiration from Floyd-Warshall
+shortest path algorithm on graphs. Floyd-Warshall is a generalization of
+Dijkstra algorithm that computes shortest path from every states to all other
+states.
+This work introduces Floyd-Warshall Reinforcement Learning, a new framework for
+combining model-based and model-free RL in goal-conditioned tasks. FWRL works by
+modeling a goal-conditioned action-value function where every state in the state
+space can be a valid goal. This allows FWRL to remember the paths even if they
+do not lead to the goal location during a particular episode. This motivation is
+similar to the Hindsight Experience Replay \cite{anderson2017vision}, however,
+we use the parameteric representation for ``hindsight experience'' instead of
+the replay memory.
 
-Ideas of combining both RL paradigms to improve agent performance are
-not new. In Temporal-Difference modelling \cite{pong2018temporal} 
-model a goal conditioned action-value function that is also conditioned
-on the number of time-steps. In contrast our proposed value function
-is independent of the time-steps.
-In Hindsight Experience Replay \cite{andrychowicz2016learning},
-previous episode experience is used augment and bootstrap learning. 
+Ideas of combining both RL paradigms to improve agent performance are not new.
+In Temporal-Difference modelling \cite{pong2018temporal} model a goal
+conditioned action-value function that is also conditioned on the number of
+time-steps. In contrast our proposed value function is independent of the
+time-steps. In Hindsight Experience Replay \cite{andrychowicz2016learning},
+previous episode experience is used augment and bootstrap learning.
 
 Experimentally, FWRL is shown to outperform both model-based, model-free
 and above combintations thereof in both a tabular and neural-network
 based setting. FWRL is found to outperform the next most significant
-baselines by as much x\%.
-
+baselines by as much \TODO{x\%}.
 
 In summary, this work introduces Floyd-Warshall Reinforcement Learning
 outperforming several strong baselines on a varierty of multi-goal
