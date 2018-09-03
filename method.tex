@@ -79,11 +79,17 @@ When the policy is optimal, the Floyd-Warshall function should satisfy the const
 \fwargs{\state_i}{\act_i}{\state_j}{}{*}
  = \max_{\state_k} \left[
 \fwargs{\state_i}{\act_i}{\state_k}{}{*}
-+ \max_{\act_k}\fwargs{\state_k}{\act_k}{\state_j}{}{*} \right] .
++ \max_{\act_k}\fwargs{\state_k}{\act_k}{\state_j}{}{*} \right] ,
 \end{align}%
 %
+which states that the optimal FW function from a given start state to a
+given goal state should be greater than or equal to the summation of FW
+function via any intermediate state. 
 
 We summarize the algorithm in Alg~\ref{alg:floyd-warshall-small}.
+
+\TODO{Should we use Q-function as backdrop?}
+
 
 \input{algorithm}
 

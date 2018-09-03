@@ -54,11 +54,13 @@ explicitly learned state-dynamics. However, model-based algorithms do not
 achieve high asymptotic algorithms like model-free RL. This is because minor
 modeling errors in state-dynamics cumulate over planning over long term.
 To address this limitation in model-free RL on goal conditioned tasks, 
-this work introduced Floyd-Warshall Reinforcement Learning (FWRL), a novel
-algorithm that combines advantages from both \emph{model-based} and
-\emph{model-free} approaches.
-The algorithm works by learning a goal-conditioned value function from every
-possible state to every other state.
+this work introduces Floyd-Warshall Reinforcement Learning (FWRL), a novel
+algorithm for learning goal-conditioned value functions (GVF).
+The algorithm works by constraining GVFs to be greater than the
+summation of GVFs via any other path.  
+Which states that the optimal FW function from a given start state to a
+given goal state should be greater than or equal to the summation of FW
+function via any intermediate state. 
 FWRL is shown to transfer knowledge about an environment when the reward
 location is dynamic compared to a model-based Q-learning baseline.
 \end{abstract}
