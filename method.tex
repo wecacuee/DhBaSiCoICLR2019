@@ -64,20 +64,43 @@ learned behavior when goal location is dynamic. We accomplish this by
 maintaining a path based expected reward function from any state to any goal
 state. We call this algorithm Floyd-Warshall Reinforcement Learning, because of
 its similarity to Floyd-Warshall algorithm : a shortest-path planning algorithm
-on graphs. We define Floyd-Warshall value function as
+on graphs. We define Floyd-Warshall value function (FW) as
 %
 \begin{align}
-\fwargs{i}{l}{j}{\policy}{} =
-\E_{\policy}\left[ \sum_{t=0}^{t=k} \rew_t \middle\vert \state_0 = i, \act_0 = l, \state_k = j \right] .
+\fwargs{\state}{\act}{\state'}{\policy}{} =
+\E_{\policy}\left[ \sum_{t=0}^{t=k} \rew_t \middle\vert \state_0 = \state, \act_0 = \state, \state_k = \state' \right] ,
 \end{align}%
 %
-When the policy is optimal, the Floyd-Warshall function should satisfy the constraint
+where $\policy: \State \times \Action \rightarrow \Delta$ is the
+stochastic policy being followed.
+
+What is the relationship between Q-function and FW-function?
+\begin{align}
+  \Q_\policy(\state, \act) = \sum_{\state'} P_\policy(\state' | \state, \act) \fwargs{\state}{\act}{\state'}{\policy}{},
+\end{align}%
+%
+where $P_\policy(\state' | \state, \act)$ is the probability of the agent
+arriving at $\state'$ within the episode.
+
+The optimal FW-function is defined as
+\begin{align}
+\fwargs{\state}{\act}{\state'}{\policy^*_{\state'}}{*} =
+\max_{\policy_{\state'}}\E_{\policy_{\state'}}\left[ \sum_{t=0}^{t=k} \rew_t \middle\vert \state_0 = \state, \act_0 = \state, \state_k = \state' \right] ,
+\end{align}%
+where $\policy^*_{\state'}: \State \times \Action \rightarrow \Delta$ is the
+optimal policy towards the goal state $\state'$. The
+optimal Q-function and FW-function are equal same goal
+  $\Q^*_{\policy^*_{\state_g}}(\state, \act) =
+  \fwargs{\state}{\act}{\state_g}{\policy^*_{\state_g}}{*}$, as long as they are
+  following the policy towards the same goal.
+
+When the policy is optimal, the Floyd-Warshall function must satisfy the constraint
 %
 \begin{align}
-\fwargs{\state_i}{\act_i}{\state_j}{}{*}
- = \max_{\state_k} \left[
-\fwargs{\state_i}{\act_i}{\state_k}{}{*}
-+ \max_{\act_k}\fwargs{\state_k}{\act_k}{\state_j}{}{*} \right] ,
+\fwargs{\state_i}{\act_i}{\state_j}{\policy^*_{\state_j}}{*}
+ = \sup_{\state_k} \left[
+  \fwargs{\state_i}{\act_i}{\state_k}{\policy^*_{\state_k}}{*}
+  + \max_{\act_k}\fwargs{\state_k}{\act_k}{\state_j}{\policy^*_{\state_j}}{*} \right] ,
 \end{align}%
 %
 which states that the optimal FW function from a given start state to a
