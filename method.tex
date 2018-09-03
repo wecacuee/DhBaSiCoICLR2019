@@ -60,11 +60,13 @@ computation and more importantly in sample complexity.
 
 \section{Method}
 We present a model-free reinforcement learning method that easily transfers the
-learned behavior when goal location is dynamic. We accomplish this by
-maintaining a path based expected reward function from any state to any goal
-state. We call this algorithm Floyd-Warshall Reinforcement Learning, because of
-its similarity to Floyd-Warshall algorithm : a shortest-path planning algorithm
-on graphs. We define Floyd-Warshall value function (FW) as
+learned behavior when goal location is dynamic. We call this algorithm
+Floyd-Warshall Reinforcement Learning, because of its similarity to
+Floyd-Warshall algorithm~\cite{floydwarshall1962}:
+a shortest-path planning algorithm on graphs. Similar
+to universal value function~\cite{schaul2015universal}, we define Floyd-Warshall
+(FW) function as the expected cumulative reward on going from start state to the
+end state within the episode:
 %
 \begin{align}
 \fwargs{\state}{\act}{\state'}{\policy}{} =
@@ -72,24 +74,25 @@ on graphs. We define Floyd-Warshall value function (FW) as
 \end{align}%
 %
 where $\policy: \State \times \Action \rightarrow \Delta$ is the
-stochastic policy being followed.
-
-What is the relationship between Q-function and FW-function?
+stochastic policy being followed. The relationship between Q-function and
+FW-function is given by the following equation:
 \begin{align}
   \Q_\policy(\state, \act) = \sum_{\state'} P_\policy(\state' | \state, \act) \fwargs{\state}{\act}{\state'}{\policy}{},
 \end{align}%
 %
 where $P_\policy(\state' | \state, \act)$ is the probability of the agent
-arriving at $\state'$ within the episode.
-
-The optimal FW-function is defined as
+arriving at $\state'$ within the episode. We define optimal FW-function as
+the maximum expected value that a path between start state and goal state can
+produce,
 \begin{align}
 \fwargs{\state}{\act}{\state'}{\policy^*_{\state'}}{*} =
 \max_{\policy_{\state'}}\E_{\policy_{\state'}}\left[ \sum_{t=0}^{t=k} \rew_t \middle\vert \state_0 = \state, \act_0 = \state, \state_k = \state' \right] ,
 \end{align}%
 where $\policy^*_{\state'}: \State \times \Action \rightarrow \Delta$ is the
-optimal policy towards the goal state $\state'$. The
-optimal Q-function and FW-function are equal same goal
+optimal policy towards the goal state $\state'$. Similar to Floyd-Warshall
+shortest path algorithm~\cite{floydwarshall1962}, we assume that there are no
+positive reward cycles in the environment.
+The optimal Q-function and FW-function are equal same goal
   $\Q^*_{\policy^*_{\state_g}}(\state, \act) =
   \fwargs{\state}{\act}{\state_g}{\policy^*_{\state_g}}{*}$, as long as they are
   following the policy towards the same goal.
@@ -98,12 +101,12 @@ When the policy is optimal, the Floyd-Warshall function must satisfy the constra
 %
 \begin{align}
 \fwargs{\state_i}{\act_i}{\state_j}{\policy^*_{\state_j}}{*}
- = \sup_{\state_k} \left[
+ \ge 
   \fwargs{\state_i}{\act_i}{\state_k}{\policy^*_{\state_k}}{*}
-  + \max_{\act_k}\fwargs{\state_k}{\act_k}{\state_j}{\policy^*_{\state_j}}{*} \right] ,
+  + \max_{\act_k}\fwargs{\state_k}{\act_k}{\state_j}{\policy^*_{\state_j}}{*} ,
 \end{align}%
 %
-which states that the optimal FW function from a given start state to a
+which states that the optimal value from a given start state to a
 given goal state should be greater than or equal to the summation of FW
 function via any intermediate state. 
 
