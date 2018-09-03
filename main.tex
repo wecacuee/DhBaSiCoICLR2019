@@ -42,37 +42,26 @@ Purdue University$^2$}
 
 \maketitle
 \begin{abstract}
-Reinforcement learning algorithms are oftentimes classified as either
-\emph{model-free} or \emph{model-based} based on whether a state-dynamics
-is learned. In the \emph{model-free} case, algorithms such as
-Q-learning and policy gradients learn the optimal action value function that
-maximizes expected future reward for all state-action pairs perceived by an
-agent in an environment.
-% VD: Not sure about that
-% The reward distribution and state dynamics that governs the agent's
-% environment are implicitly memorized in the learning of this function.
-The action value function depends upon both reward distribution and state
-dynamics but neither can be recovered from the learned action value function.
-That is why, \emph{model-free} RL struggles with transferring learned behaviours
-to tasks where only the reward distribution can change, for example,
-goal-conditioned tasks.
-In contrast, \emph{model-based} RL explicitly learns the state-dynamics
-function allowing for the transfer of an agent's learned behaviours to
-environments in which only the reward distribution changes. Oftentimes,
-this explicit modelling requires  an additional planning step to predict
-state-dynamics making policy computation in such algorithms
-an expensive process.  Inspired by both these paradigms and the
-Floyd-Warshall algorithm for path-planning on graphs,  this work
-introduced Floyd-Warshall Reinforcement Learning (FWRL), a novel
+Many practical problems in robotics, like navigation, pick and place can be
+formulated as goal conditioned tasks, tasks where the environment is static but
+the goal location is dynamic.
+However, \emph{model-free} reinforcement learning (RL) is not suitable for these
+tasks because the learned function approximations like action-value function are
+not useful in transferring learned information once the reward distribution
+changes.
+On the other hand, \emph{model-based} reinforcement learning algorithms can
+transfer to changing reward distributions by simply retaining the the
+explicitly learned state-dynamics. However, model-based algorithms do not
+achieve high asymptotic algorithms like model-free RL. This is because minor
+modeling errors in state-dynamics cumulate over planning over long term.
+To address this limitation in model-free RL on goal conditioned tasks, 
+this work introduced Floyd-Warshall Reinforcement Learning (FWRL), a novel
 algorithm that combines advantages from both \emph{model-based} and
-\emph{model-free} approaches.  The algorithm works by learning a
-goal-conditioned value function that transitions from model-based
-behavior to model-free behavior in well explored regions of an agent's
-state space.  FWRL is shown to transfer knowledge about an environment
-when the reward location is dynamic compared to a model-based Q-learning
-baseline.  FWRL is shown to meet the ground between model-free and
-model-based algorithms by being model-free in the more frequently
-visited regions while being model-based on less visited paths.
+\emph{model-free} approaches.
+The algorithm works by learning a goal-conditioned value function from every
+possible state to every other state.
+FWRL is shown to transfer knowledge about an environment when the reward
+location is dynamic compared to a model-based Q-learning baseline.
 \end{abstract}
 
 
