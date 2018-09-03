@@ -1,6 +1,9 @@
 \begin{algorithm}
   \tcc{By default all states are unreachable}
   Initialize $\fwargs{\state_i}{\act_i ; \param_{\fwcost}}{\state_j}{}{} \leftarrow -\infty$ \;
+
+  Define $\policy^*(\state_t, \state_g, \fw) = \arg \max_{\act}
+  \fwargs{\state_t}{\act; \param_{\fwcost}}{\state_g}{}{}$ \;
   % We do not know the goal location
   Initialize $\state_g = \phi$ \;
   Set $t \leftarrow 0$\;

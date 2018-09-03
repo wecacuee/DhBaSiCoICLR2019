@@ -46,30 +46,36 @@ both baseline methods and FWRL are described here.
         thus the amount of time taken for reward to climb.
 
     \item \textbf{\Loo}\\
-        First defined in \cite{MiPaViICLR2017}, \Loo is the ratio of the
-        amount of time taken to hit the goal for the first time to the
-        average amount of time taken to hit goals subsequently. It is
-        the ratio of the exploration time over the exploitation time.
-		\begin{align*}
+        We use the metric \Loo as defined in \cite{MiPaViICLR2017} as the ratio
+        of the time taken to hit the goal for the first time to the average
+        amount of time taken to hit goals subsequently. It
+        is the ratio of the exploration time over the exploitation time:
+		\begin{align}
 			\text{\Loo} &= 
-			\frac{(N-1) \tau_1}{\tau_{N} - \tau_1} & \text{if }  N >= 2
-		\end{align*}%
+			\frac{(N-1) \tau_1}{\tau_{N} - \tau_1} & \text{if }  N >= 2,
+		\end{align}%
+        where $\tau_1, \tau_2, \dots, \tau_N$ are the $N$ time steps at which
+        the agent reaches the goal.
 
 
     \item \textbf{Distance-Inefficiency}\\
-        Described in \cite{dhiman2018critical}, the
-        distance-inefficiency is the ratio of the distances travelled by
+        The distance-inefficiency is the ratio of the distances travelled by
         the agent during an episode to the sum of the shortest path to
-        the goal at every point of initialization.
-
-		\begin{align*}
+        the goal at every point of initialization. Mathematically it is defined
+        as: 
+		\begin{align}
 			\text{Dist-ineff.} &=
-			\frac{ \sum_{i=1}^{N-1} \sum_{t=\tau_i + 1}^{\tau_{i+1} - 1} \|\pos_{t+1} - \pos_{t}\| }
-			{ \sum_{i=1}^{N-1} p(\pos_{\tau_i + 1}, \pos_g) } \enspace, & \text{if } N >= 1
-		\end{align*}%
+			\frac{ \sum_{i=1}^{N-1} \sum_{k=\tau_i + 1}^{\tau_{i+1} - 1} \|\pos_{k+1} - \pos_{j}\| }
+			{ \sum_{i=1}^{N-1} \delta(\pos_{\tau_i + 1}, \pos_g) } \quad \text{if } N >= 1,
+		\end{align}%
 		%
-		where $p(\pos_{\tau_i +1}, x_g)$ denotes the approximate shortest path
-		distance between spawn location $\pos_{\tau_i+1}$ and goal location $\pos_g$.
+		where $\delta(\pos_{\tau_i +1}, x_g)$ denotes the shortest path
+		distance between spawn location $\pos_{\tau_i+1}$ and goal location
+        $\pos_g$. The numerator is the total distance covered by the agent while
+        skipping the jumps where the agent gets re-spawned after reaching the
+        goal location. The denominator is the total shortest distance during the
+        episodes.
+
 
 \end{enumerate}
 
