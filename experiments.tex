@@ -59,10 +59,10 @@ both baseline methods and FWRL are described here.
 
 
     \item \textbf{Distance-Inefficiency}\\
-        The distance-inefficiency is the ratio of the distances travelled by
-        the agent during an episode to the sum of the shortest path to
-        the goal at every point of initialization. Mathematically it is defined
-        as: 
+      The distance-inefficiency~\citep{dhiman2018critical} is the ratio of the
+      distances travelled by the agent during an episode to the sum of the shortest
+      path to the goal at every point of initialization. Mathematically it is defined
+      as:
 		\begin{align}
 			\text{Dist-ineff.} &=
 			\frac{ \sum_{i=1}^{N-1} \sum_{k=\tau_i + 1}^{\tau_{i+1} - 1} \|\pos_{k+1} - \pos_{j}\| }
@@ -75,10 +75,17 @@ both baseline methods and FWRL are described here.
         skipping the jumps where the agent gets re-spawned after reaching the
         goal location. The denominator is the total shortest distance during the
         episodes.
-
-
 \end{enumerate}
 
+\subsection{Baselines}
+We compare our algorithm FWRL against two baselines
+Q-Learning~\cite{watkins1992qlearning} and Model based RL (MBRL).
+We implement a simple version of tabular model based RL where we maintain a
+transition count data-structure $T(\state' | \state, \act)$.
+This allows to compute a frequentist estimate of dynamics model.
+We also keep an tabular record of the reward from each state-action pair
+$R(\state, \action)$. The dynamics model is then used to find the
+maximum-reward-path to the goal state.
 
 %
 \begin{figure}[h!]%
@@ -88,4 +95,4 @@ both baseline methods and FWRL are described here.
 \caption{Left: Four room grid world. Right: Four room windy grid world with wind direction shown by arrows. The windy pushes the agent in the direction of wind with 0.25 probability irrespective of the action taken.}
 \label{fig:four-room-grid-world}%
 \end{figure}%
-
+%
