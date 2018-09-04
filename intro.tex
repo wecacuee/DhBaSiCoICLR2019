@@ -6,7 +6,7 @@ evidenced from RL's recent successes in various domains such as playing Atari
 games~\cite{MnKaSiNATURE2015} from purely visual input and defeating world GO
 champion~\cite{gibney2016google}, to goal-driven ones such as recent
 applications in robotic navigation~\cite{mirowski2018learning} and
-manipulation~\cite{pong2018temporal}. In the realm of goal-conditioned tasks,
+manipulation~\cite{pong2018temporal}. In the realm of multi-goal tasks,
 this work introduces Floyd-Warshall Reinforcement Learning (FWRL), a new
 algorithm that allows transferring learned behaviours to environments in which
 the underlying reward distribution is dynamic.
@@ -29,7 +29,7 @@ applications like Atari games, Go championships etc.
 
 % Goal-conditioned tasks
 Many problems in robotics, like navigation, reach, pick and place tasks, can be
-formulated as goal-conditioned tasks where task to be completed depends on a
+formulated as multi-goal tasks where task to be completed depends on a
 goal information. However, for such tasks model-free RL fails to transfer
 learned behavior from one goal location to to another goal location within the
 same environment. This happens because model-free RL represents the environment
@@ -38,12 +38,12 @@ On the other hand, model-based RL allows for the separation of environment
 dynamics and reward, small errors in the modelling function lead to significant
 drops in performance.
 
-To address goal-conditioned RL problems, we take inspiration from Floyd-Warshall
+To address multi-goal RL problems, we take inspiration from Floyd-Warshall
 shortest path algorithm on graphs. Floyd-Warshall is a generalization of
 Dijkstra algorithm that computes shortest path from every states to all other
 states.
 This work introduces Floyd-Warshall Reinforcement Learning, a new framework for
-combining model-based and model-free RL in goal-conditioned tasks. FWRL works by
+combining model-based and model-free RL in multi-goal tasks. FWRL works by
 modeling a goal-conditioned action-value function where every state in the state
 space can be a valid goal. This allows FWRL to remember the paths even if they
 do not lead to the goal location during a particular episode. This motivation is

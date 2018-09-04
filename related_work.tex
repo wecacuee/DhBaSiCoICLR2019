@@ -1,31 +1,29 @@
 
 \section{Related work}
-\subsection{Goal-conditioned value functions}
+%\subsection{Goal-conditioned value functions}
 
-Universal goal-conditioned value functions (UVFs), $V(s,g)$, described in
-\citet{schaul2015universal}, measures the utility function of achieving any goal
-from any state. In the original work, UVFs are learned using traditional
-Q-learning based approaches coupled with matrix factorization based
-methods for faster learning. In this work, our contribution is a novel
-algorithm for learning UVFs via leveraging constraints within the space
-of these functions. 
-
-Other approaches have been proposed for learning UVFs.
+\paragraph{Goal-conditioned value functions}
+Multi-goal reinforcement learning has gained some attention lately with
+important work like UVF~\citep{schaul2015universal},
+HER~\citep{andrychowicz2016learning}, TDM~\citep{pong2018temporal} making
+progress towards learning goal-conditioned value functions that help in
+addressing multi-goal tasks. Universal goal-conditioned value functions
+(UVFs)~\citep{schaul2015universal}, $V(s,g)$ measures the utility function of
+achieving any goal from any state. UVFs are learned using traditional Q-learning
+based approaches coupled with matrix factorization based methods for faster
+learning.
 \citet{andrychowicz2016learning} introduced the idea of Hindsight
-experience replay (HER) to learn about the model from previous episodes
+Experience Replay (HER) to learn about the model from previous episodes
 even when the goal location has changed or not been achieved.  Their
-method works by considering failed state-traversals as succesful ones in
-the course of training. Unliked our proposed algorithm, their methods
-fails to take in to account relationships between learned Q-functions
-between common state traversal pairs. In this regard our work, our
-method can be seen as parametric approximation of ``Hindsight memory'',
-that can help compress information from previous episodes instead of
-maintaining the entire history of replay memory.
-
-\cite{pong2018temporal} propose temporal difference models that estimate
-goal directed Q function for a specific kind of reward function, in
-particular the distance from the goal and in contrast with limited
-temporal horizon.
+method works by utilizing experience from episodes where agent failed to reach
+the goal re-imagining the last state to be the goal state.
+\citet{pong2018temporal} propose Temporal Difference Models (TDM) that estimate
+goal directed horizon dependent value function $Q(s, a, g, \tau)$. There work is
+limited because they assume that rewards are available densely in the form of
+some distance like measure from the goal.
+In contrast to all the above works our contribution is a novel algorithm for
+learning UVFs via leveraging a triangular-inequality like constraint within the
+space of these functions.
 
 Much recent work has explored the application of deep-reinforcement
 learning for use in navigation domains. Agent's are usually initialized
