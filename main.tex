@@ -26,13 +26,12 @@
 % The file aaai.sty is the style file for AAAI Press 
 % proceedings, working notes, and technical reports.
 %
-\title{Floyd-Warshall Reinforcement Learning: \\Combining Advantages from
-Model-Free and Model-Based RL}
+\title{Floyd-Warshall Reinforcement Learning}
 
-\author{Vikas Dhiman$^1$, Shurjo Banerjee$^1$, Jeffrey M. Siskind$^2$ and Jason J.
-Corso$^1$\\
-The University of Michigan$^1$\\
-Purdue University$^2$}
+%\author{Vikas Dhiman$^1$, Shurjo Banerjee$^1$, Jeffrey M. Siskind$^2$ and Jason J.
+%Corso$^1$\\
+%The University of Michigan$^1$\\
+%Purdue University$^2$}
 
 \pdfinfo{
 /Title ()
@@ -44,7 +43,6 @@ Purdue University$^2$}
 Many practical problems in robotics, called multi-goal tasks, involve a static
 environment and dynamic goals. Example of such problems include goal-driven
 navigation and pick and place tasks.
-
 Two types of Reinforcement Learning (RL) algorithms are used for
 multi-goal tasks: 
 \emph{model-based} or \emph{model-free}. Each of these approaches has its limitations.
@@ -53,12 +51,10 @@ changes, but achieves high asymptotic accuracy in single goal tasks. Model-based
 RL can transfer learned information to new goal locations by retaining the
 explicitly learned state-dynamics, but is limited by the fact that small errors in
 state-dynamics accumulate over long term planning.
-
 In this work, we improve upon the limitations of model-free RL in
 multi-task domains. 
 We do this by adapting the Floyd-Warshall algorithm to
 the RL domain. We call our adaptation Floyd-Warshall RL (FWRL).
-
 The proposed algorithm learns a goal-conditioned value function. 
 It works by constraining the value of
 optimal path between any two states to be greater than or equal to the value of

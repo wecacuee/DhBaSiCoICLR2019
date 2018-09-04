@@ -11,6 +11,7 @@ work introduces Floyd-Warshall Reinforcement Learning (FWRL), a new algorithm
 that allows transferring learned behaviours to environments with new goal
 locations.
 
+
 % brief background on model-based and model-free learning.
 Algorithms in RL are often classified as being either
 \emph{model-based} or \emph{model-free}, the distinction being whether
@@ -26,6 +27,19 @@ actor-critic and Q-learning directly learn the expected ``value'' for each
 state without explicitly learning the environment-dynamics. This paradigm has
 been behind most of the recent success stories of high performance in diverse
 applications like Atari games, Go championships etc.
+
+\begin{figure}%
+\includegraphics[width=\columnwidth]{./media/optimal_trajectories.pdf}\\
+\caption{The intuition driving the workings of FWRL. An agent is
+independently directed to goal state 1 from start state 1 and goal state
+2 to start state 2. The agent is then directed to traverse to goal state
+1 from start state 2. Intuitively, the agent can use the previous
+trajectories to find a shorter path to perform this traversal (the
+dotted line). However, standard Q-Learning discards all previous
+experience during learning. FW Learning utilizes such shortest path
+based constraints to find goal locations faster.  }
+\label{fig:ql-fw-grid-world-results}%
+\end{figure}
 
 % Goal-conditioned tasks
 Many problems in robotics, like navigation, and  pick and place tasks can be
