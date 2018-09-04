@@ -85,7 +85,7 @@ the maximum expected value that a path between start state and goal state can
 yield,
 \begin{align}
 \fwargs{\state}{\act}{\state'}{\policy^*_{\state'}}{*} =
-\max_{\policy_{\state'}}\E_{\policy_{\state'}}\left[ \sum_{t=0}^{t=k} \rew_t \middle\vert \state_0 = \state, \act_0 = \state, \state_k = \state' \right] ,
+\max_{\policy_{\state'}}  \fwargs{\state}{\act}{\state'}{\policy_{\state'}}{}
 \end{align}%
 where $\policy^*_{\state'}$ is the
 optimal policy towards the goal state $\state'$. The optimal Q-function and

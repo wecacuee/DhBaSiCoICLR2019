@@ -20,7 +20,7 @@ structure $\dds$ is initialized with zero at start location $\dds[\state_0]
 i \in \vertices$. The algorithm then sequentially updates $\dds$ by
 %
 \begin{align}
-  \dds[j] \leftarrow \min\{\dds[j], \dds[i] + \edge_{(i, j)} \} \, \forall (i, j) \in \edges ,
+  \dds[j] \leftarrow \min\{\dds[j], \edge_{(i, j)} + \dds[i] \} \, \forall (i, j) \in \edges ,
   \label{eq:dijkstra}
 \end{align}%
 %
@@ -54,8 +54,15 @@ equation for every transition from $\state$ to $\state'$ on action $\act$
 yielding reward $\rew$, 
 %
 \begin{align}
-    %\Q^*(\state, \act) &= \max_{\policy} \E\left[R_t \middle| \state_t=\state, \act_t=\act, \policy \right] \\
-    \Q^*(\state, \act) &= \E_{\policy}\left[\rew + \max_{\act^{'}} \Q^*(\state^{'}, \act^{'}) \middle| \state, \act \right] \,
+    \Q^*(\state, \act) &= \max_{\policy} \E\left[R_t \middle| \state_t=\state, \act_t=\act, \policy \right] ,
+\end{align}
+which can be rewritten in a form similar to \eqref{eq:dijkstra}:
+\begin{align}
+  \Q^*(\state, \act) &= \max \left\{
+                       \Q^*(\state, \act),
+                       \E_{\policy}\left[
+                       \rew + \max_{\act^{'}} \Q^*(\state^{'}, \act^{'})
+                       \middle| \state, \act \right] \right\} \, .
     \label{eq:q-learn-bellman}
 \end{align}%
 %
