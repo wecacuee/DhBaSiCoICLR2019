@@ -18,7 +18,7 @@ the total reward per episode. Since the environment itself is static, this is
 best achieved via the agent first discovering the goal location and then
 traversing the shortest path to it from every subsequent \emph{spawn} state
 during the course of an episode. The agent is best suited by algorithms that
-emphasize the transfer \emph{environment structure} from episode to episode.
+emphasize the transfer of \emph{environment structure} from episode to episode.
 
 
 %Once the agent reaches the goal $\|\state_t - \goal\| <
@@ -32,7 +32,7 @@ emphasize the transfer \emph{environment structure} from episode to episode.
 
 %\subsection{Why is this problem important?}
 Many real world problems can be formulated in this context. Consider a robot
-who has moved into a new city.
+in a new environment.
 The salesman has to explore the city and find the buildings that match the given
 address. The next time the postman gets the same address, they can use their
 experience to find out the building. Even when a new address is provided in the
@@ -53,12 +53,12 @@ goal location the state, making the new state space $[\state_t,
 computation and more importantly in sample complexity.
 
 \section{Method}
-We present a model-free reinforcement learning method that easily transfers the
+We present a model-free reinforcement learning method that transfers the
 learned behavior when goal location is dynamic. We call this algorithm
 Floyd-Warshall Reinforcement Learning, because of its similarity to
 Floyd-Warshall algorithm~\cite{floydwarshall1962}:
 a shortest-path planning algorithm on graphs. Similar
-to universal value function~\cite{schaul2015universal}, we define Floyd-Warshall
+to universal value function~\cite{schaul2015universal}, we define the Floyd-Warshall
 (FW) function as the expected cumulative reward on going from start state to the
 end state within the episode:
 %
@@ -80,7 +80,7 @@ Note that the FW-function is closely related to the Q-function,
 \end{align}%
 %
 where $P_\policy(\state' | \state, \act)$ is the probability of the agent
-arriving at $\state'$ within the episode. We define optimal FW-function as
+arriving at $\state'$ within the episode. We define the optimal FW-function as
 the maximum expected value that a path between start state and goal state can
 yield,
 \begin{align}
