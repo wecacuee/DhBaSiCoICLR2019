@@ -45,12 +45,12 @@ goals. Examples of such tasks, such as goal-directed navigation
 and pick-and-place in robotics, abound.
 Two types of Reinforcement Learning (RL) algorithms are used for
 such tasks: 
-\emph{model-based} or \emph{model-free}. Each of these approaches has limitations.
+\emph{model-free} or \emph{model-based}. Each of these approaches has limitations.
 Model-free RL struggles to transfer learned information when the goal location
 changes, but achieves high asymptotic accuracy in single goal tasks. Model-based
 RL can transfer learned information to new goal locations by retaining the
 explicitly learned state-dynamics, but is limited by the fact that small errors in
-state-dynamics accumulate over long term planning.
+the state-dynamics accumulate over long term planning.
 In this work, we improve upon the limitations of model-free RL in
 multi-goal domains. 
 We do this by adapting the Floyd-Warshall algorithm to

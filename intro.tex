@@ -8,7 +8,7 @@ champions~\cite{gibney2016google}, to goal-driven ones such as recent
 applications in robotic navigation~\cite{mirowski2018learning} and
 manipulation~\cite{pong2018temporal}. In the realm of multi-goal tasks, this
 work introduces Floyd-Warshall Reinforcement Learning (FWRL), a new algorithm
-that allows transferring learned behaviours to environments with new goal
+that allows transferring learned behaviours in environments with dynamic goal
 locations.
 
 
@@ -21,7 +21,7 @@ environment's transitions is explicitly modelled.
 At any point in an episode, agents use this model to
 predict future states and utilize this information to maximize possible
 reward. This formulation is known to be sample-efficient while normally
-not achieving high asymptomatic performance.
+not achieving high asymptomatic performance~\cite{pong2018temporal}.
 In contrast, in \emph{model-free} RL, algorithms such as policy gradients,
 actor-critic and Q-learning directly learn the expected ``value'' for each
 state without explicitly learning the environment-dynamics. This paradigm has
@@ -46,34 +46,54 @@ Many problems in robotics, like navigation, and  pick and place tasks can be
 formulated in multi-goal domains where the task to be completed requires the
 specification of goal information. However, for such tasks model-free RL struggles
 to transfer learned behavior from one goal location to another within the same
-environment. This happens because model-free RL represents the environment as
+environment~\citep{dhiman2018critical}. This happens because model-free RL represents the environment as
 value functions which conflate the state-dynamics and reward distributions into
 a single representation.
 On the other hand, while model-based RL allows for the separation of environment
 dynamics and reward, small errors in the modelling function lead to significant
 drops in performance.
 
+We are interested in improving the performance of model-free algorithms
+in multi-goal domains while retaining the high asymptotic performance
+afforded in single goal tasks. Much prior work has attempted to do this. 
 To address the performance of model-free RL for multi-goal RL problems, we take
 inspiration from the Floyd-Warshall shortest path algorithm~\cite{floydwarshall1962}.
-Floyd-Warshall is a generalization of Dijkstra algorithm that computes the
+Floyd-Warshall is a generalization of Dijkstra's algorithm that computes the
 shortest path from every node in a graph to all other nodes.
 This work introduces Floyd-Warshall Reinforcement Learning, a new algorithm for
 model-free RL in multi-goal tasks. FWRL works by
 modeling a goal-conditioned action-value function where every state in the state
 space can be a valid goal. This allows FWRL to remember the paths even if they
-do not lead to the goal location during a particular episode. This motivation is
+do not lead to the goal location during a particular episode. 
+
+% Related Work - where are we coming from 
+Similar attempts have been made to retain the high asymptotic
+performance of model-free algorithms on multi-goal tasks.
+\citet{schaul2015universal} introduce goal-conditioned value functions
+that generalize across both state and goal spaces allowing for
+making goal-specification explicit in RL domains. In temporal difference
+modelling, equivalences between model-based and model-free algorithms
+are proposed and utilized to bootstrap Q-learning. The algorithm is
+conditioned on the horizon. In Hindsight Experience Replay, previous
+failed traversals are re-imagined as succesful leading to significant
+increases in learning times. While these methods have shown success in
+many environments, they are concerned with using Q-functions to estimate
+goal conditioned action-value functions. In contrast, our algorithm
+proposes the FW function as an alternative. This motivation is
 similar to the Hindsight Experience Replay \cite{anderson2017vision}, however,
 we use the transitive relation between goal-conditioned value function which
 allows us to utilize hindsight experience in more fine-grained manner.
 
-Recently, a few works have used the idea of goal-conditioned value functions. In
-Temporal-Difference modelling \cite{pong2018temporal} model a goal conditioned
-action-value function that is also conditioned on the horizon. In contrast our
-proposed value function is independent of horizon length, and hence easier to
-estimate.
-
 Experimentally, FWRL is shown to outperform model-based and model-free
 algorithms in a tabular setting. FWRL is found to outperform the next
 most significant baselines by as much \TODO{x\%}.
+
+
+%Recently, a few works have used the idea of goal-conditioned value functions. In
+%Temporal-Difference modelling \cite{pong2018temporal} model a goal conditioned
+%action-value function that is also conditioned on the horizon. In contrast our
+%proposed value function is independent of horizon length, and hence easier to
+%estimate.
+
 
 
