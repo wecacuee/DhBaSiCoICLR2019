@@ -54,15 +54,9 @@ equation for every transition from $\state$ to $\state'$ on action $\act$
 yielding reward $\rew$, 
 %
 \begin{align}
-    \Q^*(\state, \act) &= \max_{\policy} \E\left[R_t \middle| \state_t=\state, \act_t=\act, \policy \right] ,
-\end{align}
-which can be rewritten in a form similar to \eqref{eq:dijkstra}:
-\begin{align}
-  \Q^*(\state, \act) &= \max \left\{
-                       \Q^*(\state, \act),
-                       \E_{\policy}\left[
+  \Q^*(\state, \act) &= \E_{\policy}\left[
                        \rew + \max_{\act^{'}} \Q^*(\state^{'}, \act^{'})
-                       \middle| \state, \act \right] \right\} \, .
+                       \middle| \state, \act \right] \, .
     \label{eq:q-learn-bellman}
 \end{align}%
 %
@@ -99,7 +93,7 @@ like Johnson's algorithm~\citep{johnson1977efficient} that run in
 $O(|\vertices|^2\log|\vertices| + |\vertices||\edges|)$ and work on the same
 principle.
 
-Note, the similarity between the Eq.~\eqref{eq:dijkstra} and
+Note, the parallels between the Eq.~\eqref{eq:dijkstra} and
 Eq.~\eqref{eq:q-learn-bellman}. Q-learning can be thought of as the
 generalization of Dijkstra with the introduction of the action space on the in
 the graph traversal problem. In MDP instead of choosing the next state (or
