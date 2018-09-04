@@ -40,28 +40,36 @@
 
 \maketitle
 \begin{abstract}
-Many practical problems in robotics, called multi-goal tasks, involve a static
-environment and dynamic goals. Example of such problems include goal-driven
-navigation and pick and place tasks.
+Consider mutli-goal tasks that involve static environments and dynamic
+goals. Examples of such tasks, such as goal-directed navigation
+and pick-and-place in robotics, abound.
 Two types of Reinforcement Learning (RL) algorithms are used for
-multi-goal tasks: 
-\emph{model-based} or \emph{model-free}. Each of these approaches has its limitations.
-Model-free (RL) struggles to transfer learned information when the goal location
+such tasks: 
+\emph{model-based} or \emph{model-free}. Each of these approaches has limitations.
+Model-free RL struggles to transfer learned information when the goal location
 changes, but achieves high asymptotic accuracy in single goal tasks. Model-based
 RL can transfer learned information to new goal locations by retaining the
 explicitly learned state-dynamics, but is limited by the fact that small errors in
 state-dynamics accumulate over long term planning.
 In this work, we improve upon the limitations of model-free RL in
-multi-task domains. 
+multi-goal domains. 
 We do this by adapting the Floyd-Warshall algorithm to
-the RL domain. We call our adaptation Floyd-Warshall RL (FWRL).
-The proposed algorithm learns a goal-conditioned value function. 
-It works by constraining the value of
+the RL domain and call our adaptation Floyd-Warshall RL (FWRL).
+The proposed algorithm learns a goal-conditioned action-value function by 
+constraining the value of the
 optimal path between any two states to be greater than or equal to the value of
-path via any intermediate state.
-We experimentally show that FWRL learns better higher reward strategies in
+paths via intermediary states.
+Experimentally, we show that FWRL is more sample-efficient and learns higher reward strategies in
 multi-goal tasks as compared to Q-learning and model-based RL in a
 tabular domain.
+
+%The algorithm works by learning a goal-condition action-value function
+%that employs constraints inspired by the Floyd-Warshall algorithm
+%for path planning.  Specifically, the value of the optimal path
+%between any two states is constrained to be greater than or equal to
+%the value of path via any intermediate state.
+
+
 \end{abstract}
 
 
