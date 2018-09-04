@@ -41,25 +41,29 @@ Purdue University$^2$}
 
 \maketitle
 \begin{abstract}
-Many practical problems in robotics, like navigation, pick and place can be
-formulated as goal conditioned tasks, tasks where the environment is static but
-the goal location is dynamic.
-However, \emph{model-free} reinforcement learning (RL) is not suitable for these
-tasks because the learned function approximations like action-value function are
-not useful in transferring learned information once the reward distribution
-changes.
-On the other hand, \emph{model-based} reinforcement learning algorithms can
-transfer to changing reward distributions by simply retaining the the
-explicitly learned state-dynamics. However, model-based algorithms do not
-achieve high asymptotic algorithms like model-free RL. This is because minor
-modeling errors in state-dynamics cumulate over planning over long term.
-To address this limitation in model-free RL on goal conditioned tasks, 
-this work introduces Floyd-Warshall Reinforcement Learning (FWRL), a novel
-algorithm for learning goal-conditioned value functions (GVF).
-The algorithm works by constraining the value of optimal path between any two
-states should be greater than or equal to the value of path via any intermediate
-state. FWRL is shown to transfer knowledge about an environment when the reward
-location is dynamic compared to a model-based Q-learning baseline.
+Many practical problems in robotics, called multi-goal tasks, involve a static environment and dynamic goals.
+Example of such problems include goal-driven navigation and pick and place
+tasks.
+
+Two types of Reinforcement Learning (RL) algorithms are used for multi-goal tasks, 
+\emph{model-based} or \emph{model-free} depending on whether state-dynamics are
+learned. Each of these approaches has its limitations.
+Model-free (RL) struggles to transfer learned information when the goal location
+changes, but achieves high asymptotic performance. Model-based
+RL can transfer learned information to new goal locations by retaining the
+explicitly learned state-dynamics, but is limited by the fact that small errors in
+state-dynamics accumulate over long term planning.
+
+Our project is to address multi-goal tasks by improving upon the limitations of
+model-free RL. We do this by adapting the Floyd-Warshall algorithm to
+the RL domain. We call our adaptation Floyd-Warshall RL (FWRL).
+
+Our algorithm
+works by learning a goal-conditioned value function. We constrain the value of
+optimal path between any two states to be greater than or equal to the value of
+path via any intermediate state. FWRL is experimentally shown to transfer
+knowledge about an environment when the goal location is dynamic compared to a
+model-based Q-learning baseline.
 \end{abstract}
 
 
