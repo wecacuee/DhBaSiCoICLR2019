@@ -46,7 +46,7 @@ In contrast to our work, all the above works focus on navigation domain and
 employ domain specific auxiliary rewards and data-structures rather the focusing
 on the multi-goal task domain.
 
-\cite{Binary goal related tasks}
+\paragraph{Binary goal related tasks}
 \citet{parisotto2017neural} extend the idea of external neural network memory
 that is indexed by spatial coordinates rather then time, as done in previous
 works. However, their work, in a similar vein to \cite{OhChSiICML2016},
@@ -56,14 +56,19 @@ specification protocol and avoid the wrong goal while exploring for the right
 goal. These problems domains not evaluate the ability of agent to find the
 shortest path to the goal.
 
-\cite{Model-based RL}
-Model-based approaches are known to have lower asymptotic performance
-then model-free approaches~\cite{pong2018temporal}. It is sometimes easier to
-model the reward \TODO{cont.}
-More recently, model-based algorithms have
-shown more promise by explicitly modelling uncertainty. However this is
-still an active area of research \cite{lakshminarayanan2017simple,
-kurutach2018model,zhang2018solar}.
+\paragraph{Model-based RL}
+Model-based approaches are known to have lower asymptotic performance then
+model-free approaches~\cite{pong2018temporal}. In many tasks, like moving a
+glass of water, it is easier to model the expected rewards rather than state
+dynamics. This is because inaccurate modeling of the water-surface-dynamics
+won't affect the rewards as long the agent does not spill large amounts of
+water. More recently, model-based algorithms have shown more promise by
+explicitly modelling uncertainty~\cite{lakshminarayanan2017simple,
+  kurutach2018model,zhang2018solar}.
+However, for model-based algorithms to compete with model-free algorithms, the
+uncertainty in state-dynamics modeling needs to depend upon its effect on
+expected rewards.
+
 
 %FWRL is an algorithm for learning universal goal-conditioned value
 %functions, first introduced in \citet{schaul2015universal}. A universal
