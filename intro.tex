@@ -2,9 +2,9 @@
 Reinforcement learning (RL) is an exciting field of research as it allows for
 agents to learn complex behaviors in a multitude of environments while requiring
 minimal supervision only in the form of reward signals. This is readily
-evidenced from RL's recent successes in various domains such as playing Atari
-games~\cite{MnKaSiNATURE2015} from purely visual input and defeating world GO
-champion~\cite{gibney2016google}, to goal-driven ones such as recent
+evidenced from RL's recent successes in various domains ranging from goal-agnostic ones such as  
+playing Atari games~\cite{MnKaSiNATURE2015} from purely visual input and defeating world GO
+champions~\cite{gibney2016google}, to goal-driven ones such as recent
 applications in robotic navigation~\cite{mirowski2018learning} and
 manipulation~\cite{pong2018temporal}. In the realm of multi-goal tasks,
 this work introduces Floyd-Warshall Reinforcement Learning (FWRL), a new
@@ -12,7 +12,7 @@ algorithm that allows transferring learned behaviours to environments in which
 the underlying reward distribution is dynamic.
 
 % brief background on model-based and model-free learning.
-Algorithms that underly RL are often classified as being either
+Algorithms in RL are often classified as being either
 \emph{model-based} or \emph{model-free}, the distinction being whether
 an environment state-transition function is learned explicitly or
 implicitly.  In \emph{model-based} RL, the dynamics that govern an
@@ -28,20 +28,21 @@ been behind most of the recent success stories of high performance in diverse
 applications like Atari games, Go championships etc.
 
 % Goal-conditioned tasks
-Many problems in robotics, like navigation, reach, pick and place tasks, can be
-formulated as multi-goal tasks where task to be completed depends on a
-goal information. However, for such tasks model-free RL fails to transfer
-learned behavior from one goal location to to another goal location within the
-same environment. This happens because model-free RL represents the environment
-as value functions which conflate the state-dynamics and reward distributions into a single representation.
-On the other hand, model-based RL allows for the separation of environment
+Many problems in robotics, like navigation, and  pick and place tasks can be
+formulated in multi-goal domains where the task to be completed requires the
+specification of goal information. However, for such tasks model-free RL struggles
+to transfer learned behavior from one goal location to another within the same
+environment. This happens because model-free RL represents the environment as
+value functions which conflate the state-dynamics and reward distributions into
+a single representation.
+On the other hand, while model-based RL allows for the separation of environment
 dynamics and reward, small errors in the modelling function lead to significant
 drops in performance.
 
-To address multi-goal RL problems, we take inspiration from Floyd-Warshall
-shortest path algorithm on graphs. Floyd-Warshall is a generalization of
-Dijkstra algorithm that computes shortest path from every states to all other
-states.
+To address the performance of model-free RL for multi-goal RL problems, we take
+inspiration from the Floyd-Warshall shortest path algorithm on graphs.
+Floyd-Warshall is a generalization of Dijkstra algorithm that computes the shortest
+path from every node in a graph to all other nodes.
 This work introduces Floyd-Warshall Reinforcement Learning, a new framework for
 combining model-based and model-free RL in multi-goal tasks. FWRL works by
 modeling a goal-conditioned action-value function where every state in the state
