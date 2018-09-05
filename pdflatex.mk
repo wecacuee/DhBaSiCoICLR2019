@@ -38,23 +38,18 @@ $(OO)/%.pdf: %.tex $(OO)/.mkdir
 	# Parse the input files into the makefile. Remove the aux file from
 	# dependency list.
 	$(SED) -n 's/INPUT \(.*\)$$/$(INDENT)\1 \\/p' $(OO)/$*.fls | $(GREP) -Ev '$*.(w18|aex|aux)' >> $(OO)/$*.mk
-	# Run bibtex if log file says so
-	if $(GREP) -Fq 'LaTeX Warning: There were undefined references.' $(OO)/$*.log; \
-		then \
-		$(call BIBTEXRECIPE,$(OO),$*); \
-		$(PDFLATEX_R) $<; \
-	fi
-	# Rerun pdflatex if the log file says so
-	if $(GREP) -q 'Rerun to get cross-references right' $(OO)/$*.log; \
-		then $(PDFLATEX_R) $<; \
-	fi
+	# # Run bibtex if log file says so
+	$(call BIBTEXRECIPE,$(OO),$*)
+	$(PDFLATEX_R) $<
+	# # Rerun pdflatex if the log file says so
+	$(PDFLATEX_R) $<
 
 .PRECIOUS:
-%.bbl:
+%.bbl: %.aux
 	$(call BIBTEXRECIPE,$(*D),$(*F))
 
 .PRECIOUS: %/.mkdir
-%/.mkdir: 
+%/.mkdir:
 	mkdir -p $(@D)
 	touch $@
 

@@ -1,24 +1,22 @@
 % Objective of the paragraph: setup the hype context and importance of the problem
-Reinforcement learning (RL) is an exciting field of research as it
-allows for agents to learn complex behaviors in a multitude of
-environments while requiring minimal supervision in the form of reward
-signals. This is readily evidenced from RL's recent successes in various
-domains ranging from goal-agnostic ones such as  playing Atari
-games~\citep{MnKaSiNATURE2015} from purely visual input and defeating
-world GO champions~\citep{gibney2016google}, to goal-conditioned ones
-such as applications in robotic
+Reinforcement learning (RL) is an exciting field of research as it allows for
+agents to learn complex behaviors in a multitude of environments while requiring
+minimal supervision in the form of reward signals. Evidence of RL's success has
+accumulated in various domains ranging from playing Atari
+games~\citep{MnKaSiNATURE2015} from purely visual input and defeating world GO
+champions~\citep{gibney2016google}, to applications in robotic
 navigation~\citep{mirowski2018learning} and
-manipulation~\citep{pong2018temporal}. In the realm of multi-goal tasks,
-this work introduces Floyd-Warshall Reinforcement Learning (FWRL), a new
-algorithm that facilitates transferring learned behaviours in
-environments with dynamic goal locations.
+manipulation~\citep{pong2018temporal}. In the realm of multi-goal tasks, this
+work introduces Floyd-Warshall Reinforcement Learning (FWRL), a new algorithm
+that facilitates transferring learned behaviours in environments with dynamic
+goal locations.
 
 
 % brief background on model-based and model-free learning.
-Algorithms in RL are often classified as being either \emph{model-based}
-or \emph{model-free}, the distinction being whether an environment
-state-transition function is learned explicitly or implicitly.  In
-\emph{model-based} RL, the dynamics that govern an environment's
+Algorithms in RL are often classified as being either \emph{model-based} or
+\emph{model-free}, based on whether the state-transition function is learned
+explicitly or implicitly~\citep{SuBaBOOK1998}.
+In \emph{model-based} RL, the dynamics that govern an environment's
 transitions is explicitly modelled.  At any point in an episode, agents
 use this model to predict future states and utilize this information to
 maximize possible reward. This formulation is known to be
