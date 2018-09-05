@@ -5,21 +5,15 @@ Consider an agent interacting with an environment, $\varepsilon$. At
 every time step, $t$, the agent takes an action $\act_t \in \Act$, observes a
 state, $\state_t \in \State$ and a reward $\rew_t \in [-\Rgoal, \Rgoal]$.
 A goal state, $\goal \in \State$, is provided to the agent and it receives
-$\Rgoal$--the highest reward in the environment--on reaching close to the goal
-state by some threshold $\|\state -\goal\| < \delta_{\text{goal-thresh}}$
+$\Rgoal$--the highest reward in the environment--on reaching it
+with respect to some threshold $\|\state -\goal\| < \delta_{\text{goal-thresh}}$
 An episode is defined as of a fixed number of time steps, $T$. For
 every episode, a new goal state is provided to the agent as input. If the agent
 reaches the goal state before the episode ends, the agent is 
 re-spawned at a new random location within the environment while the goal state
 remains unchanged for the episode.
-
 The agent's objective is to find the sequence of actions to take that maximizes
-the total reward per episode. Since the environment itself is static, this is
-best achieved via the agent first discovering the goal location and then
-traversing the shortest path to it from every subsequent \emph{spawn} state
-during the course of an episode. The agent is best suited by algorithms that
-emphasize the transfer of \emph{environment structure} from episode to episode.
-
+the total reward per episode. 
 
 %Once the agent reaches the goal $\|\state_t - \goal\| <
 %\delta$
@@ -45,23 +39,24 @@ emphasize the transfer of \emph{environment structure} from episode to episode.
 %\subsection{Why is the problem hard?}
 Model-free Reinforcement learning methods assume that the rewards are
 being sampled from the a static reward function.  In a problem where the
-goal location changes, hence the reward function also changes, it
-becomes hard to transfer the learned value-function or action-value
-function to the changed location.  One alternative is to concatenate the
-goal location the state, making the new state space $[\state_t,
-\goal]^\top \in \State^2$ larger.  This method is wasteful in
-computation and more importantly in sample complexity.
+goal location changes it becomes hard to transfer the learned
+value-function or action-value function to the changed location.  One
+alternative is to concatenate the goal location the state, making the
+new state space $[\state_t, \goal]^\top \in \State^2$ larger.  This
+method is wasteful in computation and more importantly in sample
+complexity \cite{schaul2015universal}.
 
 \section{Method}
 \label{sec:method}
-We present a model-free reinforcement learning method that transfers the
-learned behavior when goal location is dynamic. We call this algorithm
+We present a model-free reinforcement learning method that transfers
+learned behavior when goal locations are dynamic. We call this algorithm
 Floyd-Warshall Reinforcement Learning, because of its similarity to
 Floyd-Warshall algorithm~\cite{floydwarshall1962}:
 a shortest-path planning algorithm on graphs. Similar
 to universal value function~\cite{schaul2015universal}, we define the Floyd-Warshall
-(FW) function as the expected cumulative reward on going from start state to the
-end state within the episode:
+(FW) function as the expected cumulative reward on going from a start
+state to an
+end state within an episode:
 %
 \begin{align}
 \fwargs{\state}{\act}{\state'}{\policy}{} =
@@ -70,9 +65,9 @@ end state within the episode:
 %
 where $\policy$ is the
 stochastic policy being followed.
-Note that we do not use discounted rewards, instead we assume that episodes are
-of finite time length and in line with Floyd-Warshall shortest path
-algorithm~\cite{floydwarshall1962}, we assume that there are no positive reward
+Note that we do not use discounted rewards, instead assuming that episodes are
+of finite time length. In keeping with the Floyd-Warshall shortest path
+algorithm, we assume that there are no positive reward
 cycles in the environment.
 
 Note that the FW-function is closely related to the Q-function,
@@ -82,18 +77,14 @@ Note that the FW-function is closely related to the Q-function,
 %
 where $P_\policy(\state' | \state, \act)$ is the probability of the agent
 arriving at $\state'$ within the episode. We define the optimal FW-function as
-the maximum expected value that a path between start state and goal state can
+the maximum expected value that a path between a start state and a goal state can
 yield,
 \begin{align}
 \fwargs{\state}{\act}{\state'}{\policy^*_{\state'}}{*} =
 \max_{\policy_{\state'}}  \fwargs{\state}{\act}{\state'}{\policy_{\state'}}{}
 \end{align}%
 where $\policy^*_{\state'}$ is the
-optimal policy towards the goal state $\state'$. The optimal Q-function and
-FW-function are equal same goal
-$\Q^*_{\policy^*_{\state_g}}(\state, \act) =
-  \fwargs{\state}{\act}{\state_g}{\policy^*_{\state_g}}{*}$,
-as long as they are following the policy towards the same goal. Once the
+optimal policy towards the goal state $\state'$. Once the
 FW-function approximation is learned, the optimal policy can be computed from
 FW-function similar to the Q-learning algorithm, $\policy^*_{\state'}(\state) =
 \arg \max_{\act} \fwargs{\state}{\act}{\state'}{}{*}$
@@ -114,12 +105,11 @@ In other words, the value for the optimal path from given start state to a given
 goal state should be greater than or equal to value of path via any intermediate
 state.
 This triangular-inequality like constraint is the main contribution of our work.
-To the best of our knowledge has not been employed in any of the previous works
+To the best of our knowledge it has not been employed in any previous works
 utilizing goal-conditioned value functions.
 
-We make the additional assumption of reward distribution being same except for
-the goal reward. The rewards at all states remain the same except the goal
-reward which follows the goal. We also assume that the goal reward is the
+Aside from the dynamic goal locations, we assume environments underlying reward
+distributions to be static. We also assume that the goal reward is the
 highest reward in the reward space.
 The pseudo-code for the algorithm in shown Alg~\ref{alg:floyd-warshall-small}.
 

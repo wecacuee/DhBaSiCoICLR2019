@@ -16,7 +16,7 @@ given vertex in the graph. Consider a weighted graph $G = (\vertices,
 algorithms works by maintaining a data-structure $\dds : \vertices \rightarrow
 \R$, that represents the shortest path length from the source. The data
 structure $\dds$ is initialized with zero at start location $\dds[\state_0]
-\leftarrow 0$ and a high value else where $\dds[i] \leftarrow \infty \, \forall
+\leftarrow 0$ and a high value everywhere else $\dds[i] \leftarrow \infty \, \forall
 i \in \vertices$. The algorithm then sequentially updates $\dds$ by
 %
 \begin{align}
@@ -26,8 +26,7 @@ i \in \vertices$. The algorithm then sequentially updates $\dds$ by
 %
 where $\edge_{(i, j)}$ is the edge-weight for directed edge $(i, j) \in \edges$.
 The shortest path $(\state_0, \state_{1}, \dots)$ starting from vertex
-$\state_t \in \vertices$ can be read from $\dds$ following nearest neighbor
-towards minimum $\fwds$ towards the goal $\state_{t+1} = \arg \min_{i \in
+$\state_0$ can be read from $\dds$ via $\state_{t+1} = \arg \min_{i \in
 \text{Nbr}(\state_t)} \dds[i]$ where $\text{Nbr}(\state_t) = \{ i | (i,
 \state_t) \in \edges \} $ denotes the neighborhood of $\state_t$. With a
 carefully chosen data-structure and traversal order, the Dijkstra Algorithm can
@@ -35,8 +34,8 @@ be made to run in $O(|\vertices|\log|\vertices|)$.
 
 \subsection{Q-Learning}
 Q-learning~\citep{watkins1992qlearning} is a reinforcement learning (RL)
-algorithm that allows agent to explores the environment and simultaneously
-compute the maximum reward path.
+algorithm that allows agent to explore environment and simultaneously
+compute maximum reward paths.
 
 An RL problem is formalized as an Markov Decision Process (MDP). A MDP is
 defined by a four tuple $(\State, \Action, \Trans, \Rew)$, where $\State$ is the
@@ -49,7 +48,7 @@ reward over time, called the returns  $ R_t = \sum_{t^{'}=t}^{T} \rew_{t^{'}}$.
 Q-learning works by maintaining an action-value function $\Q : \State \times
 \Action \rightarrow \R$ which is defined as the expected return
 $\Q_\policy(\state_t, \act_t) = \E_\policy[R_t]$ from a given state-action pair.
-The Q-learning algorithm works by updating the $\Q$-function using Bellman
+The Q-learning algorithm works by updating the $\Q$-function using the Bellman
 equation for every transition from $\state$ to $\state'$ on action $\act$
 yielding reward $\rew$, 
 %
@@ -63,18 +62,18 @@ yielding reward $\rew$,
 
 \subsection{Floyd-Warshall}
 
-Floyd-Warshall algorithm~\citep{floydwarshall1962} is a shortest path finding
-algorithm from any vertex in a graph to any other vertex in the graph.
-Similar to Dijkstra, Floyd-Warshall algorithm
+The Floyd-Warshall algorithm~\citep{floydwarshall1962} is a shortest path finding
+algorithm from any vertex to any other vertex in a graph.
+Similar to Dijkstra's algorithm, the Floyd-Warshall algorithm
 finds the shortest path by keeping maintaining a shortest distance
 data-structure $\fwds : \vertices \times \vertices \rightarrow \R$. between any
 two pair of vertices $i, j \in \vertices$.
 The data-structure $\fwds$ is initialized with edges weights
 $\fwds[i, j] \leftarrow \edge_{(i, j)} \, \forall (i, j) \in \edges$
-and the uninitialized edges are assigned a high value
+and the uninitialized edges are assigned a high value,
 $\fwds[i, j] \leftarrow \infty \, \forall i, j \in \vertices$.
 The algorithm works by sequentially observing all the nodes in the graph and
-updating $\fwds$ as with the shortest path known so far:
+updating $\fwds$ with the shortest explored path known so far:
 %
 \begin{align}
   \fwds[i, j] \leftarrow \min\{ \fwds[i, j], \fwds[i, k] + \fwds[k, j] \} \quad
@@ -83,19 +82,20 @@ updating $\fwds$ as with the shortest path known so far:
 %
 
 
-The update equation in the algorithm depends upon triangular inequality for
+The update equation in the algorithm depends upon the triangular inequality for
 shortest paths distances ($\fwds[i, j] \le \fwds[i, k] + \fwds[k, j]$) and hence
 works only in the absence of negative cycles in the graph. Fortunately, many
-practical problems can be formulated such that there are no negative cycles
-in the graph. Although, Floyd-Warshall algorithm runs in $O(|\vertices|^3)$
-and is suitable for dense graphs, there exists extensions of the algorithm
+practical problems can be formulated such that negative cycles
+do not occur. The Floyd-Warshall algorithm runs in $O(|\vertices|^3)$
+and is suitable for dense graphs. There also exists extensions of the algorithm
 like Johnson's algorithm~\citep{johnson1977efficient} that run in
-$O(|\vertices|^2\log|\vertices| + |\vertices||\edges|)$ and work on the same
-principle.
+$O(|\vertices|^2\log|\vertices| + |\vertices||\edges|)$ while working on
+the same principle.
 
-Note, the parallels between the Eq.~\eqref{eq:dijkstra} and
+% TODO: Add more math (?) that draws these parallels.
+Note, the parallels between Eq.~\eqref{eq:dijkstra} and
 Eq.~\eqref{eq:q-learn-bellman}. Q-learning can be thought of as the
-generalization of Dijkstra with the introduction of the action space on the in
+generalization of Dijkstra's algorithm with the introduction of the action space in
 the graph traversal problem. In MDP instead of choosing the next state (or
 vertex in graph traversal) to go to, we can only chose an action and the next
 state gets chosen by the system dynamics.
