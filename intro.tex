@@ -1,43 +1,43 @@
 % Objective of the paragraph: setup the hype context and importance of the problem
-Reinforcement learning (RL) is an exciting field of research as it allows for
-agents to learn complex behaviors in a multitude of environments while requiring
-minimal supervision in the form of reward signals. Evidence of RL's success has
-accumulated in various domains ranging from playing Atari
-games~\citep{MnKaSiNATURE2015} from purely visual input and defeating world GO
-champions~\citep{gibney2016google}, to applications in robotic
-navigation~\citep{mirowski2018learning} and
-manipulation~\citep{pong2018temporal}. In the realm of multi-goal tasks, this
-work introduces Floyd-Warshall Reinforcement Learning (FWRL), a new algorithm
-that facilitates transferring learned behaviours in environments with dynamic
-goal locations.
+Reinforcement learning (RL) allows for agents to learn complex behaviors
+in a multitude of environments while requiring supervision only in the
+form of reward signals. RL has had success in various domains ranging
+from playing Atari games~\citep{MnKaSiNATURE2015} from purely visual
+input and defeating world GO champions~\citep{gibney2016google}, to
+applications in robotic navigation~\citep{mirowski2018learning} and
+manipulation~\cite{levine2018learning}. In the realm of multi-goal tasks,
+this work introduces Floyd-Warshall Reinforcement Learning (FWRL), a new
+algorithm that facilitates the transfer of learned behaviours in
+environments with dynamic goal locations.
 
 
 % brief background on model-based and model-free learning.
-Algorithms in RL are often classified as being either \emph{model-based} or
-\emph{model-free}, based on whether the state-transition function is learned
-explicitly or implicitly~\citep{SuBaBOOK1998}.
-In \emph{model-based} RL, the dynamics that govern an environment's
+There are two types of RL algorithms, \emph{model-based} and
+\emph{model-free}, which differ in whether the state-transition function
+is learned explicitly or implicitly~\citep{SuBaBOOK1998}.  In
+\emph{model-based} RL, the dynamics that govern an environment's
 transitions is explicitly modelled.  At any point in an episode, agents
 use this model to predict future states and utilize this information to
 maximize possible reward. This formulation is known to be
-sample-efficient while normally not achieving high asymptomatic
+sample-efficient while normally not achieving high asymptotic
 performance~\citep{pong2018temporal}.  In contrast, in \emph{model-free}
 RL, algorithms such as policy gradients, actor-critic and Q-learning
 directly learn the expected ``value'' for each state without explicitly
 learning the environment-dynamics. This paradigm has been behind most of
-the recent success stories of high performance in diverse applications
+the successes in such diverse applications
 like Atari games, Go championships etc.
 
 \begin{figure}%
 \includegraphics[width=\columnwidth]{./media/optimal_trajectories.pdf}\\
 \caption{The intuition behind Floyd-Warshall Reinforcement Learning.
-Consider agent gaining experience of going form $s_1$ to $g_1$ and then from
-$s_2$ to $g_2$. Let's assume that there is at least one common state $s_i$ in
+Consider an agent experiencing traversals from $s_1$ to $g_1$ and then from
+$s_2$ to $g_2$. Assume that there is at least one common state $s_i$ in
 the two trajectories. The agent is then directed to traverse to $g_1$ from
-$s_2$. The agent can use the previous trajectories to at least one path to
-perform this traversal (the dotted line). However, standard Q-Learning cannot
-make these generalizations. FWRL utilizes triangle-inequality like constraint
-(Eq~\eqref{eq:fwconstraint}) to combine information from earlier experiences.
+$s_2$. The agent can \emph{exploit} previous trajectories find a path to
+perform this traversal (the dotted line), without requiring extensive
+\emph{exploration}. However, standard Q-Learning cannot
+make these generalizations. FWRL utilizes a triangle-inequality like constraint
+(Eq~\eqref{eq:fwconstraint}) to combine trajectories from past experiences.
 }
 \label{fig:ql-fw-grid-world-results}%
 \end{figure}
@@ -50,19 +50,19 @@ In multi-goal tasks that involve static environments and dynamic goals,
 such as goal-directed navigation and pick-and-place in robotics,
 model-free RL struggles to transfer learned behavior from one goal
 location to another within the same
-environment~\citep{dhiman2018critical}. This happens because model-free
-RL represents the environment as value functions which conflate the
+environment~\citep{dhiman2018critical}. This occurs because model-free
+RL represents the environment as value functions, which conflate the
 state-dynamics and reward distributions into a single representation.
-On the other hand, while model-based RL allows for the separation of
-environment dynamics and reward, small errors in the modelling function
-lead to significant drops in performance.
+On the other hand, model-based RL allows for the separation of
+environment dynamics and reward, but can have lower asymptotic
+performance due to the accumulation of small errors in the modelling function.
 
 In this work we introduce Floyd-Warshall Reinforcement Learning, an
 adaptation of the Floyd-Warshall shortest path
 algorithm~\citep{floydwarshall1962}, for multi-goal tasks.
 Floyd-Warshall shortest path algorithm is itself a generalization of
 Dijkstra's algorithm in multi-goal domain on graphs. The algorithm works
-by learning a a goal conditioned value function
+by learning a goal conditioned value function
 ~\citep{schaul2015universal}, called the Floyd-Warshall (FW) function,
 that is defined to be the expected reward in going from a start
 state-action pair $(\state, \act)$ to a given goal state $\state'$:
