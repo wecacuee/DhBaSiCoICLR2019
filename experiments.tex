@@ -45,17 +45,17 @@ both baseline methods and FWRL are described here.
         the optimal policy given enough exploration time. Of interest is
         thus the amount of time taken for reward to climb.
 
-    \item \textbf{\Loo}\\
-        We use the metric \Loo as defined in \cite{MiPaViICLR2017} as the ratio
-        of the time taken to hit the goal for the first time to the average
-        amount of time taken to hit goals subsequently. It
-        is the ratio of the exploration time over the exploitation time:
-		\begin{align}
-			\text{\Loo} &= 
-			\frac{(N-1) \tau_1}{\tau_{N} - \tau_1} & \text{if }  N >= 2,
-		\end{align}%
-        where $\tau_1, \tau_2, \dots, \tau_N$ are the $N$ time steps at which
-        the agent reaches the goal.
+    %\item \textbf{\Loo}\\
+    %    We use the metric \Loo as defined in \cite{MiPaViICLR2017} as the ratio
+    %    of the time taken to hit the goal for the first time to the average
+    %    amount of time taken to hit goals subsequently. It
+    %    is the ratio of the exploration time over the exploitation time:
+	%	\begin{align}
+	%		\text{\Loo} &= 
+	%		\frac{(N-1) \tau_1}{\tau_{N} - \tau_1} & \text{if }  N >= 2,
+	%	\end{align}%
+    %    where $\tau_1, \tau_2, \dots, \tau_N$ are the $N$ time steps at which
+    %    the agent reaches the goal.
 
 
     \item \textbf{Distance-Inefficiency}\\
@@ -66,7 +66,7 @@ both baseline methods and FWRL are described here.
 		\begin{align}
 			\text{Dist-ineff.} &=
 			\frac{ \sum_{i=1}^{N-1} \sum_{k=\tau_i + 1}^{\tau_{i+1} - 1} \|\pos_{k+1} - \pos_{j}\| }
-			{ \sum_{i=1}^{N-1} \delta(\pos_{\tau_i + 1}, \pos_g) } \quad \text{if } N >= 1,
+			{ \sum_{i=1}^{N-1} \delta(\pos_{\tau_i + 1}, \pos_g) } ,
 		\end{align}%
 		%
 		where $\delta(\pos_{\tau_i +1}, x_g)$ denotes the shortest path

@@ -29,11 +29,11 @@ like Atari games, Go championships etc.
 
 \begin{figure}%
 \includegraphics[width=\columnwidth]{./media/optimal_trajectories.pdf}\\
-\caption{The intuition behind Floyd-Warshall Reinforcement Learning.
+\caption{The intuition driving Floyd-Warshall Reinforcement Learning.
 Consider an agent experiencing traversals from $s_1$ to $g_1$ and then from
 $s_2$ to $g_2$. Assume that there is at least one common state $s_i$ in
 the two trajectories. The agent is then directed to traverse to $g_1$ from
-$s_2$. The agent can \emph{exploit} previous trajectories find a path to
+$s_2$. The agent can \emph{exploit} previous trajectories to find a path to
 perform this traversal (the dotted line), without requiring extensive
 \emph{exploration}. However, standard Q-Learning cannot
 make these generalizations. FWRL utilizes a triangle-inequality like constraint
@@ -60,8 +60,8 @@ performance due to the accumulation of small errors in the modelling function.
 In this work we introduce Floyd-Warshall Reinforcement Learning, an
 adaptation of the Floyd-Warshall shortest path
 algorithm~\citep{floydwarshall1962}, for multi-goal tasks.
-Floyd-Warshall shortest path algorithm is itself a generalization of
-Dijkstra's algorithm in multi-goal domain on graphs. The algorithm works
+The Floyd-Warshall shortest path algorithm is itself a generalization of
+Dijkstra's algorithm for multi-goal domains on graphs. The algorithm works
 by learning a goal conditioned value function
 ~\citep{schaul2015universal}, called the Floyd-Warshall (FW) function,
 that is defined to be the expected reward in going from a start
@@ -72,7 +72,9 @@ state-action pair $(\state, \act)$ to a given goal state $\state'$:
 \E_{\policy}\left[ \sum_{t=0}^{t=k} \rew_t \middle\vert \state_0 = \state, \act_0 = \state, \state_k = \state' \right] .
 \end{align}%
 %
-In order to learn the FW-function, we employ the following triangular-inequality constraint for shortest paths, which is our main contribution,
+In order to learn the FW-function, we employ the following
+triangular-inequality constraint for shortest paths, which is our main
+contribution,
 %
 \begin{multline}
 \fwargs{\state_i}{\act_i}{\state_j}{\policy^*_{\state_j}}{*}

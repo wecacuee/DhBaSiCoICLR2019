@@ -5,15 +5,15 @@
   Define $\policy^*(\state_t, \state_g, \fw) = \arg \max_{\act}
   \fwargs{\state_t}{\act; \param_{\fwcost}}{\state_g}{}{}$ \;
   % We do not know the goal location
-  Initialize $\state_g = \phi$ \;
+  Input $\state_g$ \;
   Set $t \leftarrow 0$\;
   Observe $\state_t$ \;
   \For{$t \leftarrow 1$ \KwTo $\epiT$}{
     Take action $\act_{t} \sim \epsilon\text{-greedy}(\policy^*(\state_{t}, \state_g, \fw))$ \;
     Observe $\state_{t+1}$, $\rew_t$ \;
     \If{$\rew_t >= \Rgoal$}{
-      \tcc{Note the goal state}
-      $\state_g \leftarrow \state_t$ \;
+        %\tcc{Note the goal state}
+      %$\state_g \leftarrow \state_t$ \;
       \tcc{Do not update the value function with goal reward}
       continue\;
     }
