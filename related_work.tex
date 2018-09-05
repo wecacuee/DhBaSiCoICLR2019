@@ -3,22 +3,22 @@
 %\subsection{Goal-conditioned value functions}
 
 \paragraph{Goal-conditioned value functions}
-Multi-goal reinforcement learning has gained some attention lately with
-important work like UVF~\citep{schaul2015universal},
-HER~\citep{andrychowicz2016learning}, TDM~\citep{pong2018temporal} making
-progress towards learning goal-conditioned value functions that help in
-addressing multi-goal tasks. Universal goal-conditioned value functions
-(UVFs)~\citep{schaul2015universal}, $V(s,g)$ measures the utility function of
-achieving any goal from any state. UVFs are learned using traditional Q-learning
-based approaches coupled with matrix factorization based methods for faster
-learning.
-\citet{andrychowicz2016learning} introduced the idea of Hindsight
-Experience Replay (HER) to learn about the model from previous episodes
-even when the goal location has changed or not been achieved.  Their
-method works by utilizing experience from episodes where agent failed to reach
-the goal re-imagining the last state to be the goal state.
+Multi-goal reinforcement learning has gained attention lately with
+important work like UVFAs~\citep{schaul2015universal},
+HER~\citep{andrychowicz2016learning} and TDM~\citep{pong2018temporal}
+making progress towards learning goal-conditioned value functions for
+multi-goal tasks.  Introduced by ~\citep{schaul2015universal}, universal
+goal-conditioned value functions (UVFs), $V(s,g)$, measures the utility
+function of achieving any goal from any state in an environment. In this
+work, UVFs are learned using traditional Q-learning based approaches
+coupled with matrix factorization based methods for faster learning.
+In Hindsight Experience Replay (HER), \citet{andrychowicz2016learning}
+learn UVFs from previous episodes
+accounting for when the goal location has not been achieved.  Their
+method works by utilizing failed past experiences and re-imagining 
+the last states of these episodes as goal states.
 \citet{pong2018temporal} propose Temporal Difference Models (TDM) that estimate
-goal directed horizon dependent value function $Q(s, a, g, \tau)$. There work is
+goal directed horizon dependent value functions, $Q(s, a, g, \tau)$. There work is
 limited because they assume that rewards are available densely in the form of
 some distance like measure from the goal.
 In contrast to all the above works our contribution is a novel algorithm for
@@ -26,34 +26,36 @@ learning UVFs via leveraging a triangular-inequality like constraint within the
 space of these functions.
 
 \paragraph{Goal directed visual navigation}
-There has been considerable interest in using Deep Reinforcement Learning (DRL)
-algorithms for goal-driven visual navigation of
+There has been considerable interest in using Deep Reinforcement
+Learning (DRL) algorithms for the goal-driven visual navigation of
 robots~\citep{mirowski2016learning,MiPaViICLR2017,dhiman2018critical,gupta2017cognitive,savinov2018semi}.
-\cite{mirowski2016learning} demonstrate that a DRL algorithm called Asynchronous
-Advantage Actor Critic (A3C) can learn to find a goal in 3D navigation
-simulators, using only first person view as the input, while
-\cite{MiPaViICLR2017} demonstrate goal directed navigation in Google street view
-graph. \citet{gupta2017cognitive} the goal directed navigation and mapping
-depends upon a specific 2D data-structure called occupancy grid which limits the
-method's generalize-ability to other robotic tasks like reaching, pick and
-place. This line of work has struggled to move from simulations to real world
-because high sample complexity of model-free RL algorithms. Moreover, none of
-this work focuses on general goal driven tasks in RL, where goal space is same
-as state space. \citet{dhiman2018critical} empirically evaluate
-\cite{mirowski2016learning}'s approach and show that when goal locations are
-dynamic, the path chosen to reach the goal are often far from optimal.
-In contrast to our work, all the above works focus on navigation domain and
-employ domain specific auxiliary rewards and data-structures rather the focusing
-on the multi-goal task domain.
+\cite{mirowski2016learning} demonstrate that a DRL algorithm called
+Asynchronous Advantage Actor Critic (A3C) can learn to find a goal in 3D
+navigation simulators, using only a front facing first person view as
+input, while \cite{MiPaViICLR2017} demonstrate goal directed navigation
+in Google's street view graph. \citet{gupta2017cognitive} addresses goal
+directed mapping but their method depends upon
+navigation-specific occupancy grids which limit the method's
+generalizability to mutli-goal tasks. Moving the successes of these
+works from simulations to the real world is an active area of research 
+because of the high sample complexity of
+model-free RL algorithms \citep{zhu2017target,anderson2018vision} . \citet{dhiman2018critical} empirically evaluate
+\cite{mirowski2016learning}'s approach and show that when goal locations
+are dynamic, the path chosen to reach the goal are often far from
+optimal.  In contrast to our method, these works focus on the
+navigation domain and employ domain specific auxiliary rewards and
+data-structures making them less generalizable to other multi-goal
+tasks.
 
 \paragraph{Binary goal tasks}
-\citet{parisotto2017neural} extend the idea of external neural network memory
-that is indexed by spatial coordinates rather then time, as done in previous
-works. However, their work, in a similar vein to \cite{OhChSiICML2016},
-considers goal specification as a binary signal hidden somewhere in the
+In \cite{OhChSiICML2016}, agent's DRL-driven navigation is complimented
+with external memory modules indexed in time.
+In a similar vein, \citet{parisotto2017neural} experiment with indexing
+memory modules with the agent's spatial coordinates. Both works 
+consider goal specification as a binary signal hidden somewhere in the
 observation space. In such problems the challenge is to learn the goal
-specification protocol and avoid the wrong goal while exploring for the right
-goal. These problems domains not evaluate the ability of agent to find the
+specification protocol while avoiding the wrong goal and exploring for the right
+one. These problems domains do not evaluate the ability of agents to find the
 shortest path to the goal.
 
 \paragraph{Model-based RL}
@@ -65,9 +67,8 @@ won't affect the rewards as long the agent does not spill large amounts of
 water. More recently, model-based algorithms have shown more promise by
 explicitly modelling uncertainty~\cite{lakshminarayanan2017simple,
   kurutach2018model,zhang2018solar}.
-However, for model-based algorithms to compete with model-free algorithms, the
-uncertainty in state-dynamics modeling needs to depend upon its effect on
-expected rewards.
+However, more work is needed for model-free algoritms to be replaced by
+model-based ones. 
 
 
 %FWRL is an algorithm for learning universal goal-conditioned value

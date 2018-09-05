@@ -50,7 +50,7 @@ In multi-goal tasks that involve static environments and dynamic goals,
 such as goal-directed navigation and pick-and-place in robotics,
 model-free RL struggles to transfer learned behavior from one goal
 location to another within the same
-environment~\citep{dhiman2018critical}. This occurs because model-free
+environment~\citep{dhiman2018critical,quillen2018deep}. This occurs because model-free
 RL represents the environment as value functions, which conflate the
 state-dynamics and reward distributions into a single representation.
 On the other hand, model-based RL allows for the separation of
@@ -88,26 +88,29 @@ contribution,
 %
 Section~\ref{sec:method} describes the terminology, equations and the method in more detail.
 
-This constraint allows FWRL to remember paths even if they do not lead to the goal
-location during particular episodes. The motivation is similar to the Hindsight
-Experience Replay (HER)~\citep{anderson2017vision}, but our method allows us to
-utilize hindsight experience in more fine-grained manner because we consider all
-states as potential goals. Other works using goal-conditioned value function for
-multi-goal tasks include Universal Value Function Approximators
-(UVFA)~\citep{schaul2015universal} and Temporal Difference Models
-(TDM)~\citep{pong2018temporal}. UVFA introduce goal-conditioned value functions
-and a factorization approach for faster learning of neural networks that depend
-upon goals from the state space. TDM combines model-based and model-free
-algorithms by modeling the learning as a constrained objective function using a
-horizon dependent goal-conditioned value function. In contrast, our value
-function is not horizon dependent and hence has fewer parameters.
+This constraint allows FWRL to remember paths even if they do not lead
+to the goal location during particular episodes. The motivation is
+similar to the Hindsight Experience Replay
+(HER)~\citep{anderson2017vision}, where agents learn by re-imagining the
+final states of past failed experiences as succesful. Our method allows
+us to utilize hindsight experience in more a fine-grained manner because
+we consider all states as potential goals. Other works using a
+goal-conditioned value function for multi-goal tasks include Universal
+Value Function Approximators (UVFA)~\citep{schaul2015universal} and
+Temporal Difference Models (TDM)~\citep{pong2018temporal}. UVFA
+introduces the use of goal-conditioned value functions and a
+factorization approach for faster learning of neural networks that
+depend upon goals from the state space.  TDM combines model-based and
+model-free algorithms by modeling the learning as a constrained
+objective function using a horizon dependent goal-conditioned value
+function. In contrast to these works, we present an alternative
+mechanism for learning these functions that is horizon independent.  
 
 
 Experimentally, FWRL is shown to be more sample-efficient and achieve
-higher reward standard Q-Learning, HER and model-based baselines in a
+higher reward standard Q-Learning and model-based methods in a
 tabular setting.  FWRL is found to outperform the next most significant
-baselines by as much. All code and results are made available at
-\href{}{}. 
+baselines by as much.  
 
 
 %Recently, a few works have used the idea of goal-conditioned value functions. In
