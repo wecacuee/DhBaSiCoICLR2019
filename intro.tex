@@ -58,13 +58,15 @@ On the other hand, while model-based RL allows for the separation of
 environment dynamics and reward, small errors in the modelling function
 lead to significant drops in performance.
 
-In this work we introduce Floyd-Warshall Reinforcement Learning, an adaptation
-of Floyd-Warshall shortest path algorithm~\citep{floydwarshall1962} in multi-goal
-RL domain. Floyd-Warshall shortest path algorithm is itself a generalization of
-Dijkstra's algorithm in multi-goal domain on graphs. Our algorithm works by learning a
-a goal conditional value function, called Floyd-Warshall (FW) function, defined
-as the expected reward in going from a start state-action pair $(\state, \act)$ to
-a given goal state $\state'$:
+In this work we introduce Floyd-Warshall Reinforcement Learning, an
+adaptation of the Floyd-Warshall shortest path
+algorithm~\citep{floydwarshall1962}, for multi-goal tasks.
+Floyd-Warshall shortest path algorithm is itself a generalization of
+Dijkstra's algorithm in multi-goal domain on graphs. The algorithm works
+by learning a a goal conditioned value function
+~\citep{schaul2015universal}, called the Floyd-Warshall (FW) function,
+that is defined to be the expected reward in going from a start
+state-action pair $(\state, \act)$ to a given goal state $\state'$:
 %
 \begin{align}
 \fwargs{\state}{\act}{\state'}{\policy}{} =
@@ -84,19 +86,19 @@ In order to learn the FW-function, we employ the following triangular-inequality
 %
 Section~\ref{sec:method} describes the terminology, equations and the method in more detail.
 
-This constraint allows FWRL to remember the paths even if they do not lead to the goal
-location during a particular episode. The motivation is similar to the Hindsight
+This constraint allows FWRL to remember paths even if they do not lead to the goal
+location during particular episodes. The motivation is similar to the Hindsight
 Experience Replay (HER)~\citep{anderson2017vision}, but our method allows us to
 utilize hindsight experience in more fine-grained manner because we consider all
 states as potential goals. Other works using goal-conditioned value function for
 multi-goal tasks include Universal Value Function Approximators
 (UVFA)~\citep{schaul2015universal} and Temporal Difference Models
 (TDM)~\citep{pong2018temporal}. UVFA introduce goal-conditioned value functions
-and factorization approach for faster learning of neural networks that depend
+and a factorization approach for faster learning of neural networks that depend
 upon goals from the state space. TDM combines model-based and model-free
 algorithms by modeling the learning as a constrained objective function using a
 horizon dependent goal-conditioned value function. In contrast, our value
-function is not horizon dependent, hence has fewer parameters.
+function is not horizon dependent and hence has fewer parameters.
 
 
 Experimentally, FWRL is shown to be more sample-efficient and achieve
