@@ -68,13 +68,13 @@ agent is treated as a metric of success.
         episodes.
 
 \subsection{Baselines}
-We compare our FWRL against three baselines, two versions of
+We compare our FWRL against three baselines: two versions of
 Q-Learning~\cite{watkins1992qlearning} and Model based RL (MBRL).
 
 \subsubsection{Q-Learning: QL and QLCAT}
 We implement two versions of Q-learning. In the first version, called QL, we
 reset the Q-function after every episode. This version of Q-Learning does not
-use the prior knowledge of goal state, but depends upon the goal reward to
+use the prior knowledge of the goal state, but depends upon the goal reward to
 build a new Q-function in every episode. In the second version, called QLCAT,
 we concatenate the state with the goal location and retain the learned Q-function
 function across episodes. 

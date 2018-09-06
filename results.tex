@@ -4,7 +4,7 @@ We evaluate Q-learning Concatenated (QLCAT), Q-learning (QL), model-based RL
 (MBRL) and Floyd-Warshall Reinforcement Learning (FWRL) on two metrics in two
 different environments. The two metrics we use are Distance inefficiency and
 average reward per episode. The baselines and metrics are explained in the
-experiment section~\ref{sec:experiments}. The results are shown in
+experiment section (\ref{sec:experiments}). The results are shown in
 Figure~\ref{fig:ql-fw-grid-world-results}-\ref{fig:ql-fw-windy-world-rewards} 
 We find that FWRL consistently achieves higher rewards, and lower distance
 inefficiency than the baselines. The reward curves also show that FWRL learns to
@@ -47,7 +47,7 @@ sample efficiency.
 \subsubsection{Qualitative Results}
 To demonstrate the claim made in Fig~\ref{fig:visual-abstract}, we train QLCAT
 and FWRL for two episodes each with start and goal locations such that the path
-meets in the center. Unlike quantitative experiments, in this experiment the
+meets in the center. Unlike the quantitative section, in this experiment the
 episode ends when the agent reaches the goal.
 After two episodes of training, in which both FWRL (Floyd-Warshall RL) and QLCAT
 (Q-Learning with goal concatenated to the state) reach the desired
@@ -55,7 +55,8 @@ goals via exploration, we put the algorithms to test.
 For the test episode, the goal is chosen from first training episode but start
 location is chosen from second training episode.
 During the test episode,
-we turn off $\epsilon$-greed exploration and follow the greedy policy.
+we turn off $\epsilon$-greedy exploration and follow the learned policy
+greedily.
 
 We find that QLCAT decides to repeat the action that pushes it into the wall,
 therefore is unable to move. However, FWRL reaches the goal using the shortest
