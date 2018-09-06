@@ -1,15 +1,15 @@
 \section{Results}
-
-We evaluate Q-learning (QL), model-based RL (MBRL) and Floyd-Warshall
-Reinforcement Learning (FWRL) on two metrics in two different environments. The
-two metrics we use are Latency Ratio and average reward per episode. The Latency
-ratio metric was introduced in \citet{MiPaViICLR2017}, which is defined as the
-ratio of time taken to reach the goal for the first to time to the average time
-taken to hit the goal thereafter. The Latency ratio thus measures the ratio of
-exploration time for first time finding the goal to the average exploitation
-time to reach the goal. Hence, higher latency ratio is better.
-Fig~\ref{fig:ql-fw-grid-world-results} and
-Fig~\ref{fig:ql-fw-windy-world-results} show the results.
+\subsubsection{Quantitative Results}
+%We evaluate Q-learning (QL), model-based RL (MBRL) and Floyd-Warshall
+%Reinforcement Learning (FWRL) on two metrics in two different environments. The
+%two metrics we use are Latency Ratio and average reward per episode. The Latency
+%ratio metric was introduced in \citet{MiPaViICLR2017}, which is defined as the
+%ratio of time taken to reach the goal for the first to time to the average time
+%taken to hit the goal thereafter. The Latency ratio thus measures the ratio of
+%exploration time for first time finding the goal to the average exploitation
+%time to reach the goal. Hence, higher latency ratio is better.
+%Fig~\ref{fig:ql-fw-grid-world-results} and
+%Fig~\ref{fig:ql-fw-windy-world-results} show the results.
 
 \begin{figure}%
     \begin{minipage}{\columnwidth}
@@ -47,8 +47,7 @@ Fig~\ref{fig:ql-fw-windy-world-results} show the results.
 \end{figure}
 
 
-\subsection{Qualitative Results}
-
+\subsubsection{Qualitative Results}
 To demonstrate the claim made in Fig~\ref{fig:visual-abstract}, we train QLCAT
 and FWRL for two episodes each with start and goal locations such that the path
 meets in the center. Unlike quantitative experiments, in this experiment the

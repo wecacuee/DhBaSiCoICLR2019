@@ -4,12 +4,11 @@ Experiments are conducted in a grid-world like setup as displayed in
 figure \ref{fig:four-room-grid-world}. The agent can occupy any one of
 the white blank squares. The agent's observations is the numbered
 location of each square i.e. each squares x,y coordinate with the origin
-being the top left corner of the environment i.e. $s_t = (x, y)$. Agents
-can act by moving in the four different cardinal directions, $\{up,
-down, left, right\}$. Grid-world is chosen since due to it's simplicity
-it easily highlights differences between baseline models and FWRL.
-Several different grid-world setups are investigated to test the
-abilities of FWRL.
+being the top left corner of the environment, $s_t = (x, y)$. Agents
+can act by moving in four  directions, $\{up, down, left, right\}$.
+Experiments are conducted in a tabular domain showcasing results
+that are intuitive to understand while still displaying large
+performance gaps between FWRL and standard baselines methods. 
 
 
 \subsection{Four room grid world}
@@ -20,30 +19,20 @@ agents. Since the exit points, are narrow, random agents tend to get
 stuck in individual rooms. 
 
 \subsection{Four room windy world}
-
-In four room windy world, the previous setup is augmented with
-\emph{wind}. In cells that  wind, shown by arrows, the agent gets pushed
-around by the wind with 0.25 probability in the direction of the arrow
-irrespective of the action taken. Concieved by \cite{}, the setup
-increases the dependence of the dynamics model upon environment
-specifics.
-
-\subsection{Random Grid Worlds}
-While the prevoius experiments were chosen for the ability to study a
-specific property of these algorithms, random grid-world maps are
-created and tested upon.
+In four room windy world, the previous setup is augmented in some cells
+with \emph{wind}. This wind, indicated by arrows, increases the
+probability of the agent randomly going in the direction of the arrow by
+0.25.  Conceived in~\citet{SuBaBOOK1998}, this setup increases the
+dependence of the dynamics model upon environment conditions. 
 
 \subsection{Metrics}
 The metrics used to quantify and compare agent performance across
-both baseline methods and FWRL are described here.
+FWRL to baseline methods are described here.
 
 \begin{enumerate}
     \item \textbf{Reward}\\\noindent
-        As in typical in reinforcement learning, the reward earned by
-        the agent is treated as a metric of success. Since the
-        environments used are finite MDPs, Q-Learning is known to learn
-        the optimal policy given enough exploration time. Of interest is
-        thus the amount of time taken for reward to climb.
+        As in typical in reinforcement learning, the reward earned per
+        episode by the agent is treated as a metric of success. 
 
     %\item \textbf{\Loo}\\
     %    We use the metric \Loo as defined in \cite{MiPaViICLR2017} as the ratio
@@ -78,14 +67,19 @@ both baseline methods and FWRL are described here.
 \end{enumerate}
 
 \subsection{Baselines}
-We compare our algorithm FWRL against two baselines
+\subsubsection{Q-Learning}
+We compare our FWRL against two baselines,
 Q-Learning~\cite{watkins1992qlearning} and Model based RL (MBRL).
-We implement a simple version of tabular model based RL where we maintain a
+
+\subsubsection{Model-Based RL}
+We implement a simple version of tabular model-based RL where we maintain a
 transition count data-structure $T(\state' | \state, \act)$.
 This allows to compute a frequentist estimate of dynamics model.
-We also keep an tabular record of the reward from each state-action pair
+We also keep a tabular record of the reward from each state-action pair
 $R(\state, \act)$. The dynamics model is then used to find the
 maximum-reward-path to the goal state.
+
+\subsubsection{QLCAT}
 
 %
 \begin{figure}[h!]%
