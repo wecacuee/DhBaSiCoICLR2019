@@ -92,16 +92,16 @@ like Johnson's algorithm~\citep{johnson1977efficient} that run in
 $O(|\vertices|^2\log|\vertices| + |\vertices||\edges|)$ while working on
 the same principle.
 
-% TODO: Add more math (?) that draws these parallels.
-Note, the parallels between Eq.~\eqref{eq:dijkstra} and
-Eq.~\eqref{eq:q-learn-bellman}. Q-learning can be thought of as the
-generalization of Dijkstra's algorithm with the introduction of the action space in
-the graph traversal problem. In MDP instead of choosing the next state (or
-vertex in graph traversal) to go to, we can only chose an action and the next
-state gets chosen by the system dynamics.
-However, RL is a much more challenging problem than path planning on graphs
-because there is no complete freedom on the order of traversal over state space
-and there exists a trade off between exploration and exploitation. With these
-parallels in mind, we extend the Floyd-Warshall algorithm to work on an MDP and
-call it Floyd-Warshall Reinforcement Learning.
+% DONE: Add more math (?) that draws these parallels.
+From the parallels between Eq.~\eqref{eq:dijkstra} and
+Eq.~\eqref{eq:q-learn-bellman}, Q-learning can be seen as a generalization
+Dijkstra's algorithm. Both the algorithms work by taking one step minimum (or
+maximum) over the neighboring state. Unlike Dijkstra, in Q-learning one has to
+compute an additional maximum over actions. This is because in an MDP, the agent
+cannot directly choose the next state to be in. Instead, it chooses an action
+that leads it to the next state based on transition probabilities. Moreover,
+Q-learning has to explore the state space before it can exploit the learned
+information to find most-rewarding path. With these parallels in mind, we
+generalize the Floyd-Warshall algorithm to work on an MDP and call it
+Floyd-Warshall Reinforcement Learning.
 

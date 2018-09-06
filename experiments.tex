@@ -1,4 +1,5 @@
 \section{Experiments}
+\label{sec:experiments}
 
 Experiments are conducted in a grid-world like setup as displayed in
 figure \ref{fig:four-room-grid-world}. The agent can occupy any one of
@@ -10,15 +11,18 @@ Experiments are conducted in a tabular domain showcasing results
 that are intuitive to understand while still displaying large
 performance gaps between FWRL and standard baselines methods. 
 
+\section{Environment}
+We use two types of grid world environments in the experiments, a four room grid
+world and a windy version of the four room grid world.
 
-\subsection{Four room grid world}
+\subsubsection{Four room grid world}
 Four room grid world is a grid world with four rooms connected to each
 other as shown in Figure~\ref{fig:four-room-grid-world}. This example is
 chosen due to it's intentional difficulty for random exploration based
 agents. Since the exit points, are narrow, random agents tend to get
 stuck in individual rooms. 
 
-\subsection{Four room windy world}
+\subsubsection{Four room windy world}
 In four room windy world, the previous setup is augmented in some cells
 with \emph{wind}. This wind, indicated by arrows, increases the
 probability of the agent randomly going in the direction of the arrow by
@@ -29,10 +33,9 @@ dependence of the dynamics model upon environment conditions.
 The metrics used to quantify and compare agent performance across
 FWRL to baseline methods are described here.
 
-\begin{enumerate}
-    \item \textbf{Reward}\\\noindent
-        As in typical in reinforcement learning, the reward earned per
-        episode by the agent is treated as a metric of success. 
+\subsubsection{Reward}
+As in typical in reinforcement learning, the reward earned per episode by the
+agent is treated as a metric of success.
 
     %\item \textbf{\Loo}\\
     %    We use the metric \Loo as defined in \cite{MiPaViICLR2017} as the ratio
@@ -47,8 +50,7 @@ FWRL to baseline methods are described here.
     %    the agent reaches the goal.
 
 
-    \item \textbf{Distance-Inefficiency}\\
-      The distance-inefficiency~\citep{dhiman2018critical} is the ratio of the
+\subsubsection{Distance-Inefficiency} The distance-inefficiency~\citep{dhiman2018critical} is the ratio of the
       distances travelled by the agent during an episode to the sum of the shortest
       path to the goal at every point of initialization. Mathematically it is defined
       as:
@@ -64,14 +66,20 @@ FWRL to baseline methods are described here.
         skipping the jumps where the agent gets re-spawned after reaching the
         goal location. The denominator is the total shortest distance during the
         episodes.
-\end{enumerate}
 
 \subsection{Baselines}
-\subsubsection{Q-Learning}
-We compare our FWRL against two baselines,
+We compare our FWRL against three baselines, two versions of
 Q-Learning~\cite{watkins1992qlearning} and Model based RL (MBRL).
 
-\subsubsection{Model-Based RL}
+\subsubsection{Q-Learning: QL and QLCAT}
+We implement two versions of Q-learning. In the first version, called QL, we
+reset the Q-function after every episode. This version of Q-Learning does not
+use the prior knowledge of goal state, but depends upon the goal reward to
+build a new Q-function in every episode. In the second version, called QLCAT,
+we concatenate the state with the goal location and retain the learned Q-function
+function across episodes. 
+
+\subsection{Model-based RL}
 We implement a simple version of tabular model-based RL where we maintain a
 transition count data-structure $T(\state' | \state, \act)$.
 This allows to compute a frequentist estimate of dynamics model.
@@ -79,7 +87,6 @@ We also keep a tabular record of the reward from each state-action pair
 $R(\state, \act)$. The dynamics model is then used to find the
 maximum-reward-path to the goal state.
 
-\subsubsection{QLCAT}
 
 %
 \begin{figure}[h!]%
