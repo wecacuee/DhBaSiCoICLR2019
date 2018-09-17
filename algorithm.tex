@@ -1,15 +1,19 @@
+\newcommand{\Loss}{\mathcal{L}}
 \begin{algorithm}
   \tcc{By default all states are unreachable}
-  Initialize $\fwargs{\state_i}{\act_i ; \param_{\fwcost}}{\state_j}{}{} \leftarrow -\infty$ \;
+  Initialize networks $\fwargs{\state_i}{\act_i ;
+    \param_{\fwcost}}{\state_j}{m}{}$ and $\policy(\state_i, \state_g; \param_{\policy})$ \;
+  Copy the main network to target network
+  $\fwargs{\state_i}{\act_i ;\param_{\fwcost}}{\state_j}{t}{} \leftarrow
+  \fwargs{\state_i}{\act_i ; \param_{\fwcost}}{\state_j}{m}{} $ \;
 
-  Define $\policy^*(\state_t, \state_g, \fw) = \arg \max_{\act}
-  \fwargs{\state_t}{\act; \param_{\fwcost}}{\state_g}{}{}$ \;
   % We do not know the goal location
+  Initialize replay memory $M$ \;
   Input $\state_g$ \;
   Set $t \leftarrow 0$\;
   Observe $\state_t$ \;
   \For{$t \leftarrow 1$ \KwTo $\epiT$}{
-    Take action $\act_{t} \sim \epsilon\text{-greedy}(\policy^*(\state_{t}, \state_g, \fw))$ \;
+    Take action $\act_{t} \leftarrow \policy(\state_{t}, \state_g, \fw)$ \;
     Observe $\state_{t+1}$, $\rew_t$ \;
     \If{$\rew_t >= \Rgoal$}{
         %\tcc{Note the goal state}
@@ -17,20 +21,32 @@
       \tcc{Do not update the value function with goal reward}
       continue\;
     }
+    Store $(\state_{t}, \act_t, \state_{t+1}, \state_g, \rew_t)$ in memory $M$ \;
     % Update the transition reward
-    $\fwargs{\state_{t}}{\act_{t}}{\state_{t+1}}{}{} \leftarrow \rew_t$ \;
-    \For{$\state_k \in \State, \act_k \in \Act, \state_l \in \State$}{
-      $\fwargs{\state_k}{\act_k}{\state_l}{}{} \leftarrow
-        \max \{
-        \fwargs{\state_k}{\act_k}{\state_l}{}{},
-        \fwargs{\state_k}{\act_k}{\state_t}{}{}
-        + \max_{\act_p \in \Act} \fwargs{\state_t}{\act_p}{\state_l}{}{}
-        \}$
-        \;
+    
+    Sample batch $B = [(\state_{i}, \act_i, \state_{i+1}, \state_{ig}, \rew_i), \dots ,
+    (\state_{b}, \act_b, \state_{b+1}, \state_{bg}, \rew_t)]$ from $M$ \;
+    Shuffle batch $B_{\text{shuffle}} \leftarrow \text{shuffle}(B)$ \;
+    $\Loss(\dots) = 0$ \;
+    \For{$b \in B$}{
+      $(\state_{b}, \act_b, \state_{b+1}, \state_{bg}, \rew_b) = B[b]$ \;
+      $(\state_{s}, \act_s, \state_{s+1}, \state_{sg}, \rew_s) = B_{\text{shuffle}}[b]$ \;
+      $\Loss(\dots) += (\fwargs{\state_{b}}{\act_{b}}{\state_{b+1}}{m}{} - \rew_b)^2$ 
+      \tcc*{Step loss}
+      $\Loss(\dots) += (\fwargs{\state_{b}}{\act_{b}}{\state_{bg}}{m}{} -
+      \rew_b + \fwargs{\state_{b}}{\policy(\state_b, \state_{bg};\param_\policy)}{\state_{bg}}{t}{})^2$
+      \tcc{DDPG loss}
+
+      $\Loss(\dots) += |
+      \fwargs{\state_{s}}{\act_b}{\state_b}{t}{}
+      + \fwargs{\state_{bg}}{\policy(\state_s, \state_{bg};\param_\policy)}{\state_s}{t}{}
+      - \fwargs{\state_{bg}}{\act_b}{\state_b}{m}{}
+      |_+^2$
+      \tcc*{Floyd-Warshall constraint}
     }
   }
   \KwResult{$\policy^*(\state_k, \state_g, \fwcost)$}
-  \caption{\small Floyd-Warshall Reinforcement Learning (Tabular setting)}
+  \caption{\small Deep Floyd-Warshall Reinforcement Learning (DDPG)}
   \label{alg:floyd-warshall-small}
 \end{algorithm}
 
