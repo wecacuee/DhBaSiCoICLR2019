@@ -29,6 +29,30 @@ probability of the agent randomly going in the direction of the arrow by
 0.25.  Conceived in~\citet{SuBaBOOK1998}, this setup increases the
 dependence of the dynamics model upon environment conditions. 
 
+
+\subsection{Fetch push,reach and pick and place}
+We run a neural network based implementation of FWRL to compare it against HER
+on Fetch push, reach and pick and place tasks~\citep{plappert201802multigoalrl}.
+The test success rate is shown in Fig~\ref{fig:fetch-slide-success}. 
+
+\begin{figure}
+  \def\frac{0.32}
+    \includegraphics[width=\frac\columnwidth]{media/res/373c649_FetchSlide-v1-noop/test/success_rate.pdf}%
+    \includegraphics[width=\frac\columnwidth]{media/res/a077c9e_FetchPush-v1-fwrl/test/success_rate.pdf}%
+    \includegraphics[width=\frac\columnwidth]{media/res/3a5df00_FetchReach-v1-fwrl/test/success_rate.pdf}
+    \caption{Test success rate on Fetch-Slide, Fetch-Push and Fetch-Reach task}
+    \label{fig:fetch-slide-success}
+\end{figure}
+
+\begin{figure}
+  \def\frac{0.32}
+    \includegraphics[width=\frac\columnwidth]{media/res/373c649_FetchSlide-v1-noop/test/mean_Q.pdf}%
+    \includegraphics[width=\frac\columnwidth]{media/res/a077c9e_FetchPush-v1-fwrl/test/mean_Q.pdf}%
+    \includegraphics[width=\frac\columnwidth]{media/res/3a5df00_FetchReach-v1-fwrl/test/mean_Q.pdf}
+    \caption{Test Mean Q on Fetch-Slide, Fetch-Push and Fetch-Reach task}
+    \label{fig:fetch-slide-success}
+\end{figure}
+
 \subsection{Metrics}
 The metrics used to quantify and compare agent performance across
 FWRL to baseline methods are described here.
