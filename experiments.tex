@@ -39,17 +39,12 @@ The test success rate is shown in Fig~\ref{fig:fetch-slide-success}.
   \def\frac{0.32}
     \includegraphics[width=\frac\columnwidth]{media/res/373c649_FetchSlide-v1-noop/test/success_rate.pdf}%
     \includegraphics[width=\frac\columnwidth]{media/res/a077c9e_FetchPush-v1-fwrl/test/success_rate.pdf}%
-    \includegraphics[width=\frac\columnwidth]{media/res/3a5df00_FetchReach-v1-fwrl/test/success_rate.pdf}
-    \caption{Test success rate on Fetch-Slide, Fetch-Push and Fetch-Reach task}
-    \label{fig:fetch-slide-success}
-\end{figure}
-
-\begin{figure}
+    \includegraphics[width=\frac\columnwidth]{media/res/3a5df00_FetchReach-v1-fwrl/test/success_rate.pdf}\\
   \def\frac{0.32}
     \includegraphics[width=\frac\columnwidth]{media/res/373c649_FetchSlide-v1-noop/test/mean_Q.pdf}%
     \includegraphics[width=\frac\columnwidth]{media/res/a077c9e_FetchPush-v1-fwrl/test/mean_Q.pdf}%
     \includegraphics[width=\frac\columnwidth]{media/res/3a5df00_FetchReach-v1-fwrl/test/mean_Q.pdf}
-    \caption{Test Mean Q on Fetch-Slide, Fetch-Push and Fetch-Reach task}
+    \caption{Test success rate and Mean Q on Fetch-Slide, Fetch-Push and Fetch-Reach task}
     \label{fig:fetch-slide-success}
 \end{figure}
 
@@ -75,12 +70,29 @@ The test success rate is shown in Fig~\ref{fig:fetch-slide-success}.
 \end{figure}%
 % 
 
-So Floyd-Warshall Reinforcement learning is not helping Hindsight Experience
-replay. What are the contributions of the different loss functions. We plot the
-loss function and the FW loss component.
-
-Also why does it fails to work with replay\_strategy is none. Do we need to
-resample HER for FWRL to work?
+\subsection{Over-optimistic estimates of Q-function}
+The first attempt to bound the Q-function is to implement the following loss
+function,
+%
+\begin{align}
+    \Loss_\fw(\dots) = |
+      \fwargs{\state_{s}}{\act_b}{\state_b}{t}{}
+      + \fwargs{\state_{bg}}{\policy(\state_s, \state_{bg};\param_\policy)}{\state_s}{t}{}
+      - \fwargs{\state_{bg}}{\act_b}{\state_b}{m}{}
+      |_+^2.
+\end{align}%
+% 
+However, this cause the algorithm to make over optimistic estimates of expected
+reward function. Hence, we add another loss term for upper bound of the Q-function.
+%
+\begin{align}
+    \Loss_\fw(\dots) = |
+      \fwargs{\state_{s}}{\act_b}{\state_b}{m}{}
+      + \fwargs{\state_{bg}}{\policy(\state_s, \state_{bg};\param_\policy)}{\state_s}{m}{}
+      - \fwargs{\state_{bg}}{\act_b}{\state_b}{t}{}
+      |_+^2.
+\end{align}%
+% 
 
 \subsection{Metrics}
 The metrics used to quantify and compare agent performance across

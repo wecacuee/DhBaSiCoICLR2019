@@ -36,13 +36,18 @@
       $\Loss(\dots) += (\fwargs{\state_{b}}{\act_{b}}{\state_{bg}}{m}{} -
       \rew_b + \fwargs{\state_{b}}{\policy(\state_b, \state_{bg};\param_\policy)}{\state_{bg}}{t}{})^2$
       \tcc{DDPG loss}
-
       $\Loss(\dots) += |
       \fwargs{\state_{s}}{\act_b}{\state_b}{t}{}
       + \fwargs{\state_{bg}}{\policy(\state_s, \state_{bg};\param_\policy)}{\state_s}{t}{}
       - \fwargs{\state_{bg}}{\act_b}{\state_b}{m}{}
       |_+^2$
-      \tcc*{Floyd-Warshall constraint}
+      \tcc*{Floyd-Warshall upper bound}
+      $\Loss(\dots) += |
+      \fwargs{\state_{s}}{\act_b}{\state_b}{m}{}
+      + \fwargs{\state_{bg}}{\policy(\state_s, \state_{bg};\param_\policy)}{\state_s}{m}{}
+      - \fwargs{\state_{bg}}{\act_b}{\state_b}{t}{}
+      |_+^2$
+      \tcc*{Floyd-Warshall lower bound}
     }
   }
   \KwResult{$\policy^*(\state_k, \state_g, \fwcost)$}
