@@ -70,6 +70,27 @@ The test success rate is shown in Fig~\ref{fig:fetch-slide-success}.
 \end{figure}%
 % 
 
+%
+\begin{figure}%
+  \def\frac{0.24}
+  \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-future/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-future/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-future/train/critic_loss.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-future/train/critic_addnl_loss.pdf}\\
+  \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-none/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-none/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-none/train/critic_loss.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-none/train/critic_addnl_loss.pdf}
+  \caption{
+    Algorithms: HER (d047a03noop-future), FWRL (d047a03fwrl-future), StepFWRL
+    (3a90344stepfwrl-future). 
+    From left: (1): HER helps, Step loss helps,
+    (2): FWRL causes over over-optimistic estimates of Q-function
+    (3-4): FWRL loss is the major part of critic loss}%
+  \label{fig:fwrl-stepfwrl-noop-test-sucess-rate}%
+\end{figure}%
+% 
+
 \subsection{Over-optimistic estimates of Q-function}
 The first attempt to bound the Q-function is to implement the following loss
 function,
