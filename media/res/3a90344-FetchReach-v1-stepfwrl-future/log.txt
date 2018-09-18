@@ -1,0 +1,803 @@
+Logging to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future
+T: 50
+_Q_lr: 0.001
+_action_l2: 1.0
+_addnl_loss_term: stepfwrl
+_batch_size: 256
+_buffer_size: 1000000
+_clip_obs: 200.0
+_hidden: 256
+_layers: 3
+_max_u: 1.0
+_network_class: baselines.her.actor_critic:ActorCritic
+_norm_clip: 5
+_norm_eps: 0.01
+_pi_lr: 0.001
+_polyak: 0.95
+_relative_goals: False
+_scope: ddpg
+clip_return: True
+ddpg_params: {'buffer_size': 1000000, 'hidden': 256, 'layers': 3, 'network_class': 'baselines.her.actor_critic:ActorCritic', 'polyak': 0.95, 'batch_size': 256, 'Q_lr': 0.001, 'pi_lr': 0.001, 'norm_eps': 0.01, 'norm_clip': 5, 'max_u': 1.0, 'action_l2': 1.0, 'clip_obs': 200.0, 'scope': 'ddpg', 'relative_goals': False, 'addnl_loss_term': 'stepfwrl'}
+env: FetchReach-v1
+env_name: FetchReach-v1
+gamma: 0.98
+gitrev: 3a90344
+logdir: /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future
+make_env: <function prepare_params.<locals>.make_env at 0x7f5ddf0b4400>
+mid_dir: /z/home/dhiman/mid
+n_batches: 40
+n_cycles: 10
+n_epochs: 50
+n_test_rollouts: 10
+noise_eps: 0.2
+policy_save_interval: 5
+project_name: floyd-warshall-rl/openai-baselines/her
+random_eps: 0.3
+replay_k: 4
+replay_strategy: future
+rollout_batch_size: 2
+seed: 0
+test_with_polyak: False
+user: dhiman
+Creating a DDPG agent with action space 4 x 1.0...
+Training...
+-------------------------------------------------
+| epoch                   | 0                   |
+| stats_g/mean            | 0.86754894          |
+| stats_g/std             | 0.08816463          |
+| stats_o/mean            | 0.26073545          |
+| stats_o/std             | 0.028169608         |
+| test/episode            | 20.0                |
+| test/mean_Q             | -0.56872267         |
+| test/success_rate       | 0.05833333333333334 |
+| train/critic_addnl_loss | 0.3449931           |
+| train/critic_loss       | 0.5405095           |
+| train/episode           | 20.0                |
+| train/success_rate      | 0.0                 |
+-------------------------------------------------
+New best success rate: 0.05833333333333334. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+Saving periodic policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_0.pkl ...
+-------------------------------------------------
+| epoch                   | 1                   |
+| stats_g/mean            | 0.86860466          |
+| stats_g/std             | 0.08398407          |
+| stats_o/mean            | 0.26088756          |
+| stats_o/std             | 0.026954805         |
+| test/episode            | 40.0                |
+| test/mean_Q             | -0.85747164         |
+| test/success_rate       | 0.5166666666666667  |
+| train/critic_addnl_loss | 0.2747699           |
+| train/critic_loss       | 0.39552176          |
+| train/episode           | 40.0                |
+| train/success_rate      | 0.20833333333333334 |
+-------------------------------------------------
+New best success rate: 0.5166666666666667. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 2                  |
+| stats_g/mean            | 0.8684824          |
+| stats_g/std             | 0.08159898         |
+| stats_o/mean            | 0.26086348         |
+| stats_o/std             | 0.026457602        |
+| test/episode            | 60.0               |
+| test/mean_Q             | -0.72880536        |
+| test/success_rate       | 0.8416666666666668 |
+| train/critic_addnl_loss | 0.24346127         |
+| train/critic_loss       | 0.28578296         |
+| train/episode           | 60.0               |
+| train/success_rate      | 0.5583333333333333 |
+------------------------------------------------
+New best success rate: 0.8416666666666668. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 3                  |
+| stats_g/mean            | 0.87165785         |
+| stats_g/std             | 0.08035234         |
+| stats_o/mean            | 0.2615506          |
+| stats_o/std             | 0.026322579        |
+| test/episode            | 80.0               |
+| test/mean_Q             | -0.6641937         |
+| test/success_rate       | 0.9500000000000001 |
+| train/critic_addnl_loss | 0.21837895         |
+| train/critic_loss       | 0.24260914         |
+| train/episode           | 80.0               |
+| train/success_rate      | 0.5583333333333333 |
+------------------------------------------------
+New best success rate: 0.9500000000000001. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 4                  |
+| stats_g/mean            | 0.872474           |
+| stats_g/std             | 0.08001697         |
+| stats_o/mean            | 0.2617833          |
+| stats_o/std             | 0.026449526        |
+| test/episode            | 100.0              |
+| test/mean_Q             | -0.41681433        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.2118054          |
+| train/critic_loss       | 0.23419656         |
+| train/episode           | 100.0              |
+| train/success_rate      | 0.8000000000000002 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 5                  |
+| stats_g/mean            | 0.8719551          |
+| stats_g/std             | 0.080404945        |
+| stats_o/mean            | 0.2616927          |
+| stats_o/std             | 0.026916659        |
+| test/episode            | 120.0              |
+| test/mean_Q             | -0.36865473        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.21852957         |
+| train/critic_loss       | 0.24304493         |
+| train/episode           | 120.0              |
+| train/success_rate      | 0.8250000000000001 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+Saving periodic policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_5.pkl ...
+------------------------------------------------
+| epoch                   | 6                  |
+| stats_g/mean            | 0.8717003          |
+| stats_g/std             | 0.08067405         |
+| stats_o/mean            | 0.26160276         |
+| stats_o/std             | 0.027336037        |
+| test/episode            | 140.0              |
+| test/mean_Q             | -0.27359733        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.19738786         |
+| train/critic_loss       | 0.22103739         |
+| train/episode           | 140.0              |
+| train/success_rate      | 0.8833333333333334 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 7                  |
+| stats_g/mean            | 0.8720524          |
+| stats_g/std             | 0.08087072         |
+| stats_o/mean            | 0.26170588         |
+| stats_o/std             | 0.02767854         |
+| test/episode            | 160.0              |
+| test/mean_Q             | -0.25105122        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.20452376         |
+| train/critic_loss       | 0.22609001         |
+| train/episode           | 160.0              |
+| train/success_rate      | 0.7999999999999999 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 8                  |
+| stats_g/mean            | 0.87230253         |
+| stats_g/std             | 0.081360936        |
+| stats_o/mean            | 0.2617748          |
+| stats_o/std             | 0.028065607        |
+| test/episode            | 180.0              |
+| test/mean_Q             | -0.2557459         |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.20747799         |
+| train/critic_loss       | 0.22980537         |
+| train/episode           | 180.0              |
+| train/success_rate      | 0.8583333333333334 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 9                  |
+| stats_g/mean            | 0.87293607         |
+| stats_g/std             | 0.08169022         |
+| stats_o/mean            | 0.26197612         |
+| stats_o/std             | 0.02837888         |
+| test/episode            | 200.0              |
+| test/mean_Q             | -0.20880276        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.19669421         |
+| train/critic_loss       | 0.22094716         |
+| train/episode           | 200.0              |
+| train/success_rate      | 0.8333333333333334 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+-----------------------------------------
+| epoch                   | 10          |
+| stats_g/mean            | 0.8728685   |
+| stats_g/std             | 0.082109    |
+| stats_o/mean            | 0.2619454   |
+| stats_o/std             | 0.028643003 |
+| test/episode            | 220.0       |
+| test/mean_Q             | -0.17666547 |
+| test/success_rate       | 1.0         |
+| train/critic_addnl_loss | 0.20271404  |
+| train/critic_loss       | 0.22155261  |
+| train/episode           | 220.0       |
+| train/success_rate      | 0.85        |
+-----------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+Saving periodic policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_10.pkl ...
+------------------------------------------------
+| epoch                   | 11                 |
+| stats_g/mean            | 0.87248915         |
+| stats_g/std             | 0.08243681         |
+| stats_o/mean            | 0.26186118         |
+| stats_o/std             | 0.02888529         |
+| test/episode            | 240.0              |
+| test/mean_Q             | -0.16111447        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.2040026          |
+| train/critic_loss       | 0.22471188         |
+| train/episode           | 240.0              |
+| train/success_rate      | 0.8333333333333334 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+-----------------------------------------
+| epoch                   | 12          |
+| stats_g/mean            | 0.87289506  |
+| stats_g/std             | 0.082749054 |
+| stats_o/mean            | 0.26199672  |
+| stats_o/std             | 0.029062977 |
+| test/episode            | 260.0       |
+| test/mean_Q             | -0.16149372 |
+| test/success_rate       | 1.0         |
+| train/critic_addnl_loss | 0.19922386  |
+| train/critic_loss       | 0.22006975  |
+| train/episode           | 260.0       |
+| train/success_rate      | 0.85        |
+-----------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 13                 |
+| stats_g/mean            | 0.87386113         |
+| stats_g/std             | 0.08302197         |
+| stats_o/mean            | 0.26226312         |
+| stats_o/std             | 0.029233927        |
+| test/episode            | 280.0              |
+| test/mean_Q             | -0.11835512        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.19853276         |
+| train/critic_loss       | 0.21808416         |
+| train/episode           | 280.0              |
+| train/success_rate      | 0.7333333333333334 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 14                 |
+| stats_g/mean            | 0.87395877         |
+| stats_g/std             | 0.083036296        |
+| stats_o/mean            | 0.26231748         |
+| stats_o/std             | 0.029313177        |
+| test/episode            | 300.0              |
+| test/mean_Q             | -0.111704685       |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.1880955          |
+| train/critic_loss       | 0.20585196         |
+| train/episode           | 300.0              |
+| train/success_rate      | 0.8250000000000001 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 15                 |
+| stats_g/mean            | 0.874386           |
+| stats_g/std             | 0.08329975         |
+| stats_o/mean            | 0.2624275          |
+| stats_o/std             | 0.029453063        |
+| test/episode            | 320.0              |
+| test/mean_Q             | -0.11400171        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.18796103         |
+| train/critic_loss       | 0.20682828         |
+| train/episode           | 320.0              |
+| train/success_rate      | 0.8000000000000002 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+Saving periodic policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_15.pkl ...
+------------------------------------------------
+| epoch                   | 16                 |
+| stats_g/mean            | 0.87429076         |
+| stats_g/std             | 0.08346361         |
+| stats_o/mean            | 0.26242107         |
+| stats_o/std             | 0.029551884        |
+| test/episode            | 340.0              |
+| test/mean_Q             | -0.106642365       |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.2006234          |
+| train/critic_loss       | 0.22114968         |
+| train/episode           | 340.0              |
+| train/success_rate      | 0.8166666666666668 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------
+| epoch                   | 17           |
+| stats_g/mean            | 0.87450176   |
+| stats_g/std             | 0.08364013   |
+| stats_o/mean            | 0.26247025   |
+| stats_o/std             | 0.029657638  |
+| test/episode            | 360.0        |
+| test/mean_Q             | -0.083781995 |
+| test/success_rate       | 1.0          |
+| train/critic_addnl_loss | 0.19401532   |
+| train/critic_loss       | 0.21737485   |
+| train/episode           | 360.0        |
+| train/success_rate      | 0.775        |
+------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 18                 |
+| stats_g/mean            | 0.87410784         |
+| stats_g/std             | 0.083734274        |
+| stats_o/mean            | 0.26236182         |
+| stats_o/std             | 0.02971158         |
+| test/episode            | 380.0              |
+| test/mean_Q             | -0.09011658        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.21185108         |
+| train/critic_loss       | 0.2305158          |
+| train/episode           | 380.0              |
+| train/success_rate      | 0.7833333333333333 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 19                 |
+| stats_g/mean            | 0.8744512          |
+| stats_g/std             | 0.08413061         |
+| stats_o/mean            | 0.2624632          |
+| stats_o/std             | 0.029853398        |
+| test/episode            | 400.0              |
+| test/mean_Q             | -0.09885507        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.20092124         |
+| train/critic_loss       | 0.21820195         |
+| train/episode           | 400.0              |
+| train/success_rate      | 0.8500000000000001 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 20                 |
+| stats_g/mean            | 0.87478274         |
+| stats_g/std             | 0.084326215        |
+| stats_o/mean            | 0.2625587          |
+| stats_o/std             | 0.029944206        |
+| test/episode            | 420.0              |
+| test/mean_Q             | -0.08209277        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.18597491         |
+| train/critic_loss       | 0.20759587         |
+| train/episode           | 420.0              |
+| train/success_rate      | 0.8583333333333334 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+Saving periodic policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_20.pkl ...
+-----------------------------------------
+| epoch                   | 21          |
+| stats_g/mean            | 0.8745417   |
+| stats_g/std             | 0.08431842  |
+| stats_o/mean            | 0.26249212  |
+| stats_o/std             | 0.029969215 |
+| test/episode            | 440.0       |
+| test/mean_Q             | -0.07135575 |
+| test/success_rate       | 1.0         |
+| train/critic_addnl_loss | 0.19018964  |
+| train/critic_loss       | 0.21033432  |
+| train/episode           | 440.0       |
+| train/success_rate      | 0.875       |
+-----------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 22                 |
+| stats_g/mean            | 0.8746727          |
+| stats_g/std             | 0.08425041         |
+| stats_o/mean            | 0.26252392         |
+| stats_o/std             | 0.029975116        |
+| test/episode            | 460.0              |
+| test/mean_Q             | -0.051246822       |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.20116735         |
+| train/critic_loss       | 0.21981394         |
+| train/episode           | 460.0              |
+| train/success_rate      | 0.8166666666666668 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 23                 |
+| stats_g/mean            | 0.8750289          |
+| stats_g/std             | 0.08436651         |
+| stats_o/mean            | 0.26261926         |
+| stats_o/std             | 0.030024558        |
+| test/episode            | 480.0              |
+| test/mean_Q             | -0.0699582         |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.19569026         |
+| train/critic_loss       | 0.2146389          |
+| train/episode           | 480.0              |
+| train/success_rate      | 0.8416666666666667 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 24                 |
+| stats_g/mean            | 0.8753708          |
+| stats_g/std             | 0.08439084         |
+| stats_o/mean            | 0.26270622         |
+| stats_o/std             | 0.030051032        |
+| test/episode            | 500.0              |
+| test/mean_Q             | -0.0660118         |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.20233805         |
+| train/critic_loss       | 0.21790682         |
+| train/episode           | 500.0              |
+| train/success_rate      | 0.7833333333333332 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 25                 |
+| stats_g/mean            | 0.8752785          |
+| stats_g/std             | 0.08446699         |
+| stats_o/mean            | 0.2626762          |
+| stats_o/std             | 0.030082682        |
+| test/episode            | 520.0              |
+| test/mean_Q             | -0.07036012        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.20604564         |
+| train/critic_loss       | 0.22102721         |
+| train/episode           | 520.0              |
+| train/success_rate      | 0.8916666666666666 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+Saving periodic policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_25.pkl ...
+------------------------------------------------
+| epoch                   | 26                 |
+| stats_g/mean            | 0.8751945          |
+| stats_g/std             | 0.08448887         |
+| stats_o/mean            | 0.2626504          |
+| stats_o/std             | 0.030102074        |
+| test/episode            | 540.0              |
+| test/mean_Q             | -0.06870937        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.18864489         |
+| train/critic_loss       | 0.20568036         |
+| train/episode           | 540.0              |
+| train/success_rate      | 0.7999999999999999 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+-----------------------------------------
+| epoch                   | 27          |
+| stats_g/mean            | 0.8752062   |
+| stats_g/std             | 0.0844357   |
+| stats_o/mean            | 0.2626577   |
+| stats_o/std             | 0.030100668 |
+| test/episode            | 560.0       |
+| test/mean_Q             | -0.06433191 |
+| test/success_rate       | 1.0         |
+| train/critic_addnl_loss | 0.20037705  |
+| train/critic_loss       | 0.21528898  |
+| train/episode           | 560.0       |
+| train/success_rate      | 0.775       |
+-----------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 28                 |
+| stats_g/mean            | 0.8750748          |
+| stats_g/std             | 0.08466872         |
+| stats_o/mean            | 0.26262447         |
+| stats_o/std             | 0.030176526        |
+| test/episode            | 580.0              |
+| test/mean_Q             | -0.08782628        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.20311947         |
+| train/critic_loss       | 0.2247634          |
+| train/episode           | 580.0              |
+| train/success_rate      | 0.7416666666666667 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 29                 |
+| stats_g/mean            | 0.87478584         |
+| stats_g/std             | 0.08457474         |
+| stats_o/mean            | 0.26253867         |
+| stats_o/std             | 0.03016243         |
+| test/episode            | 600.0              |
+| test/mean_Q             | -0.06383297        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.1819077          |
+| train/critic_loss       | 0.19702043         |
+| train/episode           | 600.0              |
+| train/success_rate      | 0.7916666666666666 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 30                 |
+| stats_g/mean            | 0.87471294         |
+| stats_g/std             | 0.08464831         |
+| stats_o/mean            | 0.26251814         |
+| stats_o/std             | 0.030190637        |
+| test/episode            | 620.0              |
+| test/mean_Q             | -0.063125625       |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.19628172         |
+| train/critic_loss       | 0.21601844         |
+| train/episode           | 620.0              |
+| train/success_rate      | 0.7999999999999999 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+Saving periodic policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_30.pkl ...
+------------------------------------------------
+| epoch                   | 31                 |
+| stats_g/mean            | 0.8747041          |
+| stats_g/std             | 0.08463181         |
+| stats_o/mean            | 0.26251185         |
+| stats_o/std             | 0.030199295        |
+| test/episode            | 640.0              |
+| test/mean_Q             | -0.065800525       |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.19462632         |
+| train/critic_loss       | 0.21447797         |
+| train/episode           | 640.0              |
+| train/success_rate      | 0.7416666666666667 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 32                 |
+| stats_g/mean            | 0.87463194         |
+| stats_g/std             | 0.084758304        |
+| stats_o/mean            | 0.2624913          |
+| stats_o/std             | 0.030246982        |
+| test/episode            | 660.0              |
+| test/mean_Q             | -0.07337944        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.20557411         |
+| train/critic_loss       | 0.22646435         |
+| train/episode           | 660.0              |
+| train/success_rate      | 0.7666666666666666 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 33                 |
+| stats_g/mean            | 0.8746855          |
+| stats_g/std             | 0.08482858         |
+| stats_o/mean            | 0.2625062          |
+| stats_o/std             | 0.030277291        |
+| test/episode            | 680.0              |
+| test/mean_Q             | -0.064822875       |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.19251038         |
+| train/critic_loss       | 0.21186244         |
+| train/episode           | 680.0              |
+| train/success_rate      | 0.7833333333333333 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 34                 |
+| stats_g/mean            | 0.87481576         |
+| stats_g/std             | 0.08487951         |
+| stats_o/mean            | 0.26253998         |
+| stats_o/std             | 0.030303994        |
+| test/episode            | 700.0              |
+| test/mean_Q             | -0.07923823        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.20564984         |
+| train/critic_loss       | 0.22448538         |
+| train/episode           | 700.0              |
+| train/success_rate      | 0.7583333333333333 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------
+| epoch                   | 35           |
+| stats_g/mean            | 0.87485385   |
+| stats_g/std             | 0.08484105   |
+| stats_o/mean            | 0.26254958   |
+| stats_o/std             | 0.030303856  |
+| test/episode            | 720.0        |
+| test/mean_Q             | -0.060876276 |
+| test/success_rate       | 1.0          |
+| train/critic_addnl_loss | 0.20279483   |
+| train/critic_loss       | 0.21964014   |
+| train/episode           | 720.0        |
+| train/success_rate      | 0.775        |
+------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+Saving periodic policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_35.pkl ...
+------------------------------------------------
+| epoch                   | 36                 |
+| stats_g/mean            | 0.8749189          |
+| stats_g/std             | 0.084807694        |
+| stats_o/mean            | 0.2625682          |
+| stats_o/std             | 0.03030395         |
+| test/episode            | 740.0              |
+| test/mean_Q             | -0.07351315        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.20052819         |
+| train/critic_loss       | 0.21360964         |
+| train/episode           | 740.0              |
+| train/success_rate      | 0.8583333333333333 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+-----------------------------------------
+| epoch                   | 37          |
+| stats_g/mean            | 0.87489253  |
+| stats_g/std             | 0.08487486  |
+| stats_o/mean            | 0.2625595   |
+| stats_o/std             | 0.03033027  |
+| test/episode            | 760.0       |
+| test/mean_Q             | -0.05776531 |
+| test/success_rate       | 1.0         |
+| train/critic_addnl_loss | 0.19373906  |
+| train/critic_loss       | 0.21065675  |
+| train/episode           | 760.0       |
+| train/success_rate      | 0.775       |
+-----------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 38                 |
+| stats_g/mean            | 0.87484545         |
+| stats_g/std             | 0.084938265        |
+| stats_o/mean            | 0.26254195         |
+| stats_o/std             | 0.030358216        |
+| test/episode            | 780.0              |
+| test/mean_Q             | -0.08291098        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.19475739         |
+| train/critic_loss       | 0.21392398         |
+| train/episode           | 780.0              |
+| train/success_rate      | 0.7666666666666666 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 39                 |
+| stats_g/mean            | 0.87486404         |
+| stats_g/std             | 0.0849979          |
+| stats_o/mean            | 0.26254374         |
+| stats_o/std             | 0.03038082         |
+| test/episode            | 800.0              |
+| test/mean_Q             | -0.06269973        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.18543029         |
+| train/critic_loss       | 0.20185292         |
+| train/episode           | 800.0              |
+| train/success_rate      | 0.7666666666666666 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 40                 |
+| stats_g/mean            | 0.87484384         |
+| stats_g/std             | 0.08509638         |
+| stats_o/mean            | 0.2625395          |
+| stats_o/std             | 0.03041867         |
+| test/episode            | 820.0              |
+| test/mean_Q             | -0.05433455        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.18880725         |
+| train/critic_loss       | 0.2061802          |
+| train/episode           | 820.0              |
+| train/success_rate      | 0.7916666666666666 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+Saving periodic policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_40.pkl ...
+------------------------------------------------
+| epoch                   | 41                 |
+| stats_g/mean            | 0.8749568          |
+| stats_g/std             | 0.0851352          |
+| stats_o/mean            | 0.26257092         |
+| stats_o/std             | 0.03043514         |
+| test/episode            | 840.0              |
+| test/mean_Q             | -0.06419728        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.21088983         |
+| train/critic_loss       | 0.23015893         |
+| train/episode           | 840.0              |
+| train/success_rate      | 0.7833333333333333 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------
+| epoch                   | 42           |
+| stats_g/mean            | 0.874903     |
+| stats_g/std             | 0.08516302   |
+| stats_o/mean            | 0.26255754   |
+| stats_o/std             | 0.030448114  |
+| test/episode            | 860.0        |
+| test/mean_Q             | -0.046943724 |
+| test/success_rate       | 1.0          |
+| train/critic_addnl_loss | 0.20533454   |
+| train/critic_loss       | 0.22188401   |
+| train/episode           | 860.0        |
+| train/success_rate      | 0.75         |
+------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 43                 |
+| stats_g/mean            | 0.87500334         |
+| stats_g/std             | 0.085154116        |
+| stats_o/mean            | 0.26258546         |
+| stats_o/std             | 0.030448368        |
+| test/episode            | 880.0              |
+| test/mean_Q             | -0.05446273        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.20389976         |
+| train/critic_loss       | 0.21932477         |
+| train/episode           | 880.0              |
+| train/success_rate      | 0.8250000000000001 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 44                 |
+| stats_g/mean            | 0.8749363          |
+| stats_g/std             | 0.08519194         |
+| stats_o/mean            | 0.26256758         |
+| stats_o/std             | 0.030461987        |
+| test/episode            | 900.0              |
+| test/mean_Q             | -0.056780856       |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.19439916         |
+| train/critic_loss       | 0.21249022         |
+| train/episode           | 900.0              |
+| train/success_rate      | 0.8333333333333334 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 45                 |
+| stats_g/mean            | 0.8750382          |
+| stats_g/std             | 0.08517516         |
+| stats_o/mean            | 0.26259547         |
+| stats_o/std             | 0.03046093         |
+| test/episode            | 920.0              |
+| test/mean_Q             | -0.046535064       |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.19599585         |
+| train/critic_loss       | 0.21281533         |
+| train/episode           | 920.0              |
+| train/success_rate      | 0.6916666666666665 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+Saving periodic policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_45.pkl ...
+------------------------------------------
+| epoch                   | 46           |
+| stats_g/mean            | 0.87501484   |
+| stats_g/std             | 0.08516548   |
+| stats_o/mean            | 0.26258817   |
+| stats_o/std             | 0.030461857  |
+| test/episode            | 940.0        |
+| test/mean_Q             | -0.052650232 |
+| test/success_rate       | 1.0          |
+| train/critic_addnl_loss | 0.20210527   |
+| train/critic_loss       | 0.21929717   |
+| train/episode           | 940.0        |
+| train/success_rate      | 0.775        |
+------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+-----------------------------------------
+| epoch                   | 47          |
+| stats_g/mean            | 0.8750809   |
+| stats_g/std             | 0.085283995 |
+| stats_o/mean            | 0.262609    |
+| stats_o/std             | 0.030498603 |
+| test/episode            | 960.0       |
+| test/mean_Q             | -0.06814272 |
+| test/success_rate       | 1.0         |
+| train/critic_addnl_loss | 0.19708462  |
+| train/critic_loss       | 0.2158979   |
+| train/episode           | 960.0       |
+| train/success_rate      | 0.75        |
+-----------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 48                 |
+| stats_g/mean            | 0.8751507          |
+| stats_g/std             | 0.085291795        |
+| stats_o/mean            | 0.2626217          |
+| stats_o/std             | 0.030504605        |
+| test/episode            | 980.0              |
+| test/mean_Q             | -0.04694845        |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.20081978         |
+| train/critic_loss       | 0.21767372         |
+| train/episode           | 980.0              |
+| train/success_rate      | 0.7666666666666667 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
+------------------------------------------------
+| epoch                   | 49                 |
+| stats_g/mean            | 0.8752535          |
+| stats_g/std             | 0.08526816         |
+| stats_o/mean            | 0.2626497          |
+| stats_o/std             | 0.030501956        |
+| test/episode            | 1000.0             |
+| test/mean_Q             | -0.053196564       |
+| test/success_rate       | 1.0                |
+| train/critic_addnl_loss | 0.1907319          |
+| train/critic_loss       | 0.21182115         |
+| train/episode           | 1000.0             |
+| train/success_rate      | 0.7166666666666668 |
+------------------------------------------------
+New best success rate: 1.0. Saving policy to /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/3a90344-FetchReach-v1-stepfwrl-future/policy_best.pkl ...
