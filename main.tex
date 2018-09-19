@@ -13,6 +13,7 @@
 \usepackage{natbib}
 \usepackage{xcolor}
 \usepackage{subfig}
+\usepackage{booktabs}
 \frenchspacing  %Required
 \setlength{\pdfpagewidth}{8.5in}  %Required
 \setlength{\pdfpageheight}{11in}  %Required
@@ -41,41 +42,11 @@
 \begin{document}
 
 \maketitle
-\begin{abstract}
-Consider mutli-goal tasks that involve static environments and dynamic
-goals. Examples of such tasks, such as goal-directed navigation
-and pick-and-place in robotics, abound.
-Two types of Reinforcement Learning (RL) algorithms are used for
-such tasks: 
-\emph{model-free} or \emph{model-based}. Each of these approaches has limitations.
-Model-free RL struggles to transfer learned information when the goal location
-changes, but achieves high asymptotic accuracy in single goal tasks. Model-based
-RL can transfer learned information to new goal locations by retaining the
-explicitly learned state-dynamics, but is limited by the fact that small errors in
-modelling these dynamics accumulate over long-term planning.
-In this work, we improve upon the limitations of model-free RL in
-multi-goal domains. 
-We do this by adapting the Floyd-Warshall algorithm for RL and call the
-adaptation Floyd-Warshall RL (FWRL).
-The proposed algorithm learns a goal-conditioned action-value function by 
-constraining the value of the
-optimal path between any two states to be greater than or equal to the value of
-paths via intermediary states.
-Experimentally, we show that FWRL is more sample-efficient and learns
-higher reward strategies in multi-goal tasks as compared to Q-learning, model-based RL 
-and other relevant baselines in a tabular domain.
-
-%The algorithm works by learning a goal-condition action-value function
-%that employs constraints inspired by the Floyd-Warshall algorithm
-%for path planning.  Specifically, the value of the optimal path
-%between any two states is constrained to be greater than or equal to
-%the value of path via any intermediate state.
+%\begin{abstract}
+%\end{abstract}
 
 
-\end{abstract}
-
-
-\section{ Introduction}
+%\section{ Introduction}
 
 %\input{intro}
 
@@ -83,9 +54,9 @@ and other relevant baselines in a tabular domain.
 
 %\input{related_work}
 
-\input{background}
-
-\input{method}
+%\input{background}
+%
+%\input{method}
 
 \input{experiments}
 
