@@ -59,35 +59,39 @@ The test success rate is shown in Fig~\ref{fig:fetch-slide-success}.
   \includegraphics[width=\frac\columnwidth]{media/res/d047a03-FetchReach-v1-stepfwrl-none/test/success_rate.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/d047a03-FetchReach-v1-stepfwrl-none/test/mean_Q.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/d047a03-FetchReach-v1-stepfwrl-none/train/critic_loss.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/d047a03-FetchReach-v1-stepfwrl-none/train/critic_addnl_loss.pdf}
+  \includegraphics[width=\frac\columnwidth]{media/res/d047a03-FetchReach-v1-stepfwrl-none/train/critic_addnl_loss.pdf}\\
+Using both upper and lower bound\\
+  \includegraphics[width=\frac\columnwidth]{media/res/f0d4cfa-FetchReach-v1-stfw-none/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/f0d4cfa-FetchReach-v1-stfw-none/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/f0d4cfa-FetchReach-v1-stfw-none/train/critic_loss.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/f0d4cfa-FetchReach-v1-stfw-none/train/critic_addnl_loss.pdf}\\
   \caption{
-    Algorithms: HER (d047a03noop-future), FWRL (d047a03fwrl-future), StepFWRL
-    (3a90344stepfwrl-future). 
-    From left: (1): HER helps, Step loss helps,
-    (2): FWRL causes over over-optimistic estimates of Q-function
     (3-4): FWRL loss is the major part of critic loss}%
-  \label{fig:fwrl-stepfwrl-noop-test-sucess-rate}%
+  \label{fig:fwrl-stepfwrl-noop-FetchReach}%
 \end{figure}%
 % 
 
 %
 \begin{figure}%
   \def\frac{0.24}
+  With HER sampling\\
   \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-future/test/success_rate.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-future/test/mean_Q.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-future/train/critic_loss.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-future/train/critic_addnl_loss.pdf}\\
+  Without HER sampling\\
   \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-none/test/success_rate.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-none/test/mean_Q.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-none/train/critic_loss.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-none/train/critic_addnl_loss.pdf}
+More objective function breakdown on Fetch Push\\
+  \includegraphics[width=\frac\columnwidth]{media/res/f84daa7-FetchPush-v1-stfw-none/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/f84daa7-FetchPush-v1-stfw-none/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/f84daa7-FetchPush-v1-stfw-none/train/critic_loss.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/f84daa7-FetchPush-v1-stfw-none/train/critic_loss.pdf}
   \caption{
-    Algorithms: HER (d047a03noop-future), FWRL (d047a03fwrl-future), StepFWRL
-    (3a90344stepfwrl-future). 
-    From left: (1): HER helps, Step loss helps,
-    (2): FWRL causes over over-optimistic estimates of Q-function
-    (3-4): FWRL loss is the major part of critic loss}%
-  \label{fig:fwrl-stepfwrl-noop-test-sucess-rate}%
+    Fetch Push results. Loss function changes do no seem to make a difference.}%
+  \label{fig:fwrl-stepfwrl-noop-FetchPush}%
 \end{figure}%
 % 
 
