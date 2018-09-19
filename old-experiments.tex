@@ -7,9 +7,11 @@
     \includegraphics[width=\frac\columnwidth]{media/res/373c649_FetchSlide-v1-noop/test/mean_Q.pdf}%
     \includegraphics[width=\frac\columnwidth]{media/res/a077c9e_FetchPush-v1-fwrl/test/mean_Q.pdf}%
     \includegraphics[width=\frac\columnwidth]{media/res/3a5df00_FetchReach-v1-fwrl/test/mean_Q.pdf}
-    \caption{fwrl = Floyd Warshall (lower bound only) + HER; noop = HER.
+    \caption{fwrl = Floyd Warshall ($=\Loss_{\text{ddpg}} +
+      \Loss_{\text{upper}}$) with HER sampling;
+      noop = DDPG ($=\Loss_{\text{ddpg}}$)with HER sampling.
   Test success rate and Mean Q on (1) Fetch-Slide, (2) Fetch-Push and (3)
-  Fetch-Reach task}
+  Fetch-Reach task. fwrl does consistently worse than HER.}
     \label{fig:fetch-slide-success}
 \end{figure}
 
@@ -33,8 +35,10 @@ Using both upper and lower bound in FWRL\\
   \includegraphics[width=\frac\columnwidth]{media/res/f0d4cfa-FetchReach-v1-stfw-none/train/critic_loss.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/f0d4cfa-FetchReach-v1-stfw-none/train/critic_addnl_loss.pdf}\\
   \caption{
-    stepfwrl = DDPG loss + Step loss + FWRL constraints, noop = DDPG loss + HER
-    sampling, fwrl = DDPG Loss + FWRL constraints.
+    stepfwrl = DDPG loss $\Loss_{\text{ddpg}}$ + Step loss $\Loss_{\text{step}}$
+    + FWRL constraints $\Loss_{\text{upper}} + \Loss_{\text{lower}}$, noop =
+    DDPG loss $\Loss_{\text{ddpg}}$  + HER
+    sampling, fwrl = DDPG Loss $\Loss_{\text{ddpg}}$ + FWRL constraints $\Loss_{\text{upper}} + \Loss_{\text{lower}}$.
     All experiments on Fetch-Reach task.
   }%
   \label{fig:fwrl-stepfwrl-noop-FetchReach}%
@@ -54,8 +58,11 @@ Using both upper and lower bound in FWRL\\
   \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-none/test/mean_Q.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-none/train/critic_loss.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/ea0e35b-FetchPush-v1-stfw-none/train/critic_addnl_loss.pdf}%
-  \caption{noop = DDPG loss, fwrl = DDPG + FWRL bounds,
-    stfw = DDPG loss + Step loss + FWRL bounds. All experiments on Fetch-Push}
+  \caption{stepfwrl = DDPG loss $\Loss_{\text{ddpg}}$ + Step loss $\Loss_{\text{step}}$
+    + FWRL constraints $\Loss_{\text{upper}} + \Loss_{\text{lower}}$, noop =
+    DDPG loss $\Loss_{\text{ddpg}}$  + HER
+    sampling, fwrl = DDPG Loss $\Loss_{\text{ddpg}}$ + FWRL constraints $\Loss_{\text{upper}} + \Loss_{\text{lower}}$.
+    All experiments on Fetch-Push}
   \label{fig:loss-func-fetch-push}
 \end{figure}
 %
