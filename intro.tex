@@ -1,26 +1,80 @@
 \section{Introduction}
 
+% What is the problem we are trying to solve: Mutli-Goal Reinforcement
+% Learning; Approached in different ways
+
+%Goal-conditioned tasks form a large bulk of problems often tackled in
+%Reinforcement Learning . In them, agents are tasked with achieving
+%certain goal states in as little time as possible. Examples of such
+%tasks permeate the field of robotics. For example, in
+%\emph{manipulation} a robotic arm may need to move an object to a
+%certain location on a table. In \emph{navigation}, a robot may be tasked
+%with finding a goal locations in both old and new environments.  
+
+In Multi-Goal Reinforcement Learning (MGRL)\citep{plappert2018multi}, agents are
+tasked with achieving certain goal states in as little time as possible.
+Many problems in robotics can be formulated in the Multi-Goal domain. For
+example, in \emph{manipulation} a robotic arm may need to move an object
+to a certain location on a table. In \emph{navigation}, a robot may be
+tasked with finding a goal locations in both old and new environments.  
+One of the most popular methods for solving MGRL problems is the
+utilization of \emph{goal-conditioned value functions}, a variant of
+traditional \emph{value functions} in reinforcement learning that
+take as input a goal state and operates in both goal and state space. 
+
+
+% One way: goal conditioned value functions which have been employed
+% using RL based learning methods. HER/Schaul/Horde
+Much work has showcased how goal-conditioned value functions can be
+employed to solve MGRL problems on a variety of experimental setups
+\citep{sutton2011horde, schaul2015universal,andrychowicz2017hindsight}.
+These algorithms have shown much success in learning these specialized
+value functions but have largely ignored the inherent structure that
+arises from their formulation. This work introduces Floyd-Warshall Deep
+Reinforcement Learning, a new algorithm for training Multi-Goal
+Reinforcement Learning algorithms that works by leveraging
+compositionality constraints in the space of goal-condition value
+functions. 
+
+
+% There is inherent structure in the formulation of these functions
+% thathas been ignored. Dhiman et al introduced structure in the space
+% of these functions 
+Floyd-Warshall Reinforcement Learning was first introduced in Dhiman et.
+al. for tabular domains. 
+The FW functions is defined 
+%
+\begin{align}
+\fwargs{\state}{\act}{\state'}{\policy}{} =
+\E_{\policy}\left[ \sum_{t=0}^{t=k} \rew_t \middle\vert \state_0 = \state, \act_0 = \state, \state_k = \state' \right] .
+\end{align}%
+%
+which is the expected sum of rewards when the state is s and the
+end state is the goal. Compositionality constraints are then used to
+learn the FW function.
+%
+\begin{align}
+\fwargs{\state_i}{\act_i}{\state_j}{\policy^*_{\state_j}}{*}
+ \ge 
+  \fwargs{\state_i}{\act_i}{\state_k}{\policy^*_{\state_k}}{*}
+  + \max_{\act_k}\fwargs{\state_k}{\act_k}{\state_j}{\policy^*_{\state_j}}{*}
+  ,\forall \state_k \in \State.
+  \label{eq:fwconstraint}
+\end{align}%
+%
+The constraint is inspired by the Floyd-Warshall algorithm for path
+planning on graphs and states that the expected reward in traversing
+from one state to another should be greater than or equal to that of the
+paths through intermediary states.  While Dhiman et al. was restritcted
+to toy examples in the gridworld doman and tabular functions, they are
+not naturally scalabale to real life problems. This work extends their
+formulation to paramteric functions like neural networks by addition
+terms to the RL objective based on these compositionality constraints.
+Since we extend the algorithm to the Deep Learning domain, we call it
+Deep Floyd-Warshall Reinforcement Learning. 
 
 
 
-%%
-%\begin{align}
-%\fwargs{\state}{\act}{\state'}{\policy}{} =
-%\E_{\policy}\left[ \sum_{t=0}^{t=k} \rew_t \middle\vert \state_0 = \state, \act_0 = \state, \state_k = \state' \right] .
-%\end{align}%
-%%
-%In order to learn the FW-function, we employ the following
-%triangular-inequality constraint for shortest paths, which is our main
-%contribution,
-%%
-%\begin{multline}
-%\fwargs{\state_i}{\act_i}{\state_j}{\policy^*_{\state_j}}{*}
-% \ge 
-%  \fwargs{\state_i}{\act_i}{\state_k}{\policy^*_{\state_k}}{*}
-%  + \max_{\act_k}\fwargs{\state_k}{\act_k}{\state_j}{\policy^*_{\state_j}}{*}
-%  \\
-%  \forall \state_k \in \State.
-%  \label{eq:fwconstraint}
-%\end{multline}%
-%%
-%Section~\ref{sec:method} describes the terminology, equations and the method in more detail.
+
+
+
