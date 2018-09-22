@@ -66,3 +66,45 @@ Using both upper and lower bound in FWRL\\
   \label{fig:loss-func-fetch-push}
 \end{figure}
 %
+
+%
+\begin{figure}
+  \def\frac{0.32}
+Loss function breakdown without HER sampling on Fetch Push\\
+  \includegraphics[width=\frac\columnwidth]{media/res/f84daa7-FetchPush-v1-stfw-none/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/f84daa7-FetchPush-v1-stfw-none/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/f84daa7-FetchPush-v1-stfw-none/train/critic_loss.pdf}\\
+Loss function breakdown with HER sampling on Fetch Push\\
+  \includegraphics[width=\frac\columnwidth]{media/res/3f1eafe-FetchPush-v1-stfw-future/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/3f1eafe-FetchPush-v1-stfw-future/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/3f1eafe-FetchPush-v1-stfw-future/train/critic_loss.pdf}%
+  \caption{
+    Fetch Push results. Loss function changes do no seem to make a difference.
+    There are four parts to the loss function (1) DDPG Loss $\Loss_{\text{ddpg}}$ ,
+    (2) Step loss$\Loss_{\text{step}}$,  
+    (3) Lower bound $\Loss_{\text{lower}}$ and
+    (4) Upper bound $\Loss_{\text{upper}}$ .
+    ddpg = $\Loss_{\text{ddpg}}$,
+    dqst = $\Loss_{\text{ddpg}}$ + $\Loss_{\text{step}}$,
+    fwrl = $\Loss_{\text{ddpg}}$ + $\Loss_{\text{lower}}$ +
+    $\Loss_{\text{upper}}$,
+    qlst = $\Loss_{\text{ddpg}}$ + $\Loss_{\text{step}}$ + $\Loss_{\text{lower}}$ + $\Loss_{\text{upper}}$.
+    stfw = $\Loss_{\text{step}}$ + $\Loss_{\text{lower}}$ + $\Loss_{\text{upper}}$,
+    stlo = $\Loss_{\text{step}}$ + $\Loss_{\text{lower}}$,
+    stup = $\Loss_{\text{step}}$ + $\Loss_{\text{upper}}$.
+    Success rate is the fraction of times the agent reaches the goal. Q(test) is
+    the estimated cumulative reward by the network. Critic loss is the total
+    loss plotted during training.
+    Because stfw, stlo, stup fail to succeed, we infer that the $\Loss_{\text{ddpg}}$ DDPG loss is
+    critical for making the algorithm work. Since the qlst works better than
+    fwrl, we infer that $\Loss_{\text{step}}$ Step loss is also important.
+    only.
+    Since there is slight improvement in dqst over ddpg, this means
+    $\Loss_{\text{step}}$ really helps. dqst did not run fully but it shows
+    promise (I need to fix a bug).
+    But why does the loss for stfw keep rising? Does it mean that the SGD is not
+    able to optimize the loss gradients in the right direction?
+  }%
+  \label{fig:fwrl-stepfwrl-noop-FetchPush}%
+\end{figure}%
+% 

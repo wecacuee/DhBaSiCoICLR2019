@@ -127,6 +127,14 @@ through an intermediate state.
 \end{align}%
 % 
 
+\begin{align}
+  \Loss_{\text{trieq}} &= |
+      \fwargs{\state_{b}}{\act_b}{\goal_s}{t}{}
+      + \fwargs{\state_{s}}{\policy_t(\state_s, \goal_{b};\param_\policy)}{\goal_b}{t}{}
+      - \fwargs{\state_{b}}{\act_b}{\goal_b}{m}{}
+      |^2
+\end{align}
+
 The resulting algorithm in shown in Alg~\ref{alg:floyd-warshall-deep}. An
 ablation of loss functions is shown in Figure~\ref{fig:fig:fwrl-stepfwrl-noop-FetchPush}.
 
@@ -136,16 +144,20 @@ ablation of loss functions is shown in Figure~\ref{fig:fig:fwrl-stepfwrl-noop-Fe
 %
 \begin{figure}
   \def\frac{0.32}
-Loss function breakdown without HER sampling on Fetch Push\\
-  \includegraphics[width=\frac\columnwidth]{media/res/f84daa7-FetchPush-v1-stfw-none/test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/f84daa7-FetchPush-v1-stfw-none/test/mean_Q.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/f84daa7-FetchPush-v1-stfw-none/train/critic_loss.pdf}\\
-Loss function breakdown with HER sampling on Fetch Push\\
-  \includegraphics[width=\frac\columnwidth]{media/res/3f1eafe-FetchPush-v1-stfw-future/test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/3f1eafe-FetchPush-v1-stfw-future/test/mean_Q.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/3f1eafe-FetchPush-v1-stfw-future/train/critic_loss.pdf}%
+  On Fetch Push\\
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchPush-v1-fwrl-future/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchPush-v1-fwrl-future/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchPush-v1-fwrl-future/train/critic_loss.pdf}\\
+  On Fetch Reach\\
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchReach-v1-fwrl-future/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchReach-v1-fwrl-future/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchReach-v1-fwrl-future/train/critic_loss.pdf}\\
+  On Fetch Slide\\
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchSlide-v1-fwrl-future/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchSlide-v1-fwrl-future/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchSlide-v1-fwrl-future/train/critic_loss.pdf}%
   \caption{
-    Fetch Push results. Loss function changes do no seem to make a difference.
+    Fetch results. Loss function changes do no seem to make a difference.
     There are four parts to the loss function (1) DDPG Loss $\Loss_{\text{ddpg}}$ ,
     (2) Step loss$\Loss_{\text{step}}$,  
     (3) Lower bound $\Loss_{\text{lower}}$ and
@@ -154,10 +166,9 @@ Loss function breakdown with HER sampling on Fetch Push\\
     dqst = $\Loss_{\text{ddpg}}$ + $\Loss_{\text{step}}$,
     fwrl = $\Loss_{\text{ddpg}}$ + $\Loss_{\text{lower}}$ +
     $\Loss_{\text{upper}}$,
-    qlst = $\Loss_{\text{ddpg}}$ + $\Loss_{\text{step}}$ + $\Loss_{\text{lower}}$ + $\Loss_{\text{upper}}$.
-    stfw = $\Loss_{\text{step}}$ + $\Loss_{\text{lower}}$ + $\Loss_{\text{upper}}$,
-    stlo = $\Loss_{\text{step}}$ + $\Loss_{\text{lower}}$,
-    stup = $\Loss_{\text{step}}$ + $\Loss_{\text{upper}}$.
+    qlst = $\Loss_{\text{ddpg}}$ + $\Loss_{\text{step}}$ + $\Loss_{\text{lower}}$ + $\Loss_{\text{upper}}$,
+    dqte = $\Loss_{\text{ddpg}}$ + $\Loss_{\text{trieq}}$,
+    qste = $\Loss_{\text{ddpg}}$ + $\Loss_{\text{step}}$ + $\Loss_{\text{trieq}}$.
     Success rate is the fraction of times the agent reaches the goal. Q(test) is
     the estimated cumulative reward by the network. Critic loss is the total
     loss plotted during training.
