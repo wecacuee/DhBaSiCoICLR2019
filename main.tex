@@ -27,8 +27,8 @@
 % The file aaai.sty is the style file for AAAI Press 
 % proceedings, working notes, and technical reports.
 %
-\title{Deep Floyd-Warshall Reinforcement Learning:\\
-  Learning from Past Experiences to Reach New Goals}
+\title{Deep Floyd-Warshall Reinforcement \\Learning:
+Compositionality in the space of Goal-Conditioned Value Functions}
 
 \author{Anonymous}
 %\author{Vikas Dhiman$^1$, Shurjo Banerjee$^1$, Jeffrey M. Siskind$^2$ and Jason J.
@@ -42,27 +42,29 @@
 \begin{document}
 
 \maketitle
-%\begin{abstract}
-%\end{abstract}
+\begin{abstract}
+    This work introduces Deep Floyd-Warshall Reinforcement Learning, a
+    new algorithm for goal-conditioned tasks that employs
+    compositionality constraints in the space of value functions. In
+    addition to accelrating learning, FWDRL
+    is shown to have improved performance over state-of-the-art
+    model-free DRL methods in wide suite of experiments. 
+\end{abstract}
 
 
-%\section{ Introduction}
+\input{intro}
 
-%\input{intro}
+\input{background}
 
-%\input{claims}
-
-%\input{related_work}
-
-%\input{background}
-%
-%\input{method}
+\input{method}
 
 \input{experiments}
 
-%\input{results}
+\input{results}
 
-%\input{conclusion}
+\input{related_work}
+
+\input{conclusion}
 
 %\input{algorithm}
 
@@ -75,7 +77,10 @@
 \bibliography{main,main_filtered}}
 \bibliographystyle{iclr2019_conference}
 
+\input{appendix}
+
 \newpage
+
 \section{Old Experiments}
 \input{old-experiments}
 \end{document}

@@ -1,102 +1,10 @@
-
-\section{Related work}
-%\subsection{Goal-conditioned value functions}
-
-\paragraph{Goal-conditioned value functions}
-Multi-goal reinforcement learning has gained attention lately with
-important work like UVFAs~\citep{schaul2015universal},
-HER~\citep{andrychowicz2016learning} and TDM~\citep{pong2018temporal}
-making progress towards learning goal-conditioned value functions for
-multi-goal tasks.  Introduced by ~\citep{schaul2015universal}, universal
-goal-conditioned value functions (UVFs), $V(s,g)$, measures the utility
-function of achieving any goal from any state in an environment. In this
-work, UVFs are learned using traditional Q-learning based approaches
-coupled with matrix factorization based methods for faster learning.
-In Hindsight Experience Replay (HER), \citet{andrychowicz2016learning}
-learn UVFs from previous episodes
-accounting for when the goal location has not been achieved.  Their
-method works by utilizing failed past experiences and re-imagining 
-the last states of these episodes as goal states.
-\citet{pong2018temporal} propose Temporal Difference Models (TDM) that estimate
-goal directed horizon dependent value functions, $Q(s, a, g, \tau)$. There work is
-limited because they assume that rewards are available densely in the form of
-some distance like measure from the goal.
-In contrast to all the above works our contribution is a novel algorithm for
-learning UVFs via leveraging a triangular-inequality like constraint within the
-space of these functions.
-
-\paragraph{Goal directed visual navigation}
-There has been considerable interest in using Deep Reinforcement
-Learning (DRL) algorithms for the goal-driven visual navigation of
-robots~\citep{mirowski2016learning,MiPaViICLR2017,dhiman2018critical,gupta2017cognitive,savinov2018semi}.
-\cite{mirowski2016learning} demonstrate that a DRL algorithm called
-Asynchronous Advantage Actor Critic (A3C) can learn to find a goal in 3D
-navigation simulators, using only a front facing first person view as
-input, while \cite{MiPaViICLR2017} demonstrate goal directed navigation
-in Google's street view graph. \citet{gupta2017cognitive} addresses goal
-directed mapping but their method depends upon
-navigation-specific occupancy grids which limit the method's
-generalizability to mutli-goal tasks. Moving the successes of these
-works from simulations to the real world is an active area of research 
-because of the high sample complexity of
-model-free RL algorithms \citep{zhu2017target,anderson2018vision} . \citet{dhiman2018critical} empirically evaluate
-\cite{mirowski2016learning}'s approach and show that when goal locations
-are dynamic, the path chosen to reach the goal are often far from
-optimal.  In contrast to our method, these works focus on the
-navigation domain and employ domain specific auxiliary rewards and
-data-structures making them less generalizable to other multi-goal
-tasks.
-
-\paragraph{Binary goal tasks}
-In \cite{OhChSiICML2016}, agent's DRL-driven navigation is complimented
-with external memory modules indexed in time.
-In a similar vein, \citet{parisotto2017neural} experiment with indexing
-memory modules with the agent's spatial coordinates. Both works 
-consider goal specification as a binary signal hidden somewhere in the
-observation space. In such problems the challenge is to learn the goal
-specification protocol while avoiding the wrong goal and exploring for the right
-one. These problems domains do not evaluate the ability of agents to find the
-shortest path to the goal.
-
-\paragraph{Model-based RL}
-Model-based approaches are known to have lower asymptotic performance then
-model-free approaches~\cite{pong2018temporal}. In many tasks, like moving a
-glass of water, it is easier to model the expected rewards rather than state
-dynamics. This is because inaccurate modeling of the water-surface-dynamics
-won't affect the rewards as long the agent does not spill large amounts of
-water. More recently, model-based algorithms have shown more promise by
-explicitly modelling uncertainty~\cite{lakshminarayanan2017simple,
-  kurutach2018model,zhang2018solar}.
-However, more work is needed for model-free algoritms to be replaced by
-model-based ones. 
+\section{Related Work}
 
 
-%FWRL is an algorithm for learning universal goal-conditioned value
-%functions, first introduced in \citet{schaul2015universal}. A universal
-%goal condition value function, $V(s, g)$ is a value function that takes
-%both the state and the desired goal-location as input. While the orignal
-%work learns \emph{UVFA}s using traditional Q-Learning, our contribution
-%is a novel algorithm for learing UVFAs using path-planning based
-%constraints. 
-%
-%The idea of goal-conditioned value function is not new but has got
-%attention because of revival of reinforcement learning based on deep
-%neural networks.  We build upon the goal-conditioned value functions of
-%\citet{schaul2015universal}.  \citet{schaul2015universal} proposed an
-%architecture and a matrix factorization based algorithm for faster
-%learning of UVFA (Universal value function approximators).  UVFA focused
-%on fast estimation of goal-conditioned value functions using sparse
-%matrix factorization but not on bridging the gap between model-based and
-%model-free algorithms.
+\subsection{DDPG}
 
 
+\subsection{Hindsight Experience Replay}
 
-%\subsection{Model free DRL }
-%does not generalize to multi-goal environments.
-%
-%\subsection{Model based DRL}
-%Needs more exploration.
-%Find the paper that shows that Model based DRL can actually compete with Model free DRL as long as it models uncertainty.
-%
-%\subsection{Multi-goal navigation based papers}
-%Mirowski 2017, 2018: No one shot map learning, does not generalizes to new maps.
+
+\subsection{Temporal Difference Models}

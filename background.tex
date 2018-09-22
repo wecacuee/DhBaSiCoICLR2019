@@ -1,107 +1,105 @@
 \section{Background}
 
-We present a short review of the background material that our work depends upon.
-
-\subsection{Dijkstra}
-\newcommand{\vertices}{\State}
-\newcommand{\edge}{\rew}
-% Floyd warshall data structure
-\newcommand{\fwds}{D}
-% Dijkstra data structure
-\newcommand{\dds}{D}
-% Q-function
-Dijkstra~\citep{dijkstra1959note} is a shortest path finding algorithm from a
-given vertex in the graph. Consider a weighted graph $G = (\vertices,
-\edges)$, with $\vertices$ as the vertices and $\edges$ as the edges. Dijkstra
-algorithms works by maintaining a data-structure $\dds : \vertices \rightarrow
-\R$, that represents the shortest path length from the source. The data
-structure $\dds$ is initialized with zero at start location $\dds[\state_0]
-\leftarrow 0$ and a high value everywhere else $\dds[i] \leftarrow \infty \, \forall
-i \in \vertices$. The algorithm then sequentially updates $\dds$ by
-%
-\begin{align}
-  \dds[j] \leftarrow \min\{\dds[j], \edge_{(i, j)} + \dds[i] \} \, \forall (i, j) \in \edges ,
-  \label{eq:dijkstra}
-\end{align}%
-%
-where $\edge_{(i, j)}$ is the edge-weight for directed edge $(i, j) \in \edges$.
-The shortest path $(\state_0, \state_{1}, \dots)$ starting from vertex
-$\state_0$ can be read from $\dds$ via $\state_{t+1} = \arg \min_{i \in
-\text{Nbr}(\state_t)} \dds[i]$ where $\text{Nbr}(\state_t) = \{ i | (i,
-\state_t) \in \edges \} $ denotes the neighborhood of $\state_t$. With a
-carefully chosen data-structure and traversal order, the Dijkstra Algorithm can
-be made to run in $O(|\vertices|\log|\vertices|)$.
-
-\subsection{Q-Learning}
-Q-learning~\citep{watkins1992qlearning} is a reinforcement learning (RL)
-algorithm that allows agent to explore environment and simultaneously
-compute maximum reward paths.
+\subsection{Reinforcement learning problem}
 
 An RL problem is formalized as an Markov Decision Process (MDP). A MDP is
 defined by a four tuple $(\State, \Action, \Trans, \Rew)$, where $\State$ is the
 state space, $\Action$ is the action space, $\Trans : \State \times \Action
-\rightarrow \State$ is the system dynamics and $\Rew : \State
-\rightarrow \R $ is the reward yielded on a execution of an action.
+\rightarrow \State$ is the system dynamics and $\Rew : \State \times \Action
+\rightarrow \R $ is the reward function
+In a typical RL problem the transition function $\Trans$ is not given but is
+known to be static.
 The objective of a typical RL problem is to maximize the expected cumulative
-reward over time, called the returns  $ R_t = \sum_{t^{'}=t}^{T} \rew_{t^{'}}$.
+reward over time, called the returns  $R_t = \sum_{t^{'}=t}^{T} \rew_{t^{'}}$.
+
+
+\subsection{Background: Q-Learning}
 
 Q-learning works by maintaining an action-value function $\Q : \State \times
-\Action \rightarrow \R$ which is defined as the expected return
-$\Q_\policy(\state_t, \act_t) = \E_\policy[R_t]$ from a given state-action pair.
+\Action \rightarrow \R$ which is defined as the expected cumulative reward
+  $\Q_\policy(\state, \act; \param_\Q) = \E_\policy[ \sum_{k=t}^\infty
+  \discount^{k-t} \Rew(\state_k, \act_k) | \state_t = \state, \act_t = \act ]$
+  starting from a given state-action pair.
 The Q-learning algorithm works by updating the $\Q$-function using the Bellman
 equation for every transition from $\state$ to $\state'$ on action $\act$
 yielding reward $\rew$, 
 %
 \begin{align}
-  \Q^*(\state, \act) &= \E_{\policy}\left[
-                       \rew + \max_{\act^{'}} \Q^*(\state^{'}, \act^{'})
-                       \middle| \state, \act \right] \, .
-    \label{eq:q-learn-bellman}
-\end{align}%
+\Q^*(\state_t, \act_t; \param_\Q) &\leftarrow \Rew(\state_t, \act_t) + \discount \max_{\act \in \Action} \Q^*(\state_{t+1}, \act; \param_\Q)
+                                    \label{eq:bellman}
+\end{align}
+
+A greedy policy can be computed from $\Q^*$-function easily $\policy^*(\state_t) = \arg \max_{\act \in \Action} \Q^*(\state_t, \act)$.
+
+\subsection{Background: Deep Q-Learning}
+
+\citet{MnKaSiNATURE2015} introduced neural network version of Q-learning, Deep
+Q-Networks (DQN) with
+two main ideas
 %
+\begin{enumerate}
+\item For learning to be stable using bellman equation two set of parameters
+  $\param_{\Q}$ should be maintained target parameters
+  $\param_{\Q_t}$ and main parameters $\param_{\Q_m}$. The
+  target parameters are a moving average of the main parameters that change
+  slowly than main parameters. The loss function is only optimized for main parameters:
+\begin{align}
+  \Loss_t(\param_{\Q_m}) = \left(
+  \Q^*(\state_t, \act_t; \param_{\Q_m}) -
+  \Rew(\state_t, \act_t) + \discount \max_{\act \in \Action} \Q^*(\state_{t+1}, \act; \param_{\Q_t}) \right)^2
+                                    \label{eq:bellman-dqn}
+\end{align}
 
-\subsection{Floyd-Warshall}
+\item Since the transitions from an episode or a trajectory are not
+  independently distributed, we should maintain a replay buffer in which the
+  transitions are stored and then resampled at random to update the Q-function
+  using Bellman equation~\eqref{eq:bellman}
+\end{enumerate}%
+% 
 
-The Floyd-Warshall algorithm~\citep{floydwarshall1962} is a shortest path finding
-algorithm from any vertex to any other vertex in a graph.
-Similar to Dijkstra's algorithm, the Floyd-Warshall algorithm
-finds the shortest path by keeping maintaining a shortest distance
-data-structure $\fwds : \vertices \times \vertices \rightarrow \R$. between any
-two pair of vertices $i, j \in \vertices$.
-The data-structure $\fwds$ is initialized with edges weights
-$\fwds[i, j] \leftarrow \edge_{(i, j)} \, \forall (i, j) \in \edges$
-and the uninitialized edges are assigned a high value,
-$\fwds[i, j] \leftarrow \infty \, \forall i, j \in \vertices$.
-The algorithm works by sequentially observing all the nodes in the graph and
-updating $\fwds$ with the shortest explored path known so far:
+
+\subsection{Background: Deep deterministic policy-gradients}
+
+Deep deterministic policy-gradients (DDPG)~\citep{lillicrap2015continuous}
+extends DQN~\citep{MnKaSiNATURE2015} to continuous action domains by introducing
+a parameterized policy function $\policy(\state; \param_\policy)$. The loss
+function now becomes
+\begin{align}
+  \Loss(\param_{\Q_m}, \param_{\policy_m}) = \E_{a_t\sim\policy(\state_t; \param_{\policy_m})}\left[
+  \Q^*(\state_t, \act_t; \param_{\Q_m}) -
+  \Rew(\state_t, \act_t) + \discount \Q^*(\state_{t+1}, \policy(\state; \param_{\policy_t}); \param_{\Q_t}) \right]^2 \label{eq:bellman-ddpg}
+\end{align}
+
+Note that the $\max_{\act \in \Action}$ has been replaced with choosing an action
+using the target policy $\policy(\state; \param_{\policy_t})$ and the actions
+$\act_t$ are being sampled from the main policy. Hence the $\param_{\policy_m}$
+is updated using policy gradients:
 %
 \begin{align}
-  \fwds[i, j] \leftarrow \min\{ \fwds[i, j], \fwds[i, k] + \fwds[k, j] \} \quad
-  \forall i, j, k \in \vertices \, .
+\nabla_{\param_{\policy_m}} \Loss \propto \frac{1}{N} \sum_t \nabla_\act \Q^*(\state_t, \act; \param_{\Q_m})\nabla_{\param_{\policy_m}} \policy(\state_t; \param_{\policy_m})
 \end{align}%
-%
+% 
 
+\subsection{Goal conditioned tasks}
+These tasks need the specification of goal state which can change for each trial~\citep{plappert201802multigoalrl}. The
+examples include navigation to a goal location, moving a robotic arm so that the
+tip of the arm is at a particular 3D location (Fetch-Reach task).
 
-The update equation in the algorithm depends upon the triangular inequality for
-shortest paths distances ($\fwds[i, j] \le \fwds[i, k] + \fwds[k, j]$) and hence
-works only in the absence of negative cycles in the graph. Fortunately, many
-practical problems can be formulated such that negative cycles
-do not occur. The Floyd-Warshall algorithm runs in $O(|\vertices|^3)$
-and is suitable for dense graphs. There also exists extensions of the algorithm
-like Johnson's algorithm~\citep{johnson1977efficient} that run in
-$O(|\vertices|^2\log|\vertices| + |\vertices||\edges|)$ while working on
-the same principle.
-
-% DONE: Add more math (?) that draws these parallels.
-From the parallels between Eq.~\eqref{eq:dijkstra} and
-Eq.~\eqref{eq:q-learn-bellman}, Q-learning can be seen as a generalization
-Dijkstra's algorithm. Both the algorithms work by taking one step minimum (or
-maximum) over the neighboring state. Unlike Dijkstra, in Q-learning one has to
-compute an additional maximum over actions. This is because in an MDP, the agent
-cannot directly choose the next state to be in. Instead, it chooses an action
-that leads it to the next state based on transition probabilities. Moreover,
-Q-learning has to explore the state space before it can exploit the learned
-information to find most-rewarding path. With these parallels in mind, we
-generalize the Floyd-Warshall algorithm to work on an MDP and call it
-Floyd-Warshall Reinforcement Learning.
-
+At the start of the task, a state space $\State$ (example: joint angles of the
+arm), an action space $\Action$ (example: keypresses for discrete actions, joint
+torques for continuous actions), and a
+Goal space $\Goal$ (example: 3D coordinates of the destination location).
+It is known that the transition function $\TransFull$
+and the reward function $\Rew: \State \times \Action \times \Goal \rightarrow
+\R$ are static.
+At the start of each episode, a goal state $\goal^* \in \Goal$ is given. At each
+step $t$ the agent can chose an action to take $\act_t$ and can observe
+$(\state_t, \goal_t, \rew_t)$ where $\goal_t$ is the achieved goal which can be
+deterministically computed from state $\goal_t = f_\goal(\state_t)$.
+The reward function is formulated such that reward for reaching at the goal
+$\|\goal_t - \goal^*\|_2 < \epsilon$ once
+is higher than reward for visiting any other state $\infty$-times
+$\Rew(\state_g, \goal^*, \act) \ge
+\frac{1}{1-\discount}\max_{\state, \act'}\Rew(\state, \goal^*,
+\act') \forall \act$, where $\state_g$ is such that $\|f_\goal(\state_g) -
+\goal^*\| < \epsilon$.
