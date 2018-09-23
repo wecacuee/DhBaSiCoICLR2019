@@ -48,28 +48,36 @@ HER can be applied to either DDPG or DQN, the experiments in
   \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchSlide-v1-fwrl-future/test/success_rate.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchSlide-v1-fwrl-future/test/mean_Q.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchSlide-v1-fwrl-future/train/critic_loss.pdf}%
+  On Fetch Pick and Place\\
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchPickAndPlace-v1-fwrl-future/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchPickAndPlace-v1-fwrl-future/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchPickAndPlace-v1-fwrl-future/train/critic_loss.pdf}%
+  On HandReach\\
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-92450888-HandReach-v0-fwrl-future/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-92450888-HandReach-v0-fwrl-future/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-92450888-HandReach-v0-fwrl-future/train/critic_loss.pdf}%
   \caption{
     Fetch results. Loss function changes do no seem to make a difference.
-    There are four parts to the loss function (1) DDPG Loss $\Loss_{\text{ddpg}}$ ,
-    (2) Step loss$\Loss_{\text{step}}$,  
-    (3) Lower bound $\Loss_{\text{lower}}$ and
-    (4) Upper bound $\Loss_{\text{upper}}$ .
-    ddpg = $\Loss_{\text{ddpg}}$,
-    dqst = $\Loss_{\text{ddpg}}$ + $\Loss_{\text{step}}$,
-    fwrl = $\Loss_{\text{ddpg}}$ + $\Loss_{\text{lower}}$ +
-    $\Loss_{\text{upper}}$,
-    qlst = $\Loss_{\text{ddpg}}$ + $\Loss_{\text{step}}$ + $\Loss_{\text{lower}}$ + $\Loss_{\text{upper}}$,
-    dqte = $\Loss_{\text{ddpg}}$ + $\Loss_{\text{trieq}}$,
-    qste = $\Loss_{\text{ddpg}}$ + $\Loss_{\text{step}}$ + $\Loss_{\text{trieq}}$.
+    There are four parts to the loss function (1) DDPG Loss $\LossDDPG$ ,
+    (2) Step loss$\LossStep$,  
+    (3) Lower bound $\LossLo$ and
+    (4) Upper bound $\LossUp$ .
+    ddpg = $\LossDDPG$,
+    dqst = $\LossDDPG$ + $\LossStep$,
+    fwrl = $\LossDDPG$ + $\LossLo$ +
+    $\LossUp$,
+    qlst = $\LossDDPG$ + $\LossStep$ + $\LossLo$ + $\LossUp$,
+    dqte = $\LossDDPG$ + $\LossTrieq$,
+    qste = $\LossDDPG$ + $\LossStep$ + $\LossTrieq$.
     Success rate is the fraction of times the agent reaches the goal. Q(test) is
     the estimated cumulative reward by the network. Critic loss is the total
     loss plotted during training.
-    Because stfw, stlo, stup fail to succeed, we infer that the $\Loss_{\text{ddpg}}$ DDPG loss is
+    Because stfw, stlo, stup fail to succeed, we infer that the $\LossDDPG$ DDPG loss is
     critical for making the algorithm work. Since the qlst works better than
-    fwrl, we infer that $\Loss_{\text{step}}$ Step loss is also important.
+    fwrl, we infer that $\LossStep$ Step loss is also important.
     only.
     Since there is slight improvement in dqst over ddpg, this means
-    $\Loss_{\text{step}}$ really helps. dqst did not run fully but it shows
+    $\LossStep$ really helps. dqst did not run fully but it shows
     promise (I need to fix a bug).
     But why does the loss for stfw keep rising? Does it mean that the SGD is not
     able to optimize the loss gradients in the right direction?
@@ -77,6 +85,33 @@ HER can be applied to either DDPG or DQN, the experiments in
   \label{fig:fwrl-stepfwrl-noop-FetchPush}%
 \end{figure}%
 % 
+
+%
+\begin{figure}%
+  \def\frac{0.25}
+  \includegraphics[width=\frac\columnwidth]{media/res/3d07a6e-FetchReachPR-v1-fwrl-future/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/3d07a6e-FetchReachPR-v1-fwrl-future/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/3d07a6e-FetchReachPR-v1-fwrl-future/test/ag_g_dist.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/3d07a6e-FetchReachPR-v1-fwrl-future/train/critic_loss.pdf}%
+  \label{fig:path-rewards}%
+  \caption{Experiment to see the effect of only path rewards on loss terms. We
+    did not include a step term which becomes very important in this case.}%
+\end{figure}%
+% 
+
+%
+\begin{figure}%
+  \def\frac{0.24}
+  \includegraphics[width=\frac\columnwidth]{./media/res/04a8fc6-814a3d24-FetchSlide-v1-fwrl-future/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{./media/res/04a8fc6-814a3d24-FetchSlide-v1-fwrl-future/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{./media/res/04a8fc6-814a3d24-FetchSlide-v1-fwrl-future/test/ag_g_dist.pdf}%
+  \includegraphics[width=\frac\columnwidth]{./media/res/04a8fc6-814a3d24-FetchSlide-v1-fwrl-future/train/critic_loss.pdf}%
+  \label{fig:loss-term-weights}%
+  \caption{Effect of weighted combination of loss terms on FetchSlide. The three
+  loss terms being weighed in order are $[\LossDDPG, \LossLo, \LossUp]$}%
+\end{figure}%
+% 
+We compared weighted combination of loss terms
 
 
 %\subsection{Unanswered questions and things to try}
@@ -86,14 +121,14 @@ HER can be applied to either DDPG or DQN, the experiments in
 %introduces more noise in the algorithm than it helps. A modification of HER
 %sampling would sampling three time steps from the trajectory (single episode)
 %$t_1 > t_2 > t_3$ and use $t_2$ as the intermediate state for
-%$\Loss_{\text{upper}}$ and $\Loss_{\text{lower}}$.
+%$\LossUp$ and $\LossLo$.
 %
 %
 %\subsubsection{Why is any loss term with upper/lower worse?}
 %This is probably answered by  the above section but what are the other
 %explanations. The total ``Critic loss'' is increasing for stfw
-%($=\Loss_{\text{step}}$ + $\Loss_{\text{lower}}$ + $\Loss_{\text{upper}}$),
-%which seems to say that with $\Loss_{\text{ddpg}}$, it is hard to optimize the functions.
+%($=\LossStep$ + $\LossLo$ + $\LossUp$),
+%which seems to say that with $\LossDDPG$, it is hard to optimize the functions.
 %
 %
 %\subsection{Is it still a contribution if the upper and lower bounds do not

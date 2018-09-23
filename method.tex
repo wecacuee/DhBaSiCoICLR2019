@@ -62,7 +62,7 @@ function
 \subsubsection{Step loss}
 One step reward path is the highest reward path:
 \begin{align}
-      \Loss_{\text{step}} &= (\fwargs{\state_{b}}{\act_{b}}{\goal_{b+1}}{m}{} - \rew_b)^2
+      \LossStep &= (\fwargs{\state_{b}}{\act_{b}}{\goal_{b+1}}{m}{} - \rew_b)^2
 \end{align}
 %
 
@@ -70,7 +70,7 @@ One step reward path is the highest reward path:
 This is the one step rollout for a long term goal and stays same if we sample a
 long term achieved goal $\goal_{b\text{her}}$ using HER sampling:
 \begin{align}
-  \Loss_{\text{ddpg}} &= (\fwargs{\state_{b}}{\act_{b}}{\goal_{b\text{her}}}{m}{} -
+  \LossDDPG &= (\fwargs{\state_{b}}{\act_{b}}{\goal_{b\text{her}}}{m}{} -
       \rew_b + \discount\fwargs{\state_{b}}{\policy_t(\state_b, \goal_{b\text{her}};\param_\policy)}{\goal_{b\text{her}}}{t}{})^2
 \end{align}
 %
@@ -81,13 +81,13 @@ bounds that force the highest reward path to be higher that any other path
 through an intermediate state.
 %
 \begin{align}
-  \Loss_{\text{upper}} &= |
+  \LossUp &= |
       \fwargs{\state_{b}}{\act_b}{\goal_s}{t}{}
       + \fwargs{\state_{s}}{\policy_t(\state_s, \goal_{b};\param_\policy)}{\goal_b}{t}{}
       - \fwargs{\state_{b}}{\act_b}{\goal_b}{m}{}
       |_+^2
                          \\
-  \Loss_{\text{lower}} &= |
+  \LossLo &= |
       \fwargs{\state_{b}}{\act_b}{\goal_s}{m}{}
       + \fwargs{\state_{s}}{\policy_t(\state_s, \goal_{b};\param_\policy)}{\goal_b}{t}{}
       - \fwargs{\state_{b}}{\act_b}{\goal_b}{t}{}
@@ -96,7 +96,7 @@ through an intermediate state.
 % 
 
 \begin{align}
-  \Loss_{\text{trieq}} &= |
+  \LossTrieq &= |
       \fwargs{\state_{b}}{\act_b}{\goal_s}{t}{}
       + \fwargs{\state_{s}}{\policy_t(\state_s, \goal_{b};\param_\policy)}{\goal_b}{t}{}
       - \fwargs{\state_{b}}{\act_b}{\goal_b}{m}{}
