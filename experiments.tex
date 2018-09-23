@@ -31,114 +31,6 @@ depends on the desired goal $\goal^*_{e}$ for that episode $e$.
 HER can be applied to either DDPG or DQN, the experiments in
 \citet{andrychowicz2016learning} show them to be applied on DDPG.
 
-\subsection{Goal conditioned tasks: Alternative formulation}
-Unlike \citet{andrychowicz2016learning}, we do not believe that reward
-information is meaningless without achieving the desired goal state.
-
-We make three assumptions:
-\begin{enumerate}
-\item We assume that there is no special reward
-  on reaching a particular state even the goal state. The reward formulation is
-  static even with change in goal states.
-  In a graph interpretation, this equivalent to assuming that there are no
-  vertex rewards but only edge rewards.
-  $\Rew(\state, \goal, \act) = \Rew(\state, \act)$.
-\item Like the Floyd-Warshall algorithm we assume no positive reward cycles
-  exist i.e. $  \sum_{k=t}^{T-1} \Rew(\state_k, \act_k) \le 0 \text{ if }\state_T = \state_t$.
-\end{enumerate}
-
-The benefit of these assumptions is that we do not need to resample the reward
-function with simulated goals as HER~\cite{andrychowicz2016learning} need to do.
-Resampling the reward function can be expensive.
-
-\subsection{Proposed algorithm: Floyd-Warshall RL}
-
-We present a model-free reinforcement learning method that transfers
-learned behavior when goal locations are dynamic. We call this algorithm
-Floyd-Warshall Reinforcement Learning, because of its similarity to
-Floyd-Warshall algorithm~\cite{floydwarshall1962}:
-a shortest-path planning algorithm on graphs. Similar
-to universal value function~\cite{schaul2015universal}, we define the Floyd-Warshall
-(FW) function as the expected cumulative reward on going from a start
-state to an end state:
-%
-\begin{align}
-\fwargs{\state_t = \state}{\act_t = \act}{\goal}{\policy}{} =
-\E_{\act_k \sim \policy(\state_t),T}\left[ \sum_{k=t}^{T-1} \Rew(\state_k, \act_k) \middle\vert \state_t = \state, \act_t = \act, \|f_\goal(\state_T) - \goal\|_2 < \epsilon \right] ,
-\end{align}%
-%
-
-Note that objective is different from reinforcement learning formulated in HER,
-as it is conditioned on the goal now. In \citet{andrychowicz2016learning}, the
-reward formulation has to reflect that the desired goal to reach. In our formulation
-we make it a precondition to the objective function, hence we do not need to
-make the reward function dependent upon goal.
-We want to find the policy that maximizes the expected reward from any
-state $\state_t$ to a desired goal $\goal$:
-%
-\begin{align}
-  \policy^* &=
-\arg \max_{\policy} \E_{\state_t, \act_k \sim \policy(\state_t), T}\left[ \sum_{k=t}^{T-1} \Rew(\state_k, \act_k) \middle\vert \state_t = \state, \act_t = \act, \|f_\goal(\state_T) - \goal\|_2 < \epsilon \right],
-  \\
-  \policy^*(\state, \goal) &= \arg \max_{\act} \fwargs{\state_t = \state}{\act_t = \act}{\goal}{}{*}\\
-\text{where } &\fwargs{\state_t = \state}{\act_t = \act}{\goal}{\policy}{*} = 
-\max_{\policy} \fwargs{\state_t = \state}{\act_t = \act}{\goal}{\policy}{},
-\end{align}%
-%
-
-Now all the properties of the Floyd-Warshall function, that we know can be used
-as the an objective function.
-What are the properties of the Floyd-Warshall
-function
-
-\subsubsection{Step loss}
-One step reward path is the highest reward path:
-\begin{align}
-      \Loss_{\text{step}} &= (\fwargs{\state_{b}}{\act_{b}}{\goal_{b+1}}{m}{} - \rew_b)^2
-\end{align}
-%
-
-\subsubsection{DDPG loss}
-This is the one step rollout for a long term goal and stays same if we sample a
-long term achieved goal $\goal_{b\text{her}}$ using HER sampling:
-\begin{align}
-  \Loss_{\text{ddpg}} &= (\fwargs{\state_{b}}{\act_{b}}{\goal_{b\text{her}}}{m}{} -
-      \rew_b + \discount\fwargs{\state_{b}}{\policy_t(\state_b, \goal_{b\text{her}};\param_\policy)}{\goal_{b\text{her}}}{t}{})^2
-\end{align}
-%
-
-\subsubsection{Bounds}
-Floyd-Warshall inspires us to come up with these triangular inequality like
-bounds that force the highest reward path to be higher that any other path
-through an intermediate state.
-%
-\begin{align}
-  \Loss_{\text{upper}} &= |
-      \fwargs{\state_{b}}{\act_b}{\goal_s}{t}{}
-      + \fwargs{\state_{s}}{\policy_t(\state_s, \goal_{b};\param_\policy)}{\goal_b}{t}{}
-      - \fwargs{\state_{b}}{\act_b}{\goal_b}{m}{}
-      |_+^2
-                         \\
-  \Loss_{\text{lower}} &= |
-      \fwargs{\state_{b}}{\act_b}{\goal_s}{m}{}
-      + \fwargs{\state_{s}}{\policy_t(\state_s, \goal_{b};\param_\policy)}{\goal_b}{t}{}
-      - \fwargs{\state_{b}}{\act_b}{\goal_b}{t}{}
-      |_+^2
-\end{align}%
-% 
-
-\begin{align}
-  \Loss_{\text{trieq}} &= |
-      \fwargs{\state_{b}}{\act_b}{\goal_s}{t}{}
-      + \fwargs{\state_{s}}{\policy_t(\state_s, \goal_{b};\param_\policy)}{\goal_b}{t}{}
-      - \fwargs{\state_{b}}{\act_b}{\goal_b}{m}{}
-      |^2
-\end{align}
-
-The resulting algorithm in shown in Alg~\ref{alg:floyd-warshall-deep}. An
-ablation of loss functions is shown in Figure~\ref{fig:fig:fwrl-stepfwrl-noop-FetchPush}.
-
-\input{algorithm}
 
 
 %
@@ -187,23 +79,23 @@ ablation of loss functions is shown in Figure~\ref{fig:fig:fwrl-stepfwrl-noop-Fe
 % 
 
 
-\subsection{Unanswered questions and things to try}
-
-\subsubsection{FWRL specific sampling}
-Right now the shuffle step in the algorithm is totally random and probably
-introduces more noise in the algorithm than it helps. A modification of HER
-sampling would sampling three time steps from the trajectory (single episode)
-$t_1 > t_2 > t_3$ and use $t_2$ as the intermediate state for
-$\Loss_{\text{upper}}$ and $\Loss_{\text{lower}}$.
-
-
-\subsubsection{Why is any loss term with upper/lower worse?}
-This is probably answered by  the above section but what are the other
-explanations. The total ``Critic loss'' is increasing for stfw
-($=\Loss_{\text{step}}$ + $\Loss_{\text{lower}}$ + $\Loss_{\text{upper}}$),
-which seems to say that with $\Loss_{\text{ddpg}}$, it is hard to optimize the functions.
-
-
-\subsection{Is it still a contribution if the upper and lower bounds do not
-  improve the results?}
-Can we claim that this alternative formulation is new and more principled than HER?
+%\subsection{Unanswered questions and things to try}
+%
+%\subsubsection{FWRL specific sampling}
+%Right now the shuffle step in the algorithm is totally random and probably
+%introduces more noise in the algorithm than it helps. A modification of HER
+%sampling would sampling three time steps from the trajectory (single episode)
+%$t_1 > t_2 > t_3$ and use $t_2$ as the intermediate state for
+%$\Loss_{\text{upper}}$ and $\Loss_{\text{lower}}$.
+%
+%
+%\subsubsection{Why is any loss term with upper/lower worse?}
+%This is probably answered by  the above section but what are the other
+%explanations. The total ``Critic loss'' is increasing for stfw
+%($=\Loss_{\text{step}}$ + $\Loss_{\text{lower}}$ + $\Loss_{\text{upper}}$),
+%which seems to say that with $\Loss_{\text{ddpg}}$, it is hard to optimize the functions.
+%
+%
+%\subsection{Is it still a contribution if the upper and lower bounds do not
+%  improve the results?}
+%Can we claim that this alternative formulation is new and more principled than HER?

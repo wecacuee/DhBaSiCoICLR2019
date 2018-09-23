@@ -1,10 +1,33 @@
 \section{Related Work}
 
+\subsection{Experience Repay and Target Networks}
+Not sure if we need this
 
-\subsection{DDPG}
+\subsection{Goal conditioned value functions}
+Goal-conditioned value functions have seen much use in recent years
+\citep{sutton2011horde,schaul2015universal}. Driven by the idea that
+simulataneously learning several tasks leads to better generalizability
+than learning a single tasks \citep{pong2018temporal}, goal-conditioned
+value functions have been shown to possess value in manipulation
+\citep{plappert2018multi,peng2018sim} and navigation domains \citep{
+    zhang2017deep,mirowski2018learning}.  Aside from Dhiman et. al.,
+while much work has utilized these specialized value functions to learn
+how to solve complicated tasks, we were unable to find any other work
+that leveraged the structure in the space of these functions to
+accelrate and improve learning. 
 
 
-\subsection{Hindsight Experience Replay}
+\subsection{Multi-goal Reinforcement Learning Methods (HER/TDM)}
+Learning goal-conditioned value functions have also taked a variety of
+forms. In \emph{model-free} RL, \emph{Hindsight Experience Replay} (HER)
+\citep{andrychowicz2017hindsight} represents a form of \emph{implicit
+curriculum} for training these functions. In HER, previous traversals
+are re-used for training with the goal state relabelled to be a part of
+these state traversals. HER sampling is shown to be highlight effective
+in training goal-conditioned value functions quickly and efficiently and
+is highly influential on our methods. In
+\emph{model-based} RL \emph{Temporal Difference Models} derive a
+connection between model-based and model-free algorithms for
+finite-horizon problems. While showcasing promising results, they
+represent an orthogonal direction of research. 
 
-
-\subsection{Temporal Difference Models}

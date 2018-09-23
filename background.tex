@@ -13,7 +13,7 @@ The objective of a typical RL problem is to maximize the expected cumulative
 reward over time, called the returns  $R_t = \sum_{t^{'}=t}^{T} \rew_{t^{'}}$.
 
 
-\subsection{Background: Q-Learning}
+\subsection{Q-Learning}
 
 Q-learning works by maintaining an action-value function $\Q : \State \times
 \Action \rightarrow \R$ which is defined as the expected cumulative reward
@@ -31,9 +31,9 @@ yielding reward $\rew$,
 
 A greedy policy can be computed from $\Q^*$-function easily $\policy^*(\state_t) = \arg \max_{\act \in \Action} \Q^*(\state_t, \act)$.
 
-\subsection{Background: Deep Q-Learning}
+\subsection{Deep Q-Learning}
 
-\citet{MnKaSiNATURE2015} introduced neural network version of Q-learning, Deep
+\citet{mnih2015human} introduced neural network version of Q-learning, Deep
 Q-Networks (DQN) with
 two main ideas
 %
@@ -58,7 +58,7 @@ two main ideas
 % 
 
 
-\subsection{Background: Deep deterministic policy-gradients}
+\subsection{Deep Deterministic Policy-Gradients}
 
 Deep deterministic policy-gradients (DDPG)~\citep{lillicrap2015continuous}
 extends DQN~\citep{MnKaSiNATURE2015} to continuous action domains by introducing
@@ -80,7 +80,7 @@ is updated using policy gradients:
 \end{align}%
 % 
 
-\subsection{Goal conditioned tasks}
+\subsection{Goal-conditioned Tasks}
 These tasks need the specification of goal state which can change for each trial~\citep{plappert201802multigoalrl}. The
 examples include navigation to a goal location, moving a robotic arm so that the
 tip of the arm is at a particular 3D location (Fetch-Reach task).
