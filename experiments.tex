@@ -113,6 +113,40 @@ HER can be applied to either DDPG or DQN, the experiments in
 % 
 We compared weighted combination of loss terms
 
+%
+\begin{figure}%
+  \def\frac{0.24}
+  \includegraphics[width=\frac\columnwidth]{media/res/245b3c4-ce781a70-FetchReachPR-v1-fwrl-future-her_fwrl_path_reward/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/245b3c4-ce781a70-FetchReachPR-v1-fwrl-future-her_fwrl_path_reward/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/245b3c4-ce781a70-FetchReachPR-v1-fwrl-future-her_fwrl_path_reward/test/ag_g_dist.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/245b3c4-ce781a70-FetchReachPR-v1-fwrl-future-her_fwrl_path_reward/train/critic_loss.pdf}%
+  \label{fig:}%
+  \caption{Effect of path reward on convergence in case of different loss
+    functions on FetchReach. With path reward on PR-dqst
+    ($\LossDDPG$ + $\LossStep$)
+    and PR-qlst
+    ($\LossDDPG$ + $\LossStep$ + $\LossLo$ + $\LossUp$), are able achieve high
+    success rate and even that takes longer than usual. Out of the two PR-dqst
+    does better. The terms with PR use path-rewards and hence less computation
+    by avoid recomputation of reward function. It is interesting that PR-dqst
+    and PR-qlst reach closer in terms of distance from goal probably because of
+    absence of threshold.}%
+\end{figure}%
+% 
+
+%
+\begin{figure}%
+  \def\frac{0.24}
+  \includegraphics[width=\frac\columnwidth]{media/res/d249d2d-c9bfa98b-FetchPush-v1-fwrl-future/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/d249d2d-c9bfa98b-FetchPush-v1-fwrl-future/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/d249d2d-c9bfa98b-FetchPush-v1-fwrl-future/test/ag_g_dist.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/d249d2d-c9bfa98b-FetchPush-v1-fwrl-future/train/critic_loss.pdf}%
+  \label{fig:}%
+  \caption{Effect of choosing the intermediate sample in the \emph{middle} of the
+    trajectory vs \emph{uniform}ly random in the trajectory on FetchPush}%
+\end{figure}%
+% 
+
 
 %\subsection{Unanswered questions and things to try}
 %
