@@ -40,25 +40,22 @@ experimental setups \citep{sutton2011horde,
 schaul2015universal,andrychowicz2017hindsight}.  Inherited from standard
 RL formulations, these functions are usually learned via policy-gradient
 or Q-Learning methodologies i.e. algorithms that allow for the learning
-of standard value functions. 
+of standard value functions. Perhaps central to the learning of these
+functions is the idea that on achieving the goal state, agent's are
+provided with \emph{goal-rewards}, reward values that are traditionally
+larger than reward available in the rest of the state space.  
 
-% Do goal-conditioned value functions require goal rewards to learn?
-Perhaps central to the learning of these functions is the idea that on
-achieving the goal state, agent's are provided with \emph{goal-rewards},
-reward values that are traditionally larger than reward available in the
-rest of the state space. In this work we pose a simple
-question: ``Do goal-conditioned value functions really need goal rewards
-to learn?'' The answer, counter-intuitively, is no.  
 
-% 
-The main contribution of this work is the reformulation of the
-\emph{reward} signal for multi-goal environments that does not require
-goal rewards for GCVFs to be learned. Specifically, we reinterpret
-GCVFs as \emph{path-reward} driven allowing for the learning of these
-functions with improved sample efficiencies and scores. Our experiments
-showcase how this simple reformulation leads to increased sampling
-efficiencies of up to 50\% on state-of-the-art baselines on a multitude
-of experiments. 
+
+We introduce \emph{step-loss} that allows for \emph{goal-independent
+reward formulations}. We show that this reward formulation leads to
+increased sample efficiency for a variety of    
+
+% A secondary contribution of this work is the extension of the FWRL
+% algorithm to the Deep RL domain. We leverage compositionality
+% constraints in the space of FWRL to introduce a new algorithm that is
+% more principled. 
+
 
 % In summary, our contributions are and results show increased sample
 % efficiency. 
