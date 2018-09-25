@@ -1,76 +1,90 @@
+%From playing Atari games from raw pixel values \citep{mnih2013playing},
+%beating world GO champions \citep{silver2017mastering} and applications
+%to robotic navigation \citep{zhu2017target} and manipulation
+%\citep{gu2017deep}, the accomplishments of Deep Reinforcement Learning
+%(DRL) have been wide and varied. Of interest to this work has been the
+%recent application of these powerful algorithms to complicated
+%multi-goal tasks \citep{andrychowicz2017hindsight,pong2018temporal}. In
+%Multi-Goal Reinforcement Learning (MGRL)\citep{plappert2018multi},
+%agents are tasked with learning policies that can traverse to dynamic,
+%previously unseen goal locations. Many tasks can be interpreted in
+%multi-goal domains.  For example, a robotic arm may need to move objects
+%to given \emph{positions} around a table. In another example, a mobile
+%robot may be tasked with navigating to given \emph{landmarks}.
+
 \section{Introduction}
 
 % Reinforcement learning and it's uses
 % Why we care about Multi-Goal Reinforcement Learning
-From playing Atari games from raw pixel values \citep{mnih2013playing},
-beating world GO champions \citep{silver2017mastering} and applications
-to robotic navigation \citep{zhu2017target} and manipulation
-\citep{gu2017deep}, the accomplishments of Deep Reinforcement Learning
-(DRL) have been wide and varied. The advent of such powerful DRL
-algoritms for continous control \cite{lillicrap2015continuous} has seen
-an increase in the application of these algorithms to complicated multi-goal tasks
-\citep{andrychowicz2017hindsight,pong2018temporal}. In
-Multi-Goal Reinforcement Learning (MGRL)\citep{plappert2018multi},
-agents in environments are tasked with achieving multiple goal
-conditions in as little time as possible.  Such tasks permeate the field
-of \emph{robotics}.  For example, in \emph{manipulation} a robotic arm
-may need to move an object to a certain location on a table. In
-\emph{navigation}, a robot may be tasked with finding a goal locations
-in both old and new environments.  
-
+Many tasks in robotics, called \emph{multi-goal tasks},  need the
+specification of a \emph{goal-state}.  For example, a robotic arm may
+need to move objects to given positions around a table
+\citep{gu2017deep}. A mobile robot may be tasked with navigating to
+given landmarks in a map \citep{zhu2017target}.  Deep
+Reinforcement Learning algorithms have been adapted to work on such
+problems showing promising results \citep{andrychowicz2017hindsight,pong2018temporal}. 
 
 % A common way to solve MGRL problems is the use of Goal-Conditioned
 % Value functions. Solving several tasks instead of individual tasks
-One of the most popular methods for solving MGRL problems is the use of
-\emph{goal-conditioned value functions} (GCVFs), a more generalizable
-version of \emph{value functions} in reinforcement learning. Operating
-over both state and goal space, a GCVF, $V(s,g)$, represents the
-expected cumulative return of an agent reaching any goal state from any
-start state. GCVFs are driven by the intuition of solving several tasks
-in an environment simultaneously is more generalizable and powerful than
-solving single tasks as is normal in most reinforcement learning
-problems. 
+Multi-Goal Reinforcement Learning (MGRL) \citep{plappert2018multi}
+algorithms generally work by estimating \emph{goal-conditioned value
+functions} (GCVF). A GCVF, is an extension to \emph{value functions} in
+reinforcement learning that in addition to operating on state space,
+also operates over goal space.  These functions represent the expected
+cumulative reward of reaching any goal from any start state and are used
+to compute \emph{policies} for multi-goal tasks. 
+
 
 % Goal conditioned value functions make a big assumption however. It is
 % assumed that to learn to achieve goals, goal locations must themselves
 % must be associated with reward. This however is not the case. We
-% introduce .... 
-Much work have showcased the utilization of GCVFs on a variety of
-experimental setups \citep{sutton2011horde,
-schaul2015universal,andrychowicz2017hindsight}.  Inherited from standard
-RL formulations, these functions are usually learned via policy-gradient
-or Q-Learning methodologies i.e. algorithms that allow for the learning
-of standard value functions. 
+% introduce ....
+\TODO{Fill in the related works}\\
+Many algorithms have been proposed to learn goal-conditioned value
+functions. In \emph{Universal Value Function Approximators}, \cite{} ...
+In \emph{Hindsight Experience Replay} ... In \emph{Temporal Difference
+Models} ... \emph{Reward} is conventionally a function of the agent's
+action and its state, $r(s,a)$. All these works build of the assumption
+that it is also conditioned on the desired goal, $r(s,a,g)$ thereby
+introducing an extra dimension in the formulation. . For example, in the
+Fetch-Push task \citep{plappert2018multi} of moving a block to a given
+location on a table, every movement incurs a ``-1'' reward while on
+reaching the desired goal, ``0'' reward is recieved.  To achieve maximum
+reward, the agent is incentivized to traverse and remain in the goal
+in a minimal number of steps.  Could GCVFs still be learned if no
+special reward was recieved on reaching the goal?  In this work,
+we pose the question: \emph{``Are goal-rewards really needed to learn
+goal-conditioned value functions?''}. 
 
 % Do goal-conditioned value functions require goal rewards to learn?
-Perhaps central to the learning of these functions is the idea that on
-achieving the goal state, agent's are provided with \emph{goal-rewards},
-reward values that are traditionally larger than reward available in the
-rest of the state space. In this work we pose a simple
-question: ``Do goal-conditioned value functions really need goal rewards
-to learn?'' The answer, counter-intuitively, is no.  
+\TODO{Rewrite this paragraph with Jason's help}\\
+Counter-intuitively, we answer this question in the negative.  The key
+contribution is the re-interpretation of GCVFs to be the cumulative
+\emph{path reward} of going from a given start state to a given goal
+state.  This is different than the conventional interpretation of GCVFs
+as \emph{future rewards} from a given start state to any state using the
+goal state as additional information.  
+Since we are learning the GCVF for all possible goal states, we need not treat
+goal-reward in a specialized manner. The specification of the goal is
+utilized at the policy computation step from the GCVF, rather than the
+learning stage. This \emph{path-reward} interpretation requires an
+additional loss term in the optimization, called the
+\emph{step-loss}, that learns GCVFs when the goal is only one step away. 
 
-% 
-The main contribution of this work is the reformulation of the
-\emph{reward} signal for multi-goal environments that does not require
-goal rewards for GCVFs to be learned. Specifically, we reinterpret
-GCVFs as \emph{path-reward} driven allowing for the learning of these
-functions with improved sample efficiencies and scores. Our experiments
-showcase how this simple reformulation leads to increased sampling
-efficiencies of up to 50\% on state-of-the-art baselines on a multitude
-of experiments. 
+% Do goal-conditioned value functions require goal rewards to learn?
+Experimentally, we showcase how this reinterpretation when applied to
+HER and a deep adaptation of Floyd-Warshall Reinforcement Learning
+\citep{}, substantially improves sample efficiency while reducing asymptotic distance to
+the goal across a variety of challenging environments. 
 
 % In summary, our contributions are and results show increased sample
 % efficiency. 
-In summary, the  contributions of this work are threefold. We (1)
-Describe and introduce \emph{step-loss}, a simple augmentation that
-allows for \emph{goal-independent reward formulations}. (2) We showcase
-how goal-conditioned value functions can be learned under such
-\emph{goal-independent reward formulations} leading to substantially
-improved sample efficiency across a variety of algorithms and (3) we
-extend Floyd-Warshal Reinforcement Learning for Tabular Domains to the
-realm of DRL leveraging compositionality constraints in the space of
-goal-conditioned value functions. 
+In summary, the  contributions of this work are twofold. Firstly, we
+reinterpret goal-conditioned value functions as expected path-rewards
+thereby removing the dependency of the reward function on goal states.
+We showcase how the application of this interpreation leads to improved
+learning. Secondly, we extend Floyd-Warshal Reinforcement Learning from
+tabular domains to the realm of DRL \cite{}. 
 
 
 %% There is inherent structure in the formulation of these functions
