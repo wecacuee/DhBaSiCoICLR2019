@@ -1,7 +1,5 @@
-%\section{Experiments}
-%\label{sec:experiments}
-
 \section{Experiments}
+\label{sec:experiments}
 We use Fetch push, reach and pick and place
 tasks~\citep{plappert201802multigoalrl} in our experiments:
 %
@@ -31,88 +29,6 @@ depends on the desired goal $\goal^*_{e}$ for that episode $e$.
 HER can be applied to either DDPG or DQN, the experiments in
 \citet{andrychowicz2016learning} show them to be applied on DDPG.
 
-
-
-%
-\begin{figure}
-  \def\frac{0.32}
-  On Fetch Push\\
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchPush-v1-fwrl-future/test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchPush-v1-fwrl-future/test/mean_Q.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchPush-v1-fwrl-future/train/critic_loss.pdf}\\
-  On Fetch Reach\\
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchReach-v1-fwrl-future/test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchReach-v1-fwrl-future/test/mean_Q.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchReach-v1-fwrl-future/train/critic_loss.pdf}\\
-  On Fetch Slide\\
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchSlide-v1-fwrl-future/test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchSlide-v1-fwrl-future/test/mean_Q.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchSlide-v1-fwrl-future/train/critic_loss.pdf}%
-  On Fetch Pick and Place\\
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchPickAndPlace-v1-fwrl-future/test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchPickAndPlace-v1-fwrl-future/test/mean_Q.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-FetchPickAndPlace-v1-fwrl-future/train/critic_loss.pdf}%
-  On HandReach\\
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-92450888-HandReach-v0-fwrl-future/test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-92450888-HandReach-v0-fwrl-future/test/mean_Q.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/38f4625-92450888-HandReach-v0-fwrl-future/train/critic_loss.pdf}%
-  \caption{
-    Fetch results. Loss function changes do no seem to make a difference.
-    There are four parts to the loss function (1) DDPG Loss $\LossDDPG$ ,
-    (2) Step loss$\LossStep$,  
-    (3) Lower bound $\LossLo$ and
-    (4) Upper bound $\LossUp$ .
-    ddpg = $\LossDDPG$,
-    dqst = $\LossDDPG$ + $\LossStep$,
-    fwrl = $\LossDDPG$ + $\LossLo$ +
-    $\LossUp$,
-    qlst = $\LossDDPG$ + $\LossStep$ + $\LossLo$ + $\LossUp$,
-    dqte = $\LossDDPG$ + $\LossTrieq$,
-    qste = $\LossDDPG$ + $\LossStep$ + $\LossTrieq$.
-    Success rate is the fraction of times the agent reaches the goal. Q(test) is
-    the estimated cumulative reward by the network. Critic loss is the total
-    loss plotted during training.
-    Because stfw, stlo, stup fail to succeed, we infer that the $\LossDDPG$ DDPG loss is
-    critical for making the algorithm work. Since the qlst works better than
-    fwrl, we infer that $\LossStep$ Step loss is also important.
-    only.
-    Since there is slight improvement in dqst over ddpg, this means
-    $\LossStep$ really helps. dqst did not run fully but it shows
-    promise (I need to fix a bug).
-    But why does the loss for stfw keep rising? Does it mean that the SGD is not
-    able to optimize the loss gradients in the right direction?
-  }%
-  \label{fig:fwrl-stepfwrl-noop-FetchPush}%
-\end{figure}%
-% 
-
-%
-\begin{figure}%
-  \def\frac{0.25}
-  \includegraphics[width=\frac\columnwidth]{media/res/3d07a6e-FetchReachPR-v1-fwrl-future/test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/3d07a6e-FetchReachPR-v1-fwrl-future/test/mean_Q.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/3d07a6e-FetchReachPR-v1-fwrl-future/test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/3d07a6e-FetchReachPR-v1-fwrl-future/train/critic_loss.pdf}%
-  \label{fig:path-rewards}%
-  \caption{Experiment to see the effect of only path rewards on loss terms. We
-    did not include a step term which becomes very important in this case.}%
-\end{figure}%
-% 
-
-%
-\begin{figure}%
-  \def\frac{0.24}
-  \includegraphics[width=\frac\columnwidth]{./media/res/04a8fc6-814a3d24-FetchSlide-v1-fwrl-future/test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{./media/res/04a8fc6-814a3d24-FetchSlide-v1-fwrl-future/test/mean_Q.pdf}%
-  \includegraphics[width=\frac\columnwidth]{./media/res/04a8fc6-814a3d24-FetchSlide-v1-fwrl-future/test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{./media/res/04a8fc6-814a3d24-FetchSlide-v1-fwrl-future/train/critic_loss.pdf}%
-  \label{fig:loss-term-weights}%
-  \caption{Effect of weighted combination of loss terms on FetchSlide. The three
-  loss terms being weighed in order are $[\LossDDPG, \LossLo, \LossUp]$}%
-\end{figure}%
-% 
-We compared weighted combination of loss terms
-
 %
 \begin{figure}%
   \def\frac{0.24}
@@ -125,7 +41,22 @@ We compared weighted combination of loss terms
   \includegraphics[width=\frac\columnwidth]{./media/res/be0910c-her_fwrl_path_reward-FetchPushPR-v1-fwrl/test/success_rate.pdf}%
   \includegraphics[width=\frac\columnwidth]{./media/res/be0910c-her_fwrl_path_reward-FetchPushPR-v1-fwrl/test/mean_Q.pdf}%
   \includegraphics[width=\frac\columnwidth]{./media/res/be0910c-her_fwrl_path_reward-FetchPushPR-v1-fwrl/test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{./media/res/be0910c-her_fwrl_path_reward-FetchPushPR-v1-fwrl/train/critic_loss.pdf}%
+  \includegraphics[width=\frac\columnwidth]{./media/res/be0910c-her_fwrl_path_reward-FetchPushPR-v1-fwrl/train/critic_loss.pdf}\\
+  On Fetch Slide\\
+  \includegraphics[width=\frac\columnwidth]{./media/res/eb45946-path_reward-FetchSlidePR-v1-dqst/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{./media/res/eb45946-path_reward-FetchSlidePR-v1-dqst/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{./media/res/eb45946-path_reward-FetchSlidePR-v1-dqst/test/ag_g_dist.pdf}%
+  \includegraphics[width=\frac\columnwidth]{./media/res/eb45946-path_reward-FetchSlidePR-v1-dqst/train/critic_loss.pdf}\\
+  On Fetch Pick And Place\\
+  \includegraphics[width=\frac\columnwidth]{./media/res/d5cefef-path_reward-FetchPickAndPlacePR-v1-dqst/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{./media/res/d5cefef-path_reward-FetchPickAndPlacePR-v1-dqst/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{./media/res/d5cefef-path_reward-FetchPickAndPlacePR-v1-dqst/test/ag_g_dist.pdf}%
+  \includegraphics[width=\frac\columnwidth]{./media/res/d5cefef-path_reward-FetchPickAndPlacePR-v1-dqst/train/critic_loss.pdf}\\
+  On Hand Reach \\
+  \includegraphics[width=\frac\columnwidth]{./media/res/d5cefef-path_reward-HandReachPR-v0-dqst/test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{./media/res/d5cefef-path_reward-HandReachPR-v0-dqst/test/mean_Q.pdf}%
+  \includegraphics[width=\frac\columnwidth]{./media/res/d5cefef-path_reward-HandReachPR-v0-dqst/test/ag_g_dist.pdf}%
+  \includegraphics[width=\frac\columnwidth]{./media/res/d5cefef-path_reward-HandReachPR-v0-dqst/train/critic_loss.pdf}\\
   \label{fig:path-reward-1}%
   \caption{Effect of path reward on convergence in case of different loss
     functions on FetchReach. With path reward on PR-dqst
@@ -139,37 +70,3 @@ We compared weighted combination of loss terms
     absence of threshold.}%
 \end{figure}%
 % 
-
-%
-\begin{figure}%
-  \def\frac{0.24}
-  \includegraphics[width=\frac\columnwidth]{media/res/d249d2d-c9bfa98b-FetchPush-v1-fwrl-future/test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/d249d2d-c9bfa98b-FetchPush-v1-fwrl-future/test/mean_Q.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/d249d2d-c9bfa98b-FetchPush-v1-fwrl-future/test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/d249d2d-c9bfa98b-FetchPush-v1-fwrl-future/train/critic_loss.pdf}%
-  \label{fig:middle-vs-uniform}%
-  \caption{Effect of choosing the intermediate sample in the \emph{middle} of the
-    trajectory vs \emph{uniform}ly random in the trajectory on FetchPush}%
-\end{figure}%
-% 
-
-%\subsection{Unanswered questions and things to try}
-%
-%\subsubsection{FWRL specific sampling}
-%Right now the shuffle step in the algorithm is totally random and probably
-%introduces more noise in the algorithm than it helps. A modification of HER
-%sampling would sampling three time steps from the trajectory (single episode)
-%$t_1 > t_2 > t_3$ and use $t_2$ as the intermediate state for
-%$\LossUp$ and $\LossLo$.
-%
-%
-%\subsubsection{Why is any loss term with upper/lower worse?}
-%This is probably answered by  the above section but what are the other
-%explanations. The total ``Critic loss'' is increasing for stfw
-%($=\LossStep$ + $\LossLo$ + $\LossUp$),
-%which seems to say that with $\LossDDPG$, it is hard to optimize the functions.
-%
-%
-%\subsection{Is it still a contribution if the upper and lower bounds do not
-%  improve the results?}
-%Can we claim that this alternative formulation is new and more principled than HER?

@@ -1,7 +1,5 @@
 \section{Background}
 
-\subsection{Reinforcement learning problem}
-
 An RL problem is formalized as an Markov Decision Process (MDP). A MDP is
 defined by a four tuple $(\State, \Action, \Trans, \Rew)$, where $\State$ is the
 state space, $\Action$ is the action space, $\Trans : \State \times \Action
@@ -9,81 +7,86 @@ state space, $\Action$ is the action space, $\Trans : \State \times \Action
 \rightarrow \R $ is the reward function
 In a typical RL problem the transition function $\Trans$ is not given but is
 known to be static.
-The objective of a typical RL problem is to maximize the expected cumulative
-reward over time, called the returns  $R_t = \sum_{t^{'}=t}^{T} \rew_{t^{'}}$.
+The objective of an RL problem is to find a policy $\policy(\state): \State
+\rightarrow \Action$ that
+maximize the expected cumulative
+reward over time, called the returns  $R_t = \sum_{k=t}^{\infty} \rew_{k}$.
+Reinforcement learning is has been typically formulated as in a single goal
+context, but more recently there has been interest in the multi-goal
+reinforcement learning problems.
 
 
-\subsection{Q-Learning}
+\subsection{Single-goal Reinforcement learning}
 
-Q-learning works by maintaining an action-value function $\Q : \State \times
-\Action \rightarrow \R$ which is defined as the expected cumulative reward
-  $\Q_\policy(\state, \act; \param_\Q) = \E_\policy[ \sum_{k=t}^\infty
-  \discount^{k-t} \Rew(\state_k, \act_k) | \state_t = \state, \act_t = \act ]$
-  starting from a given state-action pair.
-The Q-learning algorithm works by updating the $\Q$-function using the Bellman
-equation for every transition from $\state$ to $\state'$ on action $\act$
-yielding reward $\rew$, 
+A number of reinforcement learning algorithms use a parameteric function
+estimator for the expected future reward, either a value function
+$\Value(\state; \param)$ or an action-value function $\Q(\state, \act; \param)$.
+The more commonly used action-value function is defined as the running estimate
+of expected future reward
+%
+$\Q_\policy(\state, \act; \param_\Q) = \E_\policy[ \sum_{k=t}^\infty
+\discount^{k-t} \Rew(\state_k, \act_k) | \state_t = \state, \act_t = \act ]$ .
+%
+When the policy $\policy$ is optimal, the $\Q$-function satisfies the
+\emph{Bellman equation}:
 %
 \begin{align}
-\Q^*(\state_t, \act_t; \param_\Q) &\leftarrow \Rew(\state_t, \act_t) + \discount \max_{\act \in \Action} \Q^*(\state_{t+1}, \act; \param_\Q)
+\Q^*(\state_t, \act_t; \param_\Q) &\leftarrow \Rew(\state_t, \act_t) + \discount \max_{\act \in \Action} \Q^*(\state_{t+1}, \act; \param_\Q).
                                     \label{eq:bellman}
-\end{align}
-
-A greedy policy can be computed from $\Q^*$-function easily $\policy^*(\state_t) = \arg \max_{\act \in \Action} \Q^*(\state_t, \act)$.
-
-\subsection{Deep Q-Learning}
-
-\citet{mnih2015human} introduced neural network version of Q-learning, Deep
-Q-Networks (DQN) with
-two main ideas
-%
-\begin{enumerate}
-\item For learning to be stable using bellman equation two set of parameters
-  $\param_{\Q}$ should be maintained target parameters
-  $\param_{\Q_t}$ and main parameters $\param_{\Q_m}$. The
-  target parameters are a moving average of the main parameters that change
-  slowly than main parameters. The loss function is only optimized for main parameters:
-\begin{align}
-  \Loss_t(\param_{\Q_m}) = \left(
-  \Q^*(\state_t, \act_t; \param_{\Q_m}) -
-  \Rew(\state_t, \act_t) + \discount \max_{\act \in \Action} \Q^*(\state_{t+1}, \act; \param_{\Q_t}) \right)^2
-                                    \label{eq:bellman-dqn}
-\end{align}
-
-\item Since the transitions from an episode or a trajectory are not
-  independently distributed, we should maintain a replay buffer in which the
-  transitions are stored and then resampled at random to update the Q-function
-  using Bellman equation~\eqref{eq:bellman}
-\end{enumerate}%
+\end{align}%
 % 
+Once $\Q^*$-function is approximated, a greedy policy can be computed from $\Q^*$-function easily $\policy^*(\state_t) = \arg \max_{\act \in \Action} \Q^*(\state_t, \act)$.
 
+Recent advances in deep reinforcement learning~\citep{MnKaSiNATURE2015} view the
+Bellman equation as the gradient of a loss function. For example, Deep
+Q-Networks minimize the loss function whose gradient is the Bellman equation:
+%
+\begin{align}
+  \Loss(\param_{\Q_m}, \param_{\policy_m}) = \E_{a_t\sim\policy(\state_t; \param_{\policy_m})}\left[
+  \Q^*_m(\state_t, \act_t; \param_{\Q_m}) -
+  \Rew(\state_t, \act_t) - \max_{\act}\discount \Q^*_t(\state_{t+1}, \act; \param_{\Q_t}) \right]^2,
+  \label{eq:bellman-dqn}
+\end{align}
+%
+where $\Q_m$ is the main network and $\Q_t$ is the target network. Target and main
+networks are function approximators with same structure, but different
+parameters. The target network parameters are changed slowly towards the main
+network parameters either by periodically copying the main network parameters to
+target network or by maintaining target network as exponential moving average of
+the main network. This improves the stability of the learning.
 
-\subsection{Deep Deterministic Policy-Gradients}
+\citet{MnKaSiNATURE2015} also introduced the idea of \emph{replay buffer}.
+The transitions experienced are not used to update the neural network in order.
+Instead they are stored in a replay buffer which is then sampled out of order
+for independent transitions and updating the neural network.
 
 Deep deterministic policy-gradients (DDPG)~\citep{lillicrap2015continuous}
 extends DQN~\citep{MnKaSiNATURE2015} to continuous action domains by introducing
-a parameterized policy function $\policy(\state; \param_\policy)$. The loss
-function now becomes
-\begin{align}
-  \Loss(\param_{\Q_m}, \param_{\policy_m}) = \E_{a_t\sim\policy(\state_t; \param_{\policy_m})}\left[
-  \Q^*(\state_t, \act_t; \param_{\Q_m}) -
-  \Rew(\state_t, \act_t) + \discount \Q^*(\state_{t+1}, \policy(\state; \param_{\policy_t}); \param_{\Q_t}) \right]^2 \label{eq:bellman-ddpg}
-\end{align}
-
-Note that the $\max_{\act \in \Action}$ has been replaced with choosing an action
-using the target policy $\policy(\state; \param_{\policy_t})$ and the actions
-$\act_t$ are being sampled from the main policy. Hence the $\param_{\policy_m}$
-is updated using policy gradients:
+a parameterized policy function $\policy(\state; \param_\policy)$. 
+Assuming the policy to be optimal, the maxima of the second term in the Bellman
+equation the $\Q$-value at action chosen by the policy at that state:
 %
 \begin{align}
-\nabla_{\param_{\policy_m}} \Loss \propto \frac{1}{N} \sum_t \nabla_\act \Q^*(\state_t, \act; \param_{\Q_m})\nabla_{\param_{\policy_m}} \policy(\state_t; \param_{\policy_m})
+  \Loss(\param_{\Q_m}, \param_{\policy_m}) = \E_{a_t\sim\policy(\state_t; \param_{\policy_m})}\left[
+  \Q^*_m(\state_t, \act_t; \param_{\Q_m}) -
+  \Rew(\state_t, \act_t) -
+  \discount \Q^*_t(\state_{t+1}, \policy_t(\state_{t+1}; \param_{\policy_t}); \param_{\Q_t}) \right]^2.
+  \label{eq:bellman-ddpg}
+\end{align}
+%
+The policy network is updated using policy gradients
+%
+\begin{align}
+\nabla_{\param_{\policy_m}} \Loss \propto \frac{1}{N} \sum_t \nabla_\act \Q^*(\state_t, \act; \param_{\Q_m})\nabla_{\param_{\policy_m}} \policy(\state_t; \param_{\policy_m}).
 \end{align}%
 % 
 
-\subsection{Goal-conditioned Tasks}
-These tasks need the specification of goal state which can change for each trial~\citep{plappert201802multigoalrl}. The
-examples include navigation to a goal location, moving a robotic arm so that the
-tip of the arm is at a particular 3D location (Fetch-Reach task).
+
+\subsection{Multi-goal Reinforcement learning}
+Multi-goal tasks need the specification of goal state which can change for each
+trial~\citep{plappert201802multigoalrl}. The examples include navigation to a
+goal location, moving a robotic arm so that the tip of the arm is at a
+particular 3D location (Fetch-Reach task).
 
 At the start of the task, a state space $\State$ (example: joint angles of the
 arm), an action space $\Action$ (example: keypresses for discrete actions, joint

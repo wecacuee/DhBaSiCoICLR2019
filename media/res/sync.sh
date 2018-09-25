@@ -21,4 +21,9 @@ fi
 # rsync -rav --include='*/' --include='params.json' --include='progress.csv' --include='*test/*.pdf' --include='train/*loss*.pdf' --exclude='*' /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/245b3c4-*-FetchReach*-v1-*-future-her_fwrl_path_reward $THISDIR
 # # Effect of middle vs uniformly random sampling for choosing intermediate state
 # rsync -rav --include='*/' --include='params.json' --include='progress.csv' --include='*test/*.pdf' --include='train/*loss*.pdf' --exclude='*' /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/d249d2d-c9bfa98b-FetchPush-v1-fwrl-future /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/245b3c4-e5f0dd20-FetchPush-v1-fwrl-future- $THISDIR
-rsync -rav --include='*/' --include='params.json' --include='progress.csv' --include='*test/*.pdf' --include='train/*loss*.pdf' --exclude='*' /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/be0910c-her_fwrl_path_reward-FetchPush{PR,}-v1-*  $THISDIR
+# rsync -rav --include='*/' --include='params.json' --include='progress.csv' --include='*test/*.pdf' --include='train/*loss*.pdf' --exclude='*' /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/be0910c-her_fwrl_path_reward-FetchPush{PR,}-v1-*  $THISDIR
+# # Effect of path rewards on Fetch Slide
+rsync -rav --include='*/' --include='params.json' --include='progress.csv' --include='*test/*.pdf' --include='train/*loss*.pdf' --exclude='*' /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/*-path_reward-FetchSlide{PR,Sparse}-v1-*  $THISDIR
+# # Effect of path rewards on Fetch Pick and Place
+rsync -rav --include='*/' --include='params.json' --include='progress.csv' --include='*test/*.pdf' --include='train/*loss*.pdf' --exclude='*' /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/d5cefef-path_reward-*-v{0,1}-* $THISDIR
+
