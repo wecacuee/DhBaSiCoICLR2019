@@ -52,6 +52,15 @@ HER can be applied to either DDPG or DQN, the experiments in
   \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchPickAndPlacePR-v1-dqst/reward_computes-test/success_rate.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchPickAndPlacePR-v1-dqst/epoch-test/ag_g_dist.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchPickAndPlacePR-v1-dqst/epoch-test/success_rate.pdf}\\
+  \label{fig:path-reward-fetch}%
+  \caption{Effect of path reward on convergence in case of different algorithms
+on Fetch tasks. Our method is able achieve similar performance even without the
+goal rewards. Since our method without goal-rewards does not need reward
+recomputation, we vastly outperform other methods in terms of reward sample
+complexity.}%
+\end{figure}
+\begin{figure}
+  \def\frac{0.24}
   \rotatebox{90}{{\tiny \hspace{1em} \color{blue}{Hand Reach}}}%
   \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandReachPR-v0-dqst/reward_computes-test/ag_g_dist.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandReachPR-v0-dqst/reward_computes-test/success_rate.pdf}%
@@ -72,16 +81,11 @@ HER can be applied to either DDPG or DQN, the experiments in
   \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulatePenRotate-v0-dqst/reward_computes-test/success_rate.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulatePenRotate-v0-dqst/epoch-test/ag_g_dist.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulatePenRotate-v0-dqst/epoch-test/success_rate.pdf}\\
-  \label{fig:path-reward-1}%
-  \caption{Effect of path reward on convergence in case of different loss
-    functions on FetchReach. With path reward on PR-dqst
-    ($\LossDDPG$ + $\LossStep$)
-    and PR-qlst
-    ($\LossDDPG$ + $\LossStep$ + $\LossLo$ + $\LossUp$), are able achieve high
-    success rate and even that takes longer than usual. Out of the two PR-dqst
-    does better. The terms with PR use path-rewards and hence less computation
-    by avoid recomputation of reward function. It is interesting that PR-dqst
-    and PR-qlst reach closer in terms of distance from goal probably because of
-    absence of threshold.}%
+  \label{fig:path-reward-hand}%
+  \caption{Effect of path reward on convergence in case of different algorithms
+on Hand tasks. Our method is able achieve similar performance even without the
+goal rewards. Since our method without goal-rewards does not need reward
+recomputation, we vastly outperform other methods in terms of reward sample
+complexity.}%
 \end{figure}%
 % 
