@@ -1,23 +1,35 @@
 \section{Method}
-\subsection{Goal conditioned tasks: Alternative formulation}
-Unlike \citet{andrychowicz2016learning}, we do not believe that reward
-information is meaningless without achieving the desired goal state.
-
-We make three assumptions:
-\begin{enumerate}
-\item We assume that there is no special reward
-  on reaching a particular state even the goal state. The reward formulation is
-  static even with change in goal states.
-  In a graph interpretation, this equivalent to assuming that there are no
-  vertex rewards but only edge rewards.
-  $\Rew(\state, \goal, \act) = \Rew(\state, \act)$.
-\item Like the Floyd-Warshall algorithm we assume no positive reward cycles
-  exist i.e. $  \sum_{k=t}^{T-1} \Rew(\state_k, \act_k) \le 0 \text{ if }\state_T = \state_t$.
-\end{enumerate}
-
-The benefit of these assumptions is that we do not need to resample the reward
-function with simulated goals as HER~\cite{andrychowicz2016learning} need to do.
-Resampling the reward function can be expensive.
+Since our new formulation of goal-conditioned value function satisifies the
+Bellman Equation, the existing MGRL algorithms for $\fw$ easily apply to the
+approximation of $\fw^P$ as long as we can estimate the terminal reward for
+Eq~\eqref{eq:qp-def}. The terminal reward, however, depends up on detecting
+whether the goal has been reached. To avoid this dependence, we introduce the
+step loss $\LossStep$ which assumes that one-step reward is the highest reward between
+adjacent start-goal state:
+%
+\begin{align}
+      \LossStep(\param_\fw) &= (\fwargs{\state_{l-1}}{\act_{l-1}}{\goal_{l};\param_\fw}{*}{P} - \Rew(\state_{l-1}, \act_{l-1}))^2.
+\end{align}
+%
+This loss term allows us to estimate one-step path reward for all start and goal
+states.
+We modify an implementation of HER to include the step-loss term and disable goal
+rewards for our experiments.
+As in HER, we use the loss term from DDPG~\cite{lillicrap2015continuous} while
+using ``future'' goal sampling strategy described in the paper.
+For this purpose an episode-wise replay buffer of transitions $(\state_t,
+\goal_t, \act_t, \rew_t, \state_{t+1}, \goal_{t+1}; \goal^*)$ is maintained. To draw samples
+from the replay buffer an episode and time step is chosen. The corresponding
+transition is taken to the sampled transition, however, the desired goal for
+this transition $\goal^*$ is replaced by randomly chosen goal from the future
+transitions $\goal_{t+f}$. This new transition is applied to minimize the
+following DDPG loss function:
+%
+\begin{align}
+  \LossDDPG(\param_\fw) &= (\fwargs{\state_{t}}{\act_{t}}{\goal_{t+f}; \param_\fw}{*}{P} -
+      \rew_t - \discount\fwargs{\state_{t+1}}{\policy_t(\state_{t+1}, \goal_{t+f};\param_\policy)}{\goal_{t+f};\param_\fw}{t}{P})^2
+\end{align}
+%
 
 \subsection{Proposed algorithm: Floyd-Warshall RL}
 
@@ -58,22 +70,6 @@ Now all the properties of the Floyd-Warshall function, that we know can be used
 as the an objective function.
 What are the properties of the Floyd-Warshall
 function
-
-\subsubsection{Step loss}
-One step reward path is the highest reward path:
-\begin{align}
-      \LossStep &= (\fwargs{\state_{b}}{\act_{b}}{\goal_{b+1}}{m}{} - \rew_b)^2
-\end{align}
-%
-
-\subsubsection{DDPG loss}
-This is the one step rollout for a long term goal and stays same if we sample a
-long term achieved goal $\goal_{b\text{her}}$ using HER sampling:
-\begin{align}
-  \LossDDPG &= (\fwargs{\state_{b}}{\act_{b}}{\goal_{b\text{her}}}{m}{} -
-      \rew_b + \discount\fwargs{\state_{b}}{\policy_t(\state_b, \goal_{b\text{her}};\param_\policy)}{\goal_{b\text{her}}}{t}{})^2
-\end{align}
-%
 
 \subsubsection{Bounds}
 Floyd-Warshall inspires us to come up with these triangular inequality like
