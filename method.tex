@@ -53,9 +53,9 @@ the sum of rewards via any intermediate state-goal pair $(\state_{im}, \goal_{im
 % 
 where $\policy_*$ is the optimal goal-conditioned policy and $\act_t$ represents
 the action taken at time $t$. Taking cue from \citet{MnKaSiNATURE2015}, we do
-not repeat the main online network $\Q_*$ in the loss term.
-
-
+not repeat the main online network $\Q_*$ in the loss term. We use target
+network $\Q_t$ and split the constraint into two loss terms. One loss term acts
+as a lower bound $\LossLo$ and the other acts as the upper bound $\LossUp$:
 %
 \begin{align}
   \LossLo &= (
@@ -78,8 +78,8 @@ main network $\fw_*$.
 Similar to HER we get the intermediate state by trajectory sampling. Once,
 a transition $(\state_t, \act_t, \rew_t, \state_{t+1})$ and a future goal
 $\goal_{t+f}$ has been sampled from the same episode, we sample another
-intermediate state and goal pair as the intermediate pair $(\state_{im},
-\goal_{im})$ 
+intermediate state and goal pair $(\state_{im}, \goal_{im})$ such that $t \le im
+\le t + f$.
 % 
 % \begin{align}
 %   \LossTrieq &= |
