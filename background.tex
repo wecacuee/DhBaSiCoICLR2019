@@ -140,13 +140,25 @@ to be an observable part of Goal-MDP $[(\state_0, \goal_0, \act_0, \rew_0), \dot
 (\state_T, \goal_T, \act_T, \rew_T)]$.
 
 Also note the dependence of reward function $\Rew(\state, \act, \goal)$ on goal
-specification $\goal$. Hindsight Experience Replay (HER) builds upon this definition
-and stresses the importance of learning through episodes when the agent fails to
-reach the goal. HER works by resampling the trajectories from failed
-experiences and recomputing rewards on trajectories, as if the the achieved
-goals were the desired goals. As motivated earlier, however, this recompute
-requirement can be relaxed if the rewards are formulated independent of the goal
-specification.
+specification $\goal$.
+
+\subsubsection{Hindsight Experience Replay}
+Hindsight Experience Replay (HER) builds upon this definition of GCVF
+and and the insight that the goal locations can be very sparse in the
+state-space and there is no valuable feedback from the environment unless the
+agent reaches the goal.
+HER solves this problem by learning through episodes when the agent fails to
+reach the goal. This is implemented by re-sampling the trajectories from failed
+experiences and recomputing rewards on trajectories, as if the achieved
+goals were the desired pseudo-goals.
+
+In our experiments, we employ the ``future'' strategy for pseudo-goal sampling
+as described in the paper. More specifically two transitions $t$ and $t+f$ are
+sampled from the same episode in the replay memory. The goal for the later
+transition $\goal_{t+f}$ is assumed to the pseudo-goal for the first transition.
+A new transition is generated for the time step $t$ with reward re-computed
+with $\goal_{t+f}$ as the desired goal, $(\state_{t}, \act_t, \state_{t+1},
+\Rew(\state_t, \act_t, \goal_{t+f})$.
 
 
 \subsubsection{Goal conditioned value function as path rewards}

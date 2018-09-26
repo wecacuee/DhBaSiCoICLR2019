@@ -9,25 +9,6 @@ tasks~\citep{plappert201802multigoalrl} in our experiments:
   \item[Fetch-Slide] A robotic arm sliding a puck to a desired location.
 \end{description}%
 % 
-\subsection{Baseline: Hindsight experience replay}
-Hindsight Experience Replay~\cite{andrychowicz2016learning} targets
-goal-conditioned tasks.
-In goal-conditioned tasks, the rewards can be very sparse. Unless the agent hits
-the goal, no value-able reward is learned and rest of the space is almost even
-with respect to the rewards. To address this challenge, HER first assumes that
-for every $\state_t$ the achieved goal $\goal_t = f_\goal(\state_t)$ is known.
-Then HER simulates as if the achieved goal $\goal_t$ was the intended goal all
-along by re-sampling the goal conditioned reward function.
-More concretely, two time steps $t_1$ and $t_2 > t_1$ from the same episode in the replay memory are
-sampled. The achieved goal at $t_2$ , $\goal_{t_2}$ is assumed to be the desired
-goal at $t_1$ and the new simulated transition becomes $(\state_{t_1},
-\act_{t_1}, \state_{t_1 + 1}, \Rew(\state_{t_1}, \goal_{t_2}, \act_{t_1}))$,
-where $\Rew(\state_{t_1}, \goal_{t_2}, \act_{t_1})$ is the recomputed reward
-instead of the observed reward $\Rew(\state_{t_1}, \goal^*_{e}, \act_{t_1})$ that
-depends on the desired goal $\goal^*_{e}$ for that episode $e$.
-
-HER can be applied to either DDPG or DQN, the experiments in
-\citet{andrychowicz2016learning} show them to be applied on DDPG.
 
 %
 \begin{figure}%
