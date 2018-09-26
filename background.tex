@@ -54,7 +54,7 @@ When the policy, $\policy$, is optimal, the $\Q$-function satisfies the
   \label{eq:bellman}
 \end{align}%
 % 
-Once $\Q_{\pi_*}$-function is approximated, the optimal policy is
+Once the $\Q_{\pi_*}$-function is approximated, the optimal policy is
 computed greediliy, $\policy_*(\state_t) = \arg \max_{\act \in \Action} \Q_*(\state_t, \act)$.
 
 In DQNs \cite{mnih2013playing}, the Bellman equation is used to
@@ -78,24 +78,21 @@ where
     \param_{\Q_t}) \right)^2\right].
 \end{equation}
 %
-$y_t$ is the \emph{target} value.
-$\Q_m$ is the main network and $\Q_t$ is the target network. Target and main
-networks are function approximators with same structure, but different
-parameters. The target network parameters are changed slowly towards the main
-network parameters either by periodically copying the main network parameters to
-target network or by maintaining target network as exponential moving average of
-the main network. This improves the stability of the learning.
-
+$y_t$ is the \emph{target} for Q-values.  $\Q_m$ is the main network
+that approximates Q-values. $\Q_t$, the target network is a slower
+changing copy of the main network that computes target values. The use
+of target networks, introduced by
+\cite{mnih2015human}, greatly improves the stability of learning.
 % \citet{MnKaSiNATURE2015} also introduced the idea of \emph{replay buffer}.
 % The transitions experienced are not used to update the neural network in order.
 % Instead they are stored in a replay buffer which is then sampled out of order
 % for independent transitions and updating the neural network.
-
 In this paper, we use a variation of
-Deep deterministic policy-gradients (DDPG)~\citep{lillicrap2015continuous} which
-extends DQN~\citep{MnKaSiNATURE2015} to continuous action domains by introducing
+deep deterministic policy-gradients (DDPG)~\citep{lillicrap2015continuous} which
+extend DQNs to continuous action domains by introducing
 a parameterized policy function $\policy(\state; \param_\policy)$, which is
-learned through policy gradients.
+learned through a variant of the \emph{policy gradient} 
+method \citep{sutton1998reinforcement} .
 
 % Assuming the policy to be optimal, the maxima of the second term in the Bellman
 % equation the $\Q$-value at action chosen by the policy at that state:
@@ -117,15 +114,16 @@ learned through policy gradients.
 
 
 \subsection{Multi-goal Reinforcement learning}
-Multi-goal tasks need the specification of goal state which can change for each
-trial~\citep{plappert201802multigoalrl}. The examples include navigation to a
-goal location, or moving a robotic arm so that the tip of the arm is at a
-particular 3D location (Fetch-Reach task).
+Multi-goal tasks need the specification of a goal state at the start of
+every episode~\citep{plappert2018multi}. Examples include navigation to a
+goal location, and moving a robotic arm's end-actuator to particular 3D
+locations (Fetch-Reach task).
 
-The recent state of the art MGRL algorithms learn a goal-conditioned value
-function (GCVF), $\fwargs{\state}{\act}{\goal}{}{}$, which is defined similar to the
-$\Q$-function in Eq~\ref{eq:q-def}, but with an additional dependence over the
-desired goal specification $\goal \in \Goal$ :
+The recent state-of-the-art algorithms for these tasks learn a goal-conditioned value
+function (GCVF), $\fwargs{\state}{\act}{\goal}{}{}$, which is defined
+similarly to the
+$\Q$-function (Eq~\ref{eq:q-def}), but with an additional dependence of
+the desired goal specification $\goal \in \Goal$ :
 %
 \begin{align}
 \fwargs\state\act\goal\policy{} = \E_\policy\left[ \sum_{k=t}^T
@@ -134,10 +132,17 @@ desired goal specification $\goal \in \Goal$ :
   \label{eq:q-def}
 \end{align}%
 %
-The goal specification $\goal \in \Goal$ can be arbitrary. To ease the learning
-of correspondence between the state and the ``achieved goals'', they are assumed
-to be an observable part of Goal-MDP $[(\state_0, \goal_0, \act_0, \rew_0), \dots,
-(\state_T, \goal_T, \act_T, \rew_T)]$.
+The structure of the goal specification, $\goal \in \Goal$, can be
+arbitrary. For example, the possible goal specifications in a robotic
+arm experiment includes
+the desired position of the end-effector and the desired joint
+angles of the robot.  To ease the learning of correspondences between the states and
+the ``achieved goals'', they are assumed to be an observable part of the
+Goal-MDP $[(\state_0, \goal_0, \act_0, \rew_0), \dots, (\state_T,
+\goal_T, \act_T, \rew_T)]$. Consequently, the MDP is fully governed by
+the six tuple $(\State, \Goal, \Action, \Trans, \Rew, \discount)$. The
+reward, $\Rew : \State \times \Goal \times \Action  \rightarrow \R $, and policy,
+$\policy(\state, \goal): \State \times \Goal \rightarrow \Action $, are thereby also conditioned on goal information,  
 
 Also note the dependence of reward function $\Rew(\state, \act, \goal)$ on goal
 specification $\goal$. Hindsight Experience Replay (HER) builds upon this definition
