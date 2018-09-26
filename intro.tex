@@ -67,10 +67,12 @@ rewards, performs as well as a representative state-of-the-art method (HER) and
 even outperforms it in terms of reward sample complexity.
 
 % Detail the Floyd-Warshall contribution
-In this work, we also extend Floyd-Warshall Reinforcement
+In this work, we also extend a closely related algorithm, Floyd-Warshall Reinforcement
 Learning (FWRL) \citep{dhiman2018floydwarshall} to use paramteric
-function approximators instead of tabular functions.  We leverage FWRL's
-compositionality constraints in the space of GCVFs to introduce
+function approximators instead of tabular functions. Similar to our
+re-definition of GCVFs, FWRL learn a goal-conditioned Floyd-Warshall function
+that represents path-rewards instead of future-rewards.
+We translate FWRL's compositionality constraints in the space of GCVFs to introduce
 additional loss terms to the objective. However, these additional loss
 terms do not show improvement over the baseline. We conjecture that the
 compositionality constraints are already captured by other loss terms. 
@@ -80,7 +82,8 @@ In summary, the  contributions of this work are twofold. Firstly, we
 reinterpret goal-conditioned value functions as expected path-rewards
 and introduce one-step loss thereby removing their dependency on
 goal-rewards and reward-resampling. We showcase how the
-application of this interpreation leads to improved reward sample complexity.
+application of this interpreation leads to improved sample efficiency in  terms
+of reward samples.
 Secondly, we extend the tabular Floyd-Warshal Reinforcement Learning to
 use deep neural networks.
 
