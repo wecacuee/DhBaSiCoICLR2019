@@ -2,10 +2,11 @@
 
 % Reinforcement learning and it's uses
 % Why we care about Multi-Goal Reinforcement Learning
+% TODO: Make clear that goal position can change 
 Many tasks in robotics require the specification of a \emph{goal}. For
 example, a robotic arm may need to move an object to a goal position on
-a table \citep{gu2017deep}. A mobile robot may be tasked with navigating
-to a goal landmark in a map \citep{zhu2017target}.  The adaptation of
+a table \citep{gu2017deep}; a mobile robot may need to with navigating
+to a goal landmark on a map \citep{zhu2017target}.  The adaptation of
 reinforcement learning to such goal-conditioned tasks is called
 Multi-Goal Reinforcement Learning (MGRL)\citep{plappert2018multi}. 
 
@@ -15,24 +16,24 @@ State-of-the-art MGRL algorithms
 \citep{andrychowicz2017hindsight, pong2018temporal}
 work by estimating \emph{goal-conditioned value functions} (GCVF). A
 GCVF is defined as the expected cumulative reward of reaching from a
-start state conditioned on the given goal state. They are used to compute the
-actions to be taken at any state, also known as the \emph{policy}.
+start state conditioned on the given goal state. It is used to compute the
+actions to be take at any state, also known as the \emph{policy}.
 
 % Goal conditioned value functions make a big assumption however. It is
 % assumed that to learn to achieve goals, goal locations must themselves
 % must be associated with reward. This however is not the case. We
 % introduce ....
-These algorithms require the use of \emph{goal-rewards} which is the
+These algorithms require the use of \emph{goal-rewards}, which is the
 dependence of reward functions on the desired goal, $r(s,a,g)$.
 For example, in the Fetch-Push task \citep{plappert2018multi} of moving
 a block to a given location on a table, every movement incurs a ``-1''
-reward while reaching the desired goal earns ``0'' reward. Althought
-this dependence allows for the association of high reward with the
-reaching of goals, it incurs additional costs. In Hindsight Experience
+reward while reaching the desired goal induces ``0'' reward. Although
+this dependence allows for the agent to associate reaching the goal with a high
+reward, it may incur additional computational costs. For example, in Hindsight Experience
 Replay (HER) \citep{andrychowicz2017hindsight}, failed experiences are
 re-evaluated as succesful ones by assuming traversed states to be
-desired goals. Due to the above dependence, the association of every
-pseudo-goal with high reward requires an independent
+desired pseudo-goals. Due to the dependence of reward function on the goal,
+the association of every pseudo-goal with high reward requires an independent
 \emph{reward-recomputation} step. 
 
 %This leads to the
@@ -42,32 +43,32 @@ pseudo-goal with high reward requires an independent
 
 % Do goal-conditioned value functions require goal rewards to learn?
 % Describe some form of the intuition
-The goal-rewards requirement is avoidable. Consider a
+The goal-rewards requirement is avoidable. Let us consider an example to
+motivate why goal-rewards may be avoided in goal-conditioned tasks. Consider a
 student who has moved to a new university. To learn about the campus,
 the student explores it randomly with no specific goal in mind. When
 tasked with finding a goal classroom, the student can then use the
-learned connectivity of the campus to make their way to class in the
-shortest possible explored path. The key intuition here is that the
+learned connectivity of the campus to make their way to class along the
+shortest explored path. The key intuition here is that the
 student is not incentivized to explore specific goal locations (i.e. no
 goal rewards). 
 %
 Based on this intuition of goal-less learning, we redefine GCVFs to be
 the expected \emph{path-reward} that is learned for all possible
 start-goal pairs. Instead of goal rewards, we  
-introduce \emph{one-step loss} that assumes single steps paths 
+introduce a \emph{one-step loss} that assumes single steps paths 
 to be the maximum reward paths between adjacent pairs.
 Under this interpretation, the \emph{Bellman equation} chooses and chains
 together one-step paths to find longer maximum reward paths. 
 
 %
-Experimentally, we show how this simple reinterpration achieves equally
-good performance as a representative state-of-the-art method (HER)
-without using goal-rewards and vastly outperforms it in terms of
-reward sample complexity.
+Experimentally, we show how this simple reinterpration, which does not use goal
+rewards, performs as well as a representative state-of-the-art method (HER) and
+even outperforms it in terms of reward sample complexity.
 
 % Detail the Floyd-Warshall contribution
 In this work, we also extend Floyd-Warshall Reinforcement
-Learning (FWRL) \citep{dhiman2018floydwarshall} to the use paramteric
+Learning (FWRL) \citep{dhiman2018floydwarshall} to use paramteric
 function approximators instead of tabular functions.  We leverage FWRL's
 compositionality constraints in the space of GCVFs to introduce
 additional loss terms to the objective. However, these additional loss
