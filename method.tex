@@ -34,34 +34,52 @@ following DDPG loss function:
 \subsection{Deep Floyd-Warshall Reinforcement Learning}
 
 We extend FWRL~\citep{dhiman2018floydwarshall} to use deep neural network.
-state to an end state. In effect, the algorithm is same as the HER except
+The main contribution of FWRL is to employ compositionality constraints to
+exploit structure in the space of GCVFs.
+We translate these constraints into loss terms.
+In effect, the algorithm is same as the HER except
 addition of a few additional loss terms.
-Extension of FWRL leads to these triangular inequality like
-bounds that force the highest reward path to be higher that any other path
-through an intermediate state.
+
+
+The constraint governing the FWRL algorithm states that the highest reward path
+from any state $\state_t$ to any goal $\goal_{t+f}$ is greater than or equal to
+the sum of rewards via any intermediate state-goal pair $(\state_{im}, \goal_{im})$:
+%
+\begin{align}
+      \fwargs{\state_{t}}{\act_t}{\goal_{im}}{*}{}
+      + \fwargs{\state_{im}}{\policy_*(\state_{im}, \goal_{t+f};\param_\policy)}{\goal_{t+f}}{*}{}
+      \ge \fwargs{\state_{t}}{\act_t}{\goal_{t+f}}{*}{},
+\end{align}%
+% 
+where $\policy_*$ is the optimal goal-conditioned policy and $\act_t$ represents
+the action taken at time $t$. Taking cue from \citet{MnKaSiNATURE2015}, we do
+not repeat the main online network $\Q_*$ in the loss term.
+
+
+%
+\begin{align}
+  \LossLo &= (
+      \fwargs{\state_{t}}{\act_t}{\goal_{im}}{t}{}
+      + \fwargs{\state_{im}}{\policy_t(\state_{im}, \goal_{t+f};\param_\policy)}{\goal_{t+f}}{t}{}
+      - \fwargs{\state_{t}}{\act_t}{\goal_{t+f}}{*}{}
+      )_+^2
+                         \\
+  \LossUp &= (
+      \fwargs{\state_{t}}{\act_t}{\goal_{im}}{*}{}
+      + \fwargs{\state_{im}}{\policy_t(\state_{im}, \goal_{t+f};\param_\policy)}{\goal_{t+f}}{t}{}
+      - \fwargs{\state_{t}}{\act_t}{\goal_{t+f}}{t}{}
+      )_+^2,
+\end{align}%
+% 
+where $(\dots)_+$ denotes ReLU function.
+Note that the above terms differ only by choice of target network $\fw_t$ and
+main network $\fw_*$. 
 
 Similar to HER we get the intermediate state by trajectory sampling. Once,
 a transition $(\state_t, \act_t, \rew_t, \state_{t+1})$ and a future goal
 $\goal_{t+f}$ has been sampled from the same episode, we sample another
 intermediate state and goal pair as the intermediate pair $(\state_{im},
-\goal_{im})$ required for Floyd-Warshall loss terms:
-%
-\begin{align}
-  \LossLo &= |
-      \fwargs{\state_{t}}{\act_t}{\goal_{im}}{t}{}
-      + \fwargs{\state_{im}}{\policy_t(\state_{im}, \goal_{t+f};\param_\policy)}{\goal_{t+f}}{t}{}
-      - \fwargs{\state_{t}}{\act_t}{\goal_{t+f}}{*}{}
-      |_+^2
-                         \\
-  \LossUp &= |
-      \fwargs{\state_{t}}{\act_t}{\goal_{im}}{*}{}
-      + \fwargs{\state_{im}}{\policy_t(\state_{im}, \goal_{t+f};\param_\policy)}{\goal_{t+f}}{t}{}
-      - \fwargs{\state_{t}}{\act_t}{\goal_{t+f}}{t}{}
-      |_+^2
-\end{align}%
-% 
-Note that the above terms differ only by choice of target network $\fw_t$ and
-main network $\fw_*$. 
+\goal_{im})$ 
 % 
 % \begin{align}
 %   \LossTrieq &= |
