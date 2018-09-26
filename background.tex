@@ -1,30 +1,35 @@
 \section{Background}
 
-An RL problem is formalized as an Markov Decision Process (MDP). A MDP governs
+An RL problem is formalized as an Markov Decision Process (MDP)
+\citep{sutton1998reinforcement}. A MDP governs
 an evolving sequence of state-action-reward triples $[(\state_0, \act_0,
 \rew_0), \dots, (\state_T, \act_T, \rew_T)]$, that is full governed
-by a four tuple $(\State, \Action, \Trans, \Rew)$, where $\State$ is the
+by the five tuple $(\State, \Action, \Trans, \Rew, \discount)$, where $\State$ is the
 state space, $\Action$ is the action space, $\Trans : \State \times \Action
-\rightarrow \State$ is the system dynamics and $\Rew : \State \times \Action
-\rightarrow \R $ is the reward function
+\rightarrow \State$ is the system dynamics, $\Rew : \State \times \Action
+\rightarrow \R $ is the reward function and $\discount$ is the discount
+factor.
 In a typical RL problem the transition function $\Trans$ is not given but is
 known to be static.
-The objective of an RL problem is to find a policy $\policy(\state): \State
+In RL the objective is to find a policy $\policy(\state): \State
 \rightarrow \Action$ that
-maximize the expected cumulative
-reward over time, called the returns  $R_t = \sum_{k=t}^{\infty} \rew_{k}$.
-Reinforcement learning is has been typically formulated as in a single goal
-context, but more recently there has been interest in the multi-goal
-reinforcement learning problems.
+maximizes the expected cumulative
+reward over time, $R_t = \sum_{k=t}^{\infty} \discount^{k-t}\rew_{k}$, called the
+\emph{return}. $\discount < 1$, is the discount factor that forces
+convergence of the return for long horizon problems. 
+Reinforcement learning is typically formulated in single goal
+contexts. More recently there has been interest in multi-goal
+problems
+\citep{andrychowicz2017hindsight,pong2018temporal,plappert2018multi}.
 
 
 \subsection{Single-goal Reinforcement learning}
 
-A number of reinforcement learning algorithms use a parameteric function
-estimator for the expected future reward, either a value function
+A number of reinforcement learning algorithms use parameteric function
+approximators to estimate returns, either in the form of a value function
 $\Value(\state; \param)$ or an action-value function $\Q(\state, \act; \param)$.
-The more commonly used action-value function is defined as the running estimate
-of expected future reward
+Here we use the action-value function which is the return for
+state-action pairs.  
 %
 \begin{align}
 \Q_\policy(\state, \act; \param_\Q) = \E_\policy\left[ \sum_{k=t}^T
@@ -33,35 +38,48 @@ of expected future reward
   \label{eq:q-def}
 \end{align}%
 %
-When the policy $\policy$ is optimal, the $\Q$-function satisfies the
+When the policy, $\policy$, is optimal, the $\Q$-function satisfies the
 \emph{Bellman equation}:
 %
 \begin{align}
-  \Q_*(\state_t, \act_t; \param_\Q)
+    \Q_{\pi_*}(\state_t, \act_t; \param_\Q)
   &=
     \begin{cases}
-      \Rew(\state_t, \act_t) + \discount \max_{\act \in \Action} \Q_*(\state_{t+1}, \act; \param_\Q)
+        \Rew(\state_t, \act_t) + \discount \max_{\act \in \Action}
+        \Q_{\pi_*}(\state_{t+1}, \act; \param_\Q)
       & \text{ if } t < T
       \\
-      \Rew(\state_T, \act_T) & \text{ otherwise}
+      \Rew(\state_T, \act_T) & \text{ if } t = T
     \end{cases}.
   \label{eq:bellman}
 \end{align}%
 % 
-Once $\Q_*$-function is approximated, a greedy policy can be computed from $\Q_*$-function easily $\policy_*(\state_t) = \arg \max_{\act \in \Action} \Q_*(\state_t, \act)$.
+Once $\Q_{\pi_*}$-function is approximated, the optimal policy is
+computed greediliy, $\policy_*(\state_t) = \arg \max_{\act \in \Action} \Q_*(\state_t, \act)$.
 
-Recent advances in deep reinforcement learning~\citep{MnKaSiNATURE2015} view the
-Bellman equation as the gradient of a loss function. For example, Deep
-Q-Networks minimize the loss function whose gradient is the Bellman equation:
+In DQNs \cite{mnih2013playing}, the Bellman equation is used to
+formulate a loss function over which gradient descent approximates the
+$\Q_{\pi_*}$.
+%
+%Recent advances in deep reinforcement learning~\citep{MnKaSiNATURE2015} view the
+%Bellman equation as the gradient of a loss function. For example, Deep
+%Q-Networks minimize the loss function whose gradient is the Bellman equation:
 %
 \begin{align}
-  \Loss(\param_{\Q_m}, \param_{\policy_m}) = \E_{a_t\sim\policy(\state_t; \param_{\policy_m})}\left[
+  \Loss(\param_{\Q_m}, \param_{\policy_m}) =
+    \E_{a_t\sim\policy(\state_t; \param_{\policy_m})}\left[\left(
   \Q_m(\state_t, \act_t; \param_{\Q_m}) -
-  \Rew(\state_t, \act_t) - \max_{\act}\discount \Q_t(\state_{t+1}, \act; \param_{\Q_t}) \right]^2,
+  y_t  \right)^2\right],
   \label{eq:bellman-dqn}
 \end{align}
+where 
+\begin{equation}
+    y_t = \Rew(\state_t, \act_t) + \max_{\act}\discount \Q_t(\state_{t+1}, \act;
+    \param_{\Q_t}) \right)^2\right].
+\end{equation}
 %
-where $\Q_m$ is the main network and $\Q_t$ is the target network. Target and main
+$y_t$ is the \emph{target} value.
+$\Q_m$ is the main network and $\Q_t$ is the target network. Target and main
 networks are function approximators with same structure, but different
 parameters. The target network parameters are changed slowly towards the main
 network parameters either by periodically copying the main network parameters to
