@@ -2,21 +2,21 @@
 
 % Reinforcement learning and it's uses
 % Why we care about Multi-Goal Reinforcement Learning
-% TODO: Make clear that goal position can change 
-Many tasks in robotics require the specification of a \emph{goal}. For
-example, a robotic arm may need to move an object to a goal position on
-a table \citep{gu2017deep}; a mobile robot may need to with navigating
-to a goal landmark on a map \citep{zhu2017target}.  The adaptation of
-reinforcement learning to such goal-conditioned tasks is called
-Multi-Goal Reinforcement Learning (MGRL)\citep{plappert2018multi}. 
+Many tasks in robotics require the specification of a \emph{goal} for every
+trial. For example, a robotic arm may need to move an object to an arbitrary
+goal position on a table \citep{gu2017deep}; a mobile robot may need to with
+navigating to a arbitrary goal landmark on a map \citep{zhu2017target}. The
+adaptation of reinforcement learning to such goal-conditioned tasks where goal
+locations can change is called Multi-Goal Reinforcement Learning
+(MGRL)~\citep{plappert2018multi}.
 
 % A common way to solve MGRL problems is the use of Goal-Conditioned
 % Value functions. Solving several tasks instead of individual tasks
 State-of-the-art MGRL algorithms
 \citep{andrychowicz2017hindsight, pong2018temporal}
 work by estimating \emph{goal-conditioned value functions} (GCVF). A
-GCVF is defined as the expected cumulative reward of reaching from a
-start state conditioned on the given goal state. It is used to compute the
+GCVF is defined as the expected cumulative reward from a
+start state with a specified the goal. It is used to compute the
 actions to be take at any state, also known as the \emph{policy}.
 
 % Goal conditioned value functions make a big assumption however. It is
@@ -29,7 +29,7 @@ For example, in the Fetch-Push task \citep{plappert2018multi} of moving
 a block to a given location on a table, every movement incurs a ``-1''
 reward while reaching the desired goal induces ``0'' reward. Although
 this dependence allows for the agent to associate reaching the goal with a high
-reward, it may incur additional computational costs. For example, in Hindsight Experience
+reward, it may incur additional sampling costs. For example, in Hindsight Experience
 Replay (HER) \citep{andrychowicz2017hindsight}, failed experiences are
 re-evaluated as succesful ones by assuming traversed states to be
 desired pseudo-goals. Due to the dependence of reward function on the goal,
@@ -68,7 +68,7 @@ even outperforms it in terms of reward sample complexity.
 
 % Detail the Floyd-Warshall contribution
 In this work, we also extend a closely related algorithm, Floyd-Warshall Reinforcement
-Learning (FWRL) \citep{dhiman2018floydwarshall} to use paramteric
+Learning (FWRL) \citep{dhiman2018floydwarshall} to use parametric
 function approximators instead of tabular functions. Similar to our
 re-definition of GCVFs, FWRL learn a goal-conditioned Floyd-Warshall function
 that represents path-rewards instead of future-rewards.
