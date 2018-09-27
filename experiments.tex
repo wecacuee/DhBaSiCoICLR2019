@@ -41,42 +41,46 @@ comparable results of our method to the baselines.
 To emphasize that our method does not require goal-reward
 and reward re-computation, we plot these metrics against
 number of reward computations used during training. The number of reward
-computations are include both the episode rollouts and the reward recomputations
-done during HER sampling.
+computations include both the episode rollouts and the reward recomputations
+during HER sampling.
 
 %
 \input{figure_fetch}
 
 \subsection{Hyper-parameters choices}
-Unless specified, all our hyper-parameters are identical to the used HER
+Unless specified, all our hyper-parameters are identical to the ones
+used in the HER
 implementation~\citep{dhariwal2017baselines}. We note two main changes
 to HER to make the comparison more fair. Firstly,
-we use a smaller distance threshold.
+we use a smaller \emph{distance-threshold}.
 The environment used for HER and FWRL returns the goal-reward when the
-achieved goal is within distance threshold of the desired goal. In the absence
-of goal-rewards the distance threshold information is not used by our
+achieved goal is within this threshold of the desired goal. Because of
+the absence of goal-rewards, the distance-threshold information is not used by our
 method.
-We reduce the distance threshold to 1cm which
-is reduction by a factor of 5.
+We reduce the it to 1cm which is reduction by a factor of 5 compared to
+HER.
 
-Secondly, due to hardware limitations we run all experiments on six
+Secondly, due to hardware limitations we run all experiments on 6
 cores each
-while HER uses 19, which causes smaller batches to be used compared to the
-published results. This may in turn lead to differences in the HER results.
+while HER uses 19. The batch size used is a function of the number of
+cores and hence this parameter has a significant effect on learning. 
 
-However, all experiments are run with the same hyper-parameters and
-random seeds to ensure that all variations in performance are purely due
+However, to ensure fair comparison, all experiments are run with the same hyper-parameters and
+random seeds to ensure that variations in performance are purely due
 to differences between the algorithms.
 
 \subsection{Results}
 % Due to space limitations and in the interest of clarity we show a subset our experiments across both platforms that emphasize both strengths and weaknesses of our algorithm.
 All our experimental results are described below. We highlight the strengths and
-weaknesses of our algorithm.
+weaknesses of our algorithm. Across all our experiments, the
+distance-to-the-goal metric achieves comparable performance to HER
+\emph{without requiring goal-rewards}. 
 
 \subsubsection{Fetch Tasks}
 
 The experimental results for Fetch tasks are shown in
-Figure~\ref{fig:fetch-results}. For Fetch Reach and Push tasks our method achieves comparable performance
+Figure~\ref{fig:fetch-results}. For Fetch Reach and Push tasks our
+method (red)  achieves comparable performance to the baselines 
 across both metrics, the success rate and the distance to the goal. In the Fetch
 Pick and Place task, our method outperforms the baselines. However, for Fetch
 Slide task the opposite is true.
