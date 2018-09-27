@@ -1,4 +1,53 @@
 \section{Method}
+
+\subsubsection{Goal conditioned value function: Path Reward Formulation}
+We define the goal-condition value function as expected path-rewards of reaching
+the goal from a given start state:
+%
+\begin{align}
+  \fwargs\state\act{\goal^*}\policy{P}
+  &=
+    \begin{cases}
+      \E_{l \in [t+1, T], \policy}\left[ \sum_{k=t}^{l-1}
+  \discount^{k-t} \Rew^P(\state_k, \act_k)
+  \middle| \state, \act, \goal_l = \goal^* \right]
+& \text{ if } \exists l \text{ such that } \goal_l = \goal^*
+\\
+-\infty & \text{ otherwise }
+\end{cases}.
+  \label{eq:qp-def}
+\end{align}%
+% 
+The main difference between $\fw^P$~\eqref{eq:qp-def} and $\fw$~\eqref{eq:q-def}
+is that $\fw^P$ explicitly depends upon reaching the goal within the episode,
+thereby removing the dependence of reward on the goal. Surprisingly, the Bellman
+Equation can still be applied to the path-value function $\fw^P$ with a slightly
+different terminal condition:
+%
+\begin{align}
+  \fwargs{\state_t}{\act_t}{\goal^*}*P
+  &=
+    \begin{cases}
+      \Rew^P(\state_t, \act_t) + \discount \max_{\act \in \Action} \fwargs{\state_{t+1}}\act{\goal^*}*P
+      & \text{ if } t < l-1 \text{ such that } \goal_l = \goal^*
+      \\
+      \Rew^P(\state_{l-1}, \act_{l-1}) & \text{ if } t = l-1 \text{ such that } \goal_l = \goal^*
+    \end{cases}.
+  \label{eq:bellman-path}
+\end{align}%
+% 
+This formulation has several advantages. Firstly, it removes a design decision
+about the choice of goal-reward. Secondly, it enables HER to work without reward
+re-computation. This can be especially useful when reward computation is expensive.
+
+\subsubsection{One-Step Loss}
+Because we work with path rewards, the reward function design should
+make sure that there are no positive cycles in the environment. In another
+words, cycling back to the same state via another state should not yield
+positive rewards, otherwise the agent can extract unlimited reward just by
+going in circles. Hence a typical environment will have most of the reward
+values as negative. In all our experiments with path rewards, we use a constant
+value of -1 for all states, $\Rew^P(\state, \act) = -1 \, \forall \state, \act$.
 Since our new formulation of goal-conditioned value function satisifies the
 Bellman Equation, the existing MGRL algorithms for $\fw$ easily apply to the
 approximation of $\fw^P$ as long as we can estimate the terminal reward for

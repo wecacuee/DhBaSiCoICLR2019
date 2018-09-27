@@ -1,98 +1,102 @@
 \section{Background}
 
-An RL problem is formalized as an Markov Decision Process (MDP)
+An RL problem is formalized as a Markov Decision Process (MDP)
 \citep{sutton1998reinforcement}. A MDP governs
 an evolving sequence of state-action-reward triples $[(\state_0, \act_0,
 \rew_0), \dots, (\state_T, \act_T, \rew_T)]$, that is full governed
 by the five tuple $(\State, \Action, \Trans, \Rew, \discount)$, where $\State$ is the
-state space, $\Action$ is the action space, $\Trans : \State \times \Action
-\rightarrow \State$ is the system dynamics, $\Rew : \State \times \Action
+state space, $\Action$ is the action space, $\Trans(\state,\act) : \State \times \Action
+\rightarrow \State$ is the system dynamics, $\Rew(\state, \act) : \State \times \Action
 \rightarrow \R $ is the reward function and $\discount$ is the discount
 factor.
 In a typical RL problem the transition function $\Trans$ is not given but is
 known to be static.
-In RL the objective is to find a policy $\policy(\state): \State
+In RL, the objective is to find a policy $\policy(\state): \State
 \rightarrow \Action$ that
 maximizes the expected cumulative
 reward over time, $R_t = \sum_{k=t}^{\infty} \discount^{k-t}\rew_{k}$, called the
-\emph{return}. $\discount < 1$, is the discount factor that forces
-convergence of the return for long horizon problems. 
+\emph{return}. The discount factor, $\discount < 1$, forces
+the return to be finite for infinite horizons.  
 Reinforcement learning is typically formulated in single goal
 contexts. More recently there has been interest in multi-goal
 problems
 \citep{andrychowicz2017hindsight,pong2018temporal,plappert2018multi}.
 
 
-\subsection{Single-goal Reinforcement learning}
+\subsection{Deep Reinforcement learning}
 
 A number of reinforcement learning algorithms use parameteric function
-approximators to estimate returns, either in the form of a value function
-$\Value(\state; \param)$ or an action-value function $\Q(\state, \act; \param)$.
-Here we use the action-value function which is the return for
-state-action pairs.  
+approximators to estimate the return in the form of 
+an action-value function, $\Q(\state, \act)$:
 %
 \begin{align}
-\Q_\policy(\state, \act; \param_\Q) = \E_\policy\left[ \sum_{k=t}^T
+\Q_\policy(\state, \act) = \E_\policy\left[ \sum_{k=t}^T
   \discount^{k-t} \Rew(\state_k, \act_k)
-  \middle| \state_t = \state, \act_t = \act \right] .
+  \middle| \state_t = \state, \act_t = \act \right] ,
   \label{eq:q-def}
 \end{align}%
+where $T$ is the episode length.
 %
-When the policy, $\policy$, is optimal, the $\Q$-function satisfies the
-\emph{Bellman equation}:
+When the policy $\policy$ is optimal, the $\Q$-function satisfies the
+\emph{Bellman equation}.
+%which is used to learn the function
+%approximator, $\Q_{*}(\state,\act; \param_\Q)$:
 %
 \begin{align}
-    \Q_{\pi_*}(\state_t, \act_t; \param_\Q)
+    \Q_{*}(\state_t, \act_t)
   &=
     \begin{cases}
         \Rew(\state_t, \act_t) + \discount \max_{\act \in \Action}
-        \Q_{\pi_*}(\state_{t+1}, \act; \param_\Q)
+        \Q_{*}(\state_{t+1}, \act)
       & \text{ if } t < T
       \\
       \Rew(\state_T, \act_T) & \text{ if } t = T
     \end{cases}.
   \label{eq:bellman}
 \end{align}%
-% 
-Once the $\Q_{\pi_*}$-function is approximated, the optimal policy is
-computed greediliy, $\policy_*(\state_t) = \arg \max_{\act \in \Action} \Q_*(\state_t, \act)$.
-
-In DQNs \cite{mnih2013playing}, the Bellman equation is used to
-formulate a loss function over which gradient descent approximates the
-$\Q_{\pi_*}$.
+%
+\newcommand{\Qstar}{\Q_{*}}
+\newcommand{\Qtgt}{\Q_{\text{tgt}}}
+\newcommand{\ytgt}{y_t}
+The optimal policy can be computed from $\Q_{*}$ greedily, 
+$\policy_*(\state_t) = \arg \max_{\act \in \Action} \Q_*(\state_t,
+\act)$.
+%\Q_*(\state_t, \act)$.
+%where $\param_\Q$ are the parameters of the function approximator.  Once
+%the $\Q_{*}$-function is approximated, the optimal policy is computed
+%greediliy, $\policy_*(\state_t) = \arg \max_{\act \in \Action}
+%\Q_*(\state_t, \act)$.
+In DQN, \citet{mnih2013playing} formulate a loss function based on 
+the Bellman equation to approximate the optimal $\Qstar$-function using
+a deep neural network, $\Q_m$:
 %
 %Recent advances in deep reinforcement learning~\citep{MnKaSiNATURE2015} view the
 %Bellman equation as the gradient of a loss function. For example, Deep
 %Q-Networks minimize the loss function whose gradient is the Bellman equation:
 %
 \begin{align}
-  \Loss(\param_{\Q_m}, \param_{\policy_m}) =
+  \Loss(\param_{\Q_m}) =
     \E_{a_t\sim\policy(\state_t; \param_{\policy_m})}\left[\left(
   \Q_m(\state_t, \act_t; \param_{\Q_m}) -
   y_t  \right)^2\right],
   \label{eq:bellman-dqn}
 \end{align}
 where 
-\begin{equation}
-    y_t = \Rew(\state_t, \act_t) + \max_{\act}\discount \Q_t(\state_{t+1}, \act;
-    \param_{\Q_t}) \right)^2\right].
-\end{equation}
-%
-$y_t$ is the \emph{target} for Q-values.  $\Q_m$ is the main network
-that approximates Q-values. $\Q_t$, the target network is a slower
-changing copy of the main network that computes target values. The use
-of target networks, introduced by
-\cite{mnih2015human}, greatly improves the stability of learning.
+$\ytgt = \Rew(\state_t, \act_t) + \max_{\act}\discount \Qtgt(\state_{t+1}, \act; \param_{\Qtgt}) $
+, is the \emph{target} and $\Qtgt$ is the target network. The target network is a a slower
+changing copy of the main network that stabilizes learning \cite{mnih2015human}. 
+
 % \citet{MnKaSiNATURE2015} also introduced the idea of \emph{replay buffer}.
 % The transitions experienced are not used to update the neural network in order.
 % Instead they are stored in a replay buffer which is then sampled out of order
 % for independent transitions and updating the neural network.
-In this paper, we use a variation of
-deep deterministic policy-gradients (DDPG)~\citep{lillicrap2015continuous} which
-extend DQNs to continuous action domains by introducing
-a parameterized policy function $\policy(\state; \param_\policy)$, which is
-learned through a variant of the \emph{policy gradient} 
-method \citep{sutton1998reinforcement} .
+In this work, we use an extension of DQN to continuous action spaces called
+deep deterministic policy-gradients
+(DDPG)~\citep{lillicrap2015continuous}. DDPG approximates the
+policy with a policy network $\pi_{\text{tgt}}$ replacing the $\max$
+operator in $\ytgt$. The target thus becomes 
+$ \ytgt = \Rew(\state_t, \act_t) + \discount
+\Qtgt(\state_{t+1}, \pi_{\text{tgt}}(\state_{t+1}); \param_{\Qtgt}) $.
 
 % Assuming the policy to be optimal, the maxima of the second term in the Bellman
 % equation the $\Q$-value at action chosen by the policy at that state:
@@ -133,86 +137,40 @@ the desired goal specification $\goal \in \Goal$ :
 \end{align}%
 %
 The structure of the goal specification, $\goal \in \Goal$, can be
-arbitrary. For example, the possible goal specifications in a robotic
-arm experiment includes
-the desired position of the end-effector and the desired joint
-angles of the robot.  To ease the learning of correspondences between the states and
-the ``achieved goals'', they are assumed to be an observable part of the
-Goal-MDP $[(\state_0, \goal_0, \act_0, \rew_0), \dots, (\state_T,
-\goal_T, \act_T, \rew_T)]$. Consequently, the MDP is fully governed by
-the six tuple $(\State, \Goal, \Action, \Trans, \Rew, \discount)$. The
-reward, $\Rew : \State \times \Goal \times \Action  \rightarrow \R $, and policy,
-$\policy(\state, \goal): \State \times \Goal \rightarrow \Action $, are thereby also conditioned on goal information,  
+arbitrary. For example, in a robotic
+arm experiment they include the desired position of the end-effector and the
+desired joint angles of the robot.  To ease the learning of
+correspondences between the states and the ``achieved goals'', they are
+assumed to be an observable part of the Goal-MDP $[(\state_0, \act_0,
+\goal_0, \rew_0), \dots, (\state_T, \act_T, \goal_T, \rew_T)]$.
+Consequently, the MDP is fully governed by the six tuple $(\State,
+\Action,\Goal, \Trans, \Rew, \discount)$. The reward, $\Rew(\state,\act,
+\goal) : \State \times \Action\times \Goal \rightarrow \R $, and policy,
+$\policy(\state, \goal): \State \times \Goal \rightarrow \Action $, are
+thereby also conditioned on goal information,  
 
-Also note the dependence of reward function $\Rew(\state, \act, \goal)$ on goal
-specification $\goal$.
 
 \subsubsection{Hindsight Experience Replay}
-Hindsight Experience Replay (HER) builds upon this definition of GCVF
-and and the insight that the goal locations can be very sparse in the
-state-space and there is no valuable feedback from the environment unless the
-agent reaches the goal.
-HER solves this problem by learning through episodes when the agent fails to
-reach the goal. This is implemented by re-sampling the trajectories from failed
-experiences and recomputing rewards on trajectories, as if the achieved
-goals were the desired pseudo-goals.
+Hindsight Experience Replay (HER) \citep{andrychowicz2017hindsight}
+builds upon this definition of GCVFs.  The main insight is that there is
+no valuable feedback from the environment when the agent does not reach
+the goal. This is further exacerbated when goal-locations are very
+sparse in the state-space. 
+HER solves this problem by implementing strategies that reuse these failed experiences 
+to extract valuable feedback. They are implemented by recomputing their
+rewards to relabel traversed states from these trajectories as desired
+psuedo-goals.
 
-In our experiments, we employ the ``future'' strategy for pseudo-goal sampling
-as described in the paper. More specifically two transitions $t$ and $t+f$ are
-sampled from the same episode in the replay memory. The goal for the later
-transition $\goal_{t+f}$ is assumed to the pseudo-goal for the first transition.
-A new transition is generated for the time step $t$ with reward re-computed
-with $\goal_{t+f}$ as the desired goal, $(\state_{t}, \act_t, \state_{t+1},
-\Rew(\state_t, \act_t, \goal_{t+f})$.
+In our experiments, we employ HER's \emph{future} strategy for
+pseudo-goal sampling. More specifically two transitions, $t$ and $t+f$, are
+sampled from the same episode in the replay memory. The goal for the
+later transition $\goal_{t+f}$ is assumed to the pseudo-goal for the
+first transition.  A new transition is generated for the time step $t$
+with reward re-computed with $\goal_{t+f}$ as the desired goal,
+$(\state_{t}, \act_t, \state_{t+1}, \Rew(\state_t, \act_t,
+\goal_{t+f})$.
 
 
-\subsubsection{Goal conditioned value function as path rewards}
-We define the goal-condition value function as expected path-rewards of reaching
-the goal from a given start state:
-%
-\begin{align}
-  \fwargs\state\act{\goal^*}\policy{P}
-  &=
-    \begin{cases}
-      \E_{l \in [t+1, T], \policy}\left[ \sum_{k=t}^{l-1}
-  \discount^{k-t} \Rew^P(\state_k, \act_k)
-  \middle| \state, \act, \goal_l = \goal^* \right]
-& \text{ if } \exists l \text{ such that } \goal_l = \goal^*
-\\
--\infty & \text{ otherwise }
-\end{cases}.
-  \label{eq:qp-def}
-\end{align}%
-% 
-The main difference between $\fw^P$~\eqref{eq:qp-def} and $\fw$~\eqref{eq:q-def}
-is that $\fw^P$ explicitly depends upon reaching the goal within the episode,
-thereby removing the dependence of reward on the goal. Surprisingly, the Bellman
-Equation can still be applied to the path-value function $\fw^P$ with a slightly
-different terminal condition:
-%
-\begin{align}
-  \fwargs{\state_t}{\act_t}{\goal^*}*P
-  &=
-    \begin{cases}
-      \Rew^P(\state_t, \act_t) + \discount \max_{\act \in \Action} \fwargs{\state_{t+1}}\act{\goal^*}*P
-      & \text{ if } t < l-1 \text{ such that } \goal_l = \goal^*
-      \\
-      \Rew^P(\state_{l-1}, \act_{l-1}) & \text{ if } t = l-1 \text{ such that } \goal_l = \goal^*
-    \end{cases}.
-  \label{eq:bellman-path}
-\end{align}%
-% 
-This formulation has several advantages. Firstly, it removes a design decision
-about the choice of goal-reward. Secondly, it enables HER to work without reward
-re-computation. This can be especially useful when reward computation is expensive.
-
-Because we work with path rewards, the reward function design should
-make sure that there are no positive cycles in the environment. In another
-words, cycling back to the same state via another state should not yield
-positive rewards, otherwise the agent can extract unlimited reward just by
-going in circles. Hence a typical environment will have most of the reward
-values as negative. In all our experiments with path rewards, we use a constant
-value of -1 for all states, $\Rew^P(\state, \act) = -1 \, \forall \state, \act$.
 
 
 % % Use less math
