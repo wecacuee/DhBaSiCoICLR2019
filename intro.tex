@@ -61,7 +61,7 @@ avoidable. Let us consider an example to motivate this. Consider a student who h
 to a new university. To learn about the campus, the student explores it
 randomly with no specific goal in mind. The key intuition here is that
 the student is not incentivized to find specific goal locations (i.e.
-no goal rewards) but is aware of the effort required to travel between
+no goal-rewards) but is aware of the effort required to travel between
 points around the university. When tasked with
 finding a goal classroom, the student can chain together these
 path efforts to find the least-effort path to the
@@ -84,7 +84,7 @@ We also extend a closely related algorithm, Floyd-Warshall Reinforcement
 Learning (FWRL) \citep{dhiman2018floydwarshall} to use parametric
 function approximators instead of tabular functions. Similar to our
 re-definition of GCVFs, FWRL learns a goal-conditioned Floyd-Warshall function
-that represents path rewards instead of future rewards.
+that represents path-rewards instead of future-rewards.
 We translate FWRL's compositionality constraints in the space of GCVFs to introduce
 additional loss terms to the objective. However, these additional loss
 terms do not show improvement over the baseline. We conjecture that the
