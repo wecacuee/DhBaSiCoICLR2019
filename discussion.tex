@@ -1,13 +1,36 @@
 \section{Analysis}
 
 \paragraph{Is the step-loss really needed?}
-Fetch Push
-DDPG fails when no goal reward
-FWRL also fails without goal reward
-Is the step loss on its own enough
-Our method words 
+%
+%
+\begin{figure}%
+  \def\frac{0.24}
+  % Ours with and without step loss
+  \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-with-without-step-loss/FetchPush-6efc1de-ddpgepoch-test/ag_g_dist.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-with-without-step-loss/FetchPush-6efc1de-ddpgepoch-test/success_rate.pdf}%
+  % Ours with and without goal rewards
+  \includegraphics[width=\frac\columnwidth]{media/res/ablate-ours-with-goal-reward/FetchPickAndPlace-dqstepoch-test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/ablate-ours-with-goal-reward/FetchPickAndPlace-dqstepoch-test/ag_g_dist.pdf}%
+  \label{fig:with-and-without-step-loss}%
+  \caption{What if we remove goal reward from DDPG
+  What if we provide goal-rewards to our algorithm? Nothing much}%
+\end{figure}%
+% 
+
+
 
 \paragraph{Effects of different distance thresholds}
+%
+\begin{figure}%
+  \def\frac{0.24}
+  \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-dqst-low_tresh_chosen-low_thresh_alt-ddpg/0.05-be0910creward_computes-test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-dqst-low_tresh_chosen-low_thresh_alt-ddpg/0.05-be0910creward_computes-test/ag_g_dist.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-dqst-low_tresh_chosen-low_thresh_alt-dqst/0.001-FetchPushPR-be467dfepoch-test/success_rate.pdf}%
+  \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-dqst-low_tresh_chosen-low_thresh_alt-dqst/0.001-FetchPushPR-be467dfepoch-test/ag_g_dist.pdf}%
+  \label{fig:with-different-distance-thresholds}%
+  \caption{Effects of distance threshold on DDPG and our experiment.}%
+\end{figure}%
+% 
 
 
 
