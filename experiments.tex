@@ -61,8 +61,7 @@ method.
 We reduce the it to 1cm which is reduction by a factor of 5 compared to
 HER.
 
-Secondly, due to hardware limitations we run all experiments on 6
-cores each
+Secondly, we run all experiments on 6 cores each,
 while HER uses 19. The batch size used is a function of the number of
 cores and hence this parameter has a significant effect on learning. 
 
@@ -72,7 +71,7 @@ to differences between the algorithms.
 
 \subsection{Results}
 % Due to space limitations and in the interest of clarity we show a subset our experiments across both platforms that emphasize both strengths and weaknesses of our algorithm.
-All our experimental results are described below. We highlight the strengths and
+All our experimental results are described below, highlighting the strengths and
 weaknesses of our algorithm. Across all our experiments, the
 distance-to-the-goal metric achieves comparable performance to HER
 \emph{without requiring goal-rewards}. 
@@ -80,28 +79,28 @@ distance-to-the-goal metric achieves comparable performance to HER
 \paragraph{Fetch Tasks}
 
 The experimental results for Fetch tasks are shown in
-Figure~\ref{fig:fetch-results}. For the Fetch Reach and Push tasks our
+Figure~\ref{fig:fetch-results}. For the Fetch Reach and Push tasks, our
 method achieves comparable performance to the baselines 
 across both metrics in terms of training epochs and outperforms them in
-terms of reward computations. Notably, the Fetch
-Pick and Place trains significantly faster in terms of epochs. For the Fetch
+terms of reward recomputations. Notably, the Fetch
+Pick and Place task trains in significantly fewer epochs. For the Fetch
 Slide task the opposite is true.
-We conjecture that the Fetch-Slide is more sensitive to the
-distance-threshold information which our method is unable to use.
+We conjecture that Fetch Slide is more sensitive to the
+distance threshold information, which our method is unable to use.
 
 \paragraph{Hand Tasks}
 
-For the Hand tasks the distance to the goal and the success rate show different trends.
+For the Hand tasks, the distance to the goal and the success rate show different trends.
 We show the results in Figure~\ref{fig:hand-results}.
-For the distance metric when plotted against epochs, we get comparable
-performance for all tasks; when plotted for reward computations we outperform
-all baselines except for the Hand Reach tasks. The baselines perform
-well enough on this task leaving less scope for significant improvement.
-These trends does not hold for the success rate. Our method
+When the distance metric is plotted against epochs, we get comparable
+performance for all tasks; when plotted against reward computations, we outperform
+all baselines on all tasks except Hand Reach. The baselines perform
+well enough on this task, leaving less scope for significant improvement.
+These trends do not hold for the success rate metric, on which our method
 consistently under-performs compared to the baselines across tasks. This
-is surpising as evidenced by the distance-from-goal metric all the
-algorithms are equally far away from the goal on an average. We conjecture that this might be because of
-high distance failure cases of the baselines i.e. when the baselines
+is surprising, as all algorithms average equally on the distance-from-goal metric.
+We conjecture that this might be the result of
+high-distance failure cases of the baselines, i.e. when the baselines
 fail, they do so at larger distances from the goal. In contrast, we
 assume our method's success and failiure cases are closer together. 
 \input{figure_hand}

@@ -27,33 +27,33 @@
   \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-dqst-low_tresh_chosen-low_thresh_alt-ddpg/0.05-be0910cepoch-test/ag_g_dist.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-dqst-low_tresh_chosen-low_thresh_alt-dqst/0.001-FetchPushPR-be467dfepoch-test/ag_g_dist.pdf}%
   \caption{Effects of distance threshold on HER and our method on Fetch Push
-task. Although the success rate decreases with decrease in distance threshold,
-the distance to the goal is not affected by it. For HER the distance to the goal
+task. Although the success rate decreases as the distance threshold decreases,
+the distance to the goal is not affected. For HER, the distance to the goal
 reaches lower values with smaller distance thresholds.}%
   \label{fig:with-different-distance-thresholds}%
 \end{figure}%
 % 
 
-We perform three ask three additional questions about our algorithm:
+We ask three additional questions about our algorithm:
 (a) Do we really need the step loss?
 (b) What happens when our algorithm has access to the goal reward?
-(c) How critical is distance threshold to HER and our algorithm?
+(c) How critical is the distance threshold to HER and our algorithm?
 \paragraph{Do we really need the step loss?}
 %
 We run our algorithm with no goal reward and without the step loss on Fetch Push
 task. This results in our algorithm failing to learn as shown in left two
 columns of Figure~\ref{fig:with-and-without-step-loss}.
 
-\paragraph{Does our algorithm improves with access to the goal reward?}
+\paragraph{Does our algorithm improve with access to the goal reward?}
 
-We ran this experiment on Fetch Pick and Place task and found that goal-rewards
-do not help much to our algorithm. The results are show in the right two columns
+We ran this experiment on the Fetch Pick and Place task and found that goal-rewards
+do not help much to our algorithm. The results are shown in the right two columns
 of Figure~\ref{fig:with-and-without-step-loss}. This indicates that one-step path reward
 fully captures the information required for goal-conditioned tasks.
 
 \paragraph{Effects of different distance thresholds}
 
-In the absence of goal-rewards, our algorithm is not to able capture distance
+In the absence of goal-rewards, our algorithm is not able to capture distance
 threshold information that decides whether the agent has reached the goal or
 not. On the other hand this information is available to HER. To understand the
 sensitivity of our algorithm and HER on distance threshold, we vary the distance
