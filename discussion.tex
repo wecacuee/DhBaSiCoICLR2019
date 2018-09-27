@@ -31,14 +31,16 @@
 
 %
 \begin{figure}%
-  \def\frac{0.24}
+  \def\frac{0.5}
+\begin{minipage}[b]{\frac\linewidth}\centering
   \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-dqst-low_tresh_chosen-low_thresh_alt-ddpg/0.05-be0910cepoch-test/success_rate.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-dqst-low_tresh_chosen-low_thresh_alt-dqst/0.001-FetchPushPR-be467dfepoch-test/success_rate.pdf}%
+  \subcaption{Sucesss rate}\label{fig:success-rate}
+  \end{minipage}\begin{minipage}[b]{\frac\linewidth}\centering
   \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-dqst-low_tresh_chosen-low_thresh_alt-ddpg/0.05-be0910cepoch-test/ag_g_dist.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-dqst-low_tresh_chosen-low_thresh_alt-dqst/0.001-FetchPushPR-be467dfepoch-test/ag_g_dist.pdf}%
-  {.\tiny\color{blue}\hspace{0.8cm}(a) Distance on Epochs \hspace{1.05cm}(b) Distance on
-    reward computes
-    \hspace{0.70cm} (c) Success rate on epochs \hspace{0.9cm} (d) Success rate on reward computes}
+  \subcaption{Distance from goal}\label{fig:distance}
+\end{minipage}
   \caption{Effects of distance threshold on HER and our method on Fetch Push
 task. Although the success rate decreases as the distance threshold decreases,
 the distance to the goal is not affected. For HER, the distance to the goal
