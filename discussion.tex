@@ -1,21 +1,23 @@
 \section{Analysis}
 %
 \begin{figure}%
-  \def\frac{0.24}
+  \def\frac{0.5}
   \begin{minipage}[b]{0.5\linewidth}
+    \centering
     % Ours with and without step loss
     \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-with-without-step-loss/FetchPush-6efc1de-ddpgepoch-test/ag_g_dist.pdf}%
-    \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-with-without-step-loss/FetchPush-6efc1de-ddpgepoch-test/success_rate.pdf}%
-    \subcaption{(a) Do we }\label{fig:with-and-without-step-loss-a}
+    \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-with-without-step-loss/FetchPush-6efc1de-ddpgepoch-test/success_rate.pdf}\\
+    \subcaption{Do we really need the step loss?}
+    \label{fig:with-and-without-step-loss-a}
   \end{minipage}
   \begin{minipage}[b]{0.5\linewidth}
+    \centering
     % Ours with and without goal rewards
     \includegraphics[width=\frac\columnwidth]{media/res/ablate-ours-with-goal-reward/FetchPickAndPlace-dqstepoch-test/success_rate.pdf}%
-    \includegraphics[width=\frac\columnwidth]{media/res/ablate-ours-with-goal-reward/FetchPickAndPlace-dqstepoch-test/ag_g_dist.pdf}%
+    \includegraphics[width=\frac\columnwidth]{media/res/ablate-ours-with-goal-reward/FetchPickAndPlace-dqstepoch-test/ag_g_dist.pdf}\\
+    \subcaption{Effect of goal-rewards}
+    \label{fig:with-and-without-step-loss-b}
   \end{minipage}
-  {.\tiny\color{blue}\hspace{0.8cm}(a) Distance on Epochs \hspace{1.05cm}(b) Distance on
-    reward computes
-    \hspace{0.70cm} (c) Success rate on epochs \hspace{0.9cm} (d) Success rate on reward computes}
   \caption{
     Effects of adding the goal-reward or removing the step-loss to our method.
     The left two plots on Fetch Push task show that the step loss is critical to the working of our
@@ -54,13 +56,13 @@ We ask three additional questions about our algorithm:
 We choose the Fetch-Push task for this experiment.
 We run our algorithm with no goal reward and without the step loss on Fetch Push
 task. Results show that our algorithm fails to reach the goal when the
-step-loss is remove (Fig.~\ref{fig:with-and-without-step-loss}).
+step-loss is remove (Fig.~\ref{fig:with-and-without-step-loss-a}).
 
 \paragraph{Does our algorithm improve with access to the goal reward?}
 
 We ran this experiment on the Fetch Pick and Place task and found that goal-rewards
 do not help much to our algorithm. The results are shown in the right two columns
-of Figure~\ref{fig:with-and-without-step-loss}. This indicates that one-step path reward
+of Figure~\ref{fig:with-and-without-step-loss-b}. This indicates that one-step path reward
 fully captures the information required for goal-conditioned tasks.
 
 \paragraph{Effects of different distance thresholds}
