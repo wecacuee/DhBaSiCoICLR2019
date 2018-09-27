@@ -25,7 +25,7 @@ start states with specified goals. GCVFs, in turn, are used to compute
 % introduce ....
 State-of-the-art MGRL algorithms use \emph{goal-rewards} to associate
 the achievement of goals with high reward.
-This conditions reward functions on the desired goals, $R(s,a,g)$.
+This conditions reward functions on the desired goals.
 For example, in the Fetch-Push task \citep{plappert2018multi} of moving
 a block to a given location on a table, every movement incurs a ``-1''
 reward while reaching the desired goal returns a ``0'' reward. 
@@ -33,7 +33,7 @@ This dependence introduces additional reward resampling steps in
 algorithms like Hindsight Experience Replay (HER)
 \citep{andrychowicz2017hindsight}, where
 trials in which the agent failed to reach the goal are reused by recomputing
-rewards as if the reached states were psuedo-desired goals.
+rewards as if the reached states were pseudo-desired goals.
 Due to the dependence of the reward function on the goal,
 the relabelling of every pseudo-goal requires an independent
 \emph{reward-recomputation} step, which can be expensive. 
@@ -75,12 +75,12 @@ to be the paths of maximum reward between pairs wherein the state and goal are a
 Under this interpretation, the \emph{Bellman equation} chooses and chains
 together one-step paths to find longer maximum reward paths. 
 %
-Experimentally, we show how this simple reinterpration, which does not use goal
+Experimentally, we show how this simple reinterpretation, which does not use goal
 rewards, performs as well as HER while outperforming it in terms of
 reward computation.
 
 % Detail the Floyd-Warshall contribution
-In this work, we also extend a closely related algorithm, Floyd-Warshall Reinforcement
+We also extend a closely related algorithm, Floyd-Warshall Reinforcement
 Learning (FWRL) \citep{dhiman2018floydwarshall} to use parametric
 function approximators instead of tabular functions. Similar to our
 re-definition of GCVFs, FWRL learns a goal-conditioned Floyd-Warshall function
@@ -93,9 +93,9 @@ compositionality constraints are already captured by other loss terms.
 % Summarize 
 In summary, the  contributions of this work are twofold. Firstly, we
 reinterpret goal-conditioned value functions as expected path-rewards
-and introduce one-step loss, thereby removing their dependency on
-goal-rewards and reward resampling. We showcase how this leads to
-improved sample efficiency in  terms of reward computation. We thus
+and introduce one-step loss, thereby removing the dependency of GCVFs on
+goal-rewards and reward resampling. We showcase our algorithm's
+improved sample efficiency (in  terms of reward computation). We thus
 extend algorithms like HER to domains where reward recomputation is
 expensive or infeasible.
 Secondly, we extend the tabular Floyd-Warshal Reinforcement Learning to
