@@ -27,4 +27,4 @@ fi
 # # Effect of path rewards on Fetch Pick and Place
 # rsync -rav --include='*/' --include='params.json' --include='progress.csv' --include='*test/*.pdf' --include='train/*loss*.pdf' --exclude='*' /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/d5cefef-path_reward-*-v{0,1}-* $THISDIR
 # Effect of path rewards with low threshold
-rsync -rav --include='*/' --include='params.json' --include='progress.csv' --include='*test/*.pdf' --include='train/*loss*.pdf' --exclude='*' /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/6efc1de-path_reward_low_thresh_chosen-* $THISDIR
+# rsync -rav --include='*/' --include='params.json' --include='progress.csv' --include='*test/*.pdf' --include='train/*loss*.pdf' --exclude='*' /z/home/dhiman/mid/floyd-warshall-rl/openai-baselines/her/6efc1de-path_reward_low_thresh_chosen-* $THISDIR
