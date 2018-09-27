@@ -1,134 +1,136 @@
 \section{Method}
 
-\subsubsection{Goal conditioned value function: Path Reward Formulation}
-We define the goal-condition value function as expected path-rewards of reaching
-the goal from a given start state:
+%\section{Goal conditioned value function: Path Reward Formulation}
+In our definition of the GCVF instead of making the reward function depend upon
+the goal, we count accumulated rewards \emph{only if} the goal is reached. This makes
+the dependence on the goal explicit instead  of implicit to the reward formulation.
+Mathematically,
 %
-\begin{align}
-  \fwargs\state\act{\goal^*}\policy{P}
-  &=
-    \begin{cases}
-      \E_{l \in [t+1, T], \policy}\left[ \sum_{k=t}^{l-1}
-  \discount^{k-t} \Rew^P(\state_k, \act_k)
-  \middle| \state, \act, \goal_l = \goal^* \right]
-& \text{ if } \exists l \text{ such that } \goal_l = \goal^*
-\\
--\infty & \text{ otherwise }
-\end{cases}.
-  \label{eq:qp-def}
-\end{align}%
+\begin{subnumcases}{
+    \fwargs\state\act{\goal^*}\policy{P} = }
+  \E_{\policy}\left[ \sum_{k=t}^{l-1} \discount^{k-t} \Rew^P(\state_k, \act_k)
+    \middle| \state, \act, \goal_l = \goal^* \right]
+  & $\text{ if } \exists \,l \text{ such that } \goal_l = \goal^*$
+  \label{eq:qp-def-a}
+  \\
+  -\infty & \text{otherwise},
+  \label{eq:qp-def-b}
+\end{subnumcases}
 % 
-The main difference between $\fw^P$~\eqref{eq:qp-def} and $\fw$~\eqref{eq:q-def}
-is that $\fw^P$ explicitly depends upon reaching the goal within the episode,
-thereby removing the dependence of reward on the goal. Surprisingly, the Bellman
-Equation can still be applied to the path-value function $\fw^P$ with a slightly
-different terminal condition:
-%
-\begin{align}
-  \fwargs{\state_t}{\act_t}{\goal^*}*P
-  &=
-    \begin{cases}
-      \Rew^P(\state_t, \act_t) + \discount \max_{\act \in \Action} \fwargs{\state_{t+1}}\act{\goal^*}*P
-      & \text{ if } t < l-1 \text{ such that } \goal_l = \goal^*
-      \\
-      \Rew^P(\state_{l-1}, \act_{l-1}) & \text{ if } t = l-1 \text{ such that } \goal_l = \goal^*
-    \end{cases}.
-  \label{eq:bellman-path}
-\end{align}%
-% 
-This formulation has several advantages. Firstly, it removes a design decision
-about the choice of goal-reward. Secondly, it enables HER to work without reward
-re-computation. This can be especially useful when reward computation is expensive.
+where $l$ is the time step when the agent reaches the goal. If the agent does
+not reach the goal, the GCVF is defined to be negative infinity. This first term
+\eqref{eq:qp-def-a} is the expected cumulative reward over
+paths from a given start state to the goal.
+This imposes the constraint that
+cyclical paths in the state space must have negative cumulative reward, for the
+\eqref{eq:qp-def-a} to yield finite values. For most practical physical
+problems, this constraints naturally holds if reward is taken to be some measure of
+negative energy expenditure. For example, in the robot arm experiment, moving the
+arm must expend energy (negative reward). Achieving a positive reward cycle
+would translate to generating infinite energy.
+In all our experiments with this formulation, we use a constant
+reward of -1 for all states, $\Rew^P(\state, \act) = -1 \, \forall \state, \act$.
 
-\subsubsection{One-Step Loss}
-Because we work with path rewards, the reward function design should
-make sure that there are no positive cycles in the environment. In another
-words, cycling back to the same state via another state should not yield
-positive rewards, otherwise the agent can extract unlimited reward just by
-going in circles. Hence a typical environment will have most of the reward
-values as negative. In all our experiments with path rewards, we use a constant
-value of -1 for all states, $\Rew^P(\state, \act) = -1 \, \forall \state, \act$.
-Since our new formulation of goal-conditioned value function satisifies the
-Bellman Equation, the existing MGRL algorithms for $\fw$ easily apply to the
-approximation of $\fw^P$ as long as we can estimate the terminal reward for
-Eq~\eqref{eq:qp-def}. The terminal reward, however, depends up on detecting
-whether the goal has been reached. To avoid this dependence, we introduce the
-step loss $\LossStep$ which assumes that one-step reward is the highest reward between
-adjacent start-goal state:
+For the cases when the agent does reach the goal \eqref{eq:qp-def-a},
+the Bellman equation takes the following form:
+%
+\begin{subnumcases}{
+  \fwargs{\state_t}{\act_t}{\goal^*}*P =}
+      \Rew^P(\state_t, \act_t) + \discount \max_{\act \in \Action}
+      \fwargs{\state_{t+1}}\act{\goal^*}*P 
+      & $\text{ if } t < l-1 \text{ s. t. } \goal_l = \goal^*$
+      \label{eq:bellman-path-a}
+      \\
+      \Rew^P(\state_{l-1}, \act_{l-1})
+      & $\text{ if } t = l-1 \text{ s. t. } \goal_l = \goal^*$
+      \label{eq:bellman-path-b}.
+\end{subnumcases}
+% 
+This equation differs from Eq~\eqref{eq:bellman-dqn} in the
+terminal step being the step to reach the goal in this, while
+it being the end of episode in the latter.
+Hence, this formulation is equivalent to the end of episode when the goal is reached.
+This re-formulation does not require goal-rewards which in turn obviates the
+requirement for pseudo-goals and reward re-computation.
+
+\paragraph{One-Step Loss}
+To enable algorithms like HER to work under this re-formulation we need to
+recognize when the goal is reached~\eqref{eq:bellman-path-b}. This recognition
+is usually done by reception of high goal reward. Instead for this formulation,
+we propose one-step loss to serve this purpose:
 %
 \begin{align}
       \LossStep(\param_\fw) &= (\fwargs{\state_{l-1}}{\act_{l-1}}{\goal_{l};\param_\fw}{*}{P} - \Rew(\state_{l-1}, \act_{l-1}))^2.
-\end{align}
+\end{align}%
 %
-This loss term allows us to estimate one-step path reward for all start and goal
-states.
+This loss is based on the assumption that one-step reward is the highest reward
+between adjacent start-goal state and allows us to estimate one-step path reward
+for all start and goal states. Once learned, the learned one step GCVF serves as
+a proxy for the reward to the last step to the goal~\eqref{eq:bellman-path-b}.
+The Bellman equation~\eqref{eq:bellman-path-a}, serves as a one-step rollout
+to combine rewards over a shortest path to the goal.
+
+
 We modify an implementation of HER to include the step-loss term and disable goal
 rewards for our experiments.
-As in HER, we use the loss term from DDPG~\cite{lillicrap2015continuous} while
+As in HER, we use the DDPG loss $\LossDDPG$ while
 using ``future'' goal sampling strategy described in the paper.
-For this purpose an episode-wise replay buffer of transitions $(\state_t,
-\goal_t, \act_t, \rew_t, \state_{t+1}, \goal_{t+1}; \goal^*)$ is maintained. To draw samples
-from the replay buffer an episode and time step is chosen. The corresponding
-transition is taken to the sampled transition, however, the desired goal for
-this transition $\goal^*$ is replaced by randomly chosen goal from the future
-transitions $\goal_{t+f}$. This new transition is applied to minimize the
-following DDPG loss function:
-%
-\begin{align}
-  \LossDDPG(\param_\fw) &= (\fwargs{\state_{t}}{\act_{t}}{\goal_{t+f}; \param_\fw}{*}{P} -
-      \rew_t - \discount\fwargs{\state_{t+1}}{\policy_t(\state_{t+1}, \goal_{t+f};\param_\policy)}{\goal_{t+f};\param_\fw}{t}{P})^2
-\end{align}
-%
+The resulting algorithm in shown in Alg~\ref{alg:floyd-warshall-deep}.
+\input{algorithm-her-pr}
 
 \subsection{Deep Floyd-Warshall Reinforcement Learning}
 
-We extend FWRL~\citep{dhiman2018floydwarshall} to use deep neural network.
-The main contribution of FWRL is to employ compositionality constraints to
-exploit structure in the space of GCVFs.
-We translate these constraints into loss terms.
-In effect, the algorithm is same as the HER except
-addition of a few additional loss terms.
+The GCVF redefinition and step-loss introduced in this paper are inspired by
+the tabular formulation of Floyd-Warshall
+Reinforcement Learning (FWRL)~\citep{dhiman2018floydwarshall}.
+We extend this algorithm to use deep neural networks.
+Unfortunately, the algorithm itself does not show significant improvement over
+the baselines. However, the intuitions gained in its implementation led to
+the contributions of this paper. 
 
-
-The constraint governing the FWRL algorithm states that the highest reward path
+The core contribution of FWRL is a compositionality constraint in the space
+of GCVFs. 
+This constraint states that the optimal $\Q_*$ value 
 from any state $\state_t$ to any goal $\goal_{t+f}$ is greater than or equal to
-the sum of rewards via any intermediate state-goal pair $(\state_{im}, \goal_{im})$:
+the sum of optimal $\Q_*$ values via any intermediate state-goal pair $(\state_{w}, \goal_{w})$:
 %
 \begin{align}
-      \fwargs{\state_{t}}{\act_t}{\goal_{im}}{*}{}
-      + \fwargs{\state_{im}}{\policy_*(\state_{im}, \goal_{t+f};\param_\policy)}{\goal_{t+f}}{*}{}
-      \ge \fwargs{\state_{t}}{\act_t}{\goal_{t+f}}{*}{},
+      \fwargs{\state_{t}}{\act_t}{\goal_{w}}{*}{}
+      + \fwargs{\state_{w}}{\policy_*(\state_{w}, \goal_{t+f};\param_\policy)}{\goal_{t+f}}{*}{}
+      \ge \fwargs{\state_{t}}{\act_t}{\goal_{t+f}}{*}{}.
 \end{align}%
 % 
-where $\policy_*$ is the optimal goal-conditioned policy and $\act_t$ represents
-the action taken at time $t$. Taking cue from \citet{MnKaSiNATURE2015}, we do
-not repeat the main online network $\Q_*$ in the loss term. We use target
-network $\Q_t$ and split the constraint into two loss terms. One loss term acts
+
+We translate these constraints into loss terms and they are added to the
+ddpg loss $\LossDDPG$ and one-step loss $\LossStep$.
+Taking cue from \citet{MnKaSiNATURE2015}, we do
+not repeat the main online network $\Q_{m}$ in the loss term. We use target
+network $\Qtgt$ and split the constraint into two loss terms. One loss term acts
 as a lower bound $\LossLo$ and the other acts as the upper bound $\LossUp$:
 %
 \begin{align}
-  \LossLo &= (
-      \fwargs{\state_{t}}{\act_t}{\goal_{im}}{t}{}
-      + \fwargs{\state_{im}}{\policy_t(\state_{im}, \goal_{t+f};\param_\policy)}{\goal_{t+f}}{t}{}
-      - \fwargs{\state_{t}}{\act_t}{\goal_{t+f}}{*}{}
-      )_+^2
+  \LossLo &= \text{ReLU}[
+      \fwargs{\state_{t}}{\act_t}{\goal_{w}}{\tgt}{}
+      + \fwargs{\state_{w}}{\policy_t(\state_{w}, \goal_{t+f};\param_\policy)}{\goal_{t+f}}{\tgt}{}
+      - \fwargs{\state_{t}}{\act_t}{\goal_{t+f}}{m}{}
+      ]^2
                          \\
-  \LossUp &= (
-      \fwargs{\state_{t}}{\act_t}{\goal_{im}}{*}{}
-      + \fwargs{\state_{im}}{\policy_t(\state_{im}, \goal_{t+f};\param_\policy)}{\goal_{t+f}}{t}{}
-      - \fwargs{\state_{t}}{\act_t}{\goal_{t+f}}{t}{}
-      )_+^2,
+  \LossUp &= \text{ReLU}[
+      \fwargs{\state_{t}}{\act_t}{\goal_{w}}{m}{}
+      + \fwargs{\state_{w}}{\policy_t(\state_{w}, \goal_{t+f};\param_\policy)}{\goal_{t+f}}{\tgt}{}
+      - \fwargs{\state_{t}}{\act_t}{\goal_{t+f}}{\tgt}{}
+      ]^2.
 \end{align}%
 % 
-where $(\dots)_+$ denotes ReLU function.
-Note that the above terms differ only by choice of target network $\fw_t$ and
-main network $\fw_*$. 
+Note that the above terms differ only by choice of the target and main network. 
 
-Similar to HER we get the intermediate state by trajectory sampling. Once,
-a transition $(\state_t, \act_t, \rew_t, \state_{t+1})$ and a future goal
-$\goal_{t+f}$ has been sampled from the same episode, we sample another
-intermediate state and goal pair $(\state_{im}, \goal_{im})$ such that $t \le im
-\le t + f$.
+\paragraph{FWRL Sampling}
+We augment HER sampling to additionally get the intermediate state-goal pair
+$(\state_{w}, \goal_{w})$.
+Once, a transition $(\state_t, \act_t, \rew_t, \state_{t+1})$ and a
+future goal $\goal_{t+f}$ has been sampled from the same episode, we sample
+another intermediate state and goal pair $(\state_{w}, \goal_{w})$ such that
+$t \le im \le t + f$.
 % 
 % \begin{align}
 %   \LossTrieq &= |
@@ -138,8 +140,6 @@ intermediate state and goal pair $(\state_{im}, \goal_{im})$ such that $t \le im
 %       |^2
 % \end{align}
 
-The resulting algorithm in shown in Alg~\ref{alg:floyd-warshall-deep}.
 % An
 %ablation of loss functions is shown in Figure~\ref{fig:fig:fwrl-stepfwrl-noop-FetchPush}.
 
-\input{algorithm-her-pr}

@@ -1,19 +1,18 @@
 \begin{algorithm}
   \tcc{By default all states are unreachable}
   Initialize networks
-  $\fwargs{\state_i}{\act_i }{\goal_j; \param_{\fwcost}}{*}{}$ and
+  $\fwargs{\state_i}{\act_i }{\goal_j; \param_{\fwcost}}{m}{}$ and
   $\policy(\state_i, \state_g; \param_{\policy})$ \;
   Copy the main network to target network
-  $\fwargs{\state_i}{\act_i ;\param_{\fwcost}}{\state_j}{t}{} \leftarrow
-  \fwargs{\state_i}{\act_i ; \param_{\fwcost}}{\state_j}{*}{} $ \;
-
+  $\fwargs{\state_i}{\act_i}{\goal_j ;\param_{\fwcost}}{\tgt}{} \leftarrow
+  \fwargs{\state_i}{\act_i}{\goal_j ; \param_{\fwcost}}{m}{} $ \;
   % We do not know the goal location
   Initialize replay memory $M$ \;
-  \tcc{Collect experience}
-  \For{$e \leftarrow 1$ \KwTo $M$}{
+  \For{$e \leftarrow 1$ \KwTo $E$}{
     Sample $\goal_e \in \Goal$ \;
     Set $t \leftarrow 0$\;
     Observe state $\state_t$ and achieved goal $\goal_t$ \;
+    \tcc{Episode rollout}
     \For{$t \leftarrow 1$ \KwTo $\epiT$}{
       Take action $\act_{t} \leftarrow \epsilon\text{-greedy}(\policy(\state_{t}, \goal, \fw))$ \;
       Observe $\state_{t+1}, \goal_{t+1}, \rew_t$ \;
@@ -30,18 +29,19 @@
       \dots ,
       (\state_{b}, \goal_b, \act_b, \state_{b+1}, \goal_{b+1}, \rew_b; \goal_{b+f_b})]$ from $M$ \;
       $\Loss(\dots) = 0$ \;
-      \For{$b \in B$}{
+      \For{$b \in 1 \KwTo |B|$}{
         $(\state_{b}, \goal_b, \act_b, \state_{b+1}, \goal_{b+1}, \rew_b, \goal_{b+f_b}) = B[b]$ \;
-        $\Loss(\dots) += (\fwargs{\state_{b}}{\act_{b}}{\goal_{b+1}}{*}{} - \rew_b)^2$ 
-        \tcc*{Step loss}
-        $\Loss(\dots) += (\fwargs{\state_{b}}{\act_{b}}{\goal_{b+f_b}}{*}{} -
-        \rew_b - \discount\fwargs{\state_{b+1}}{\policy_t(\state_{b+1}, \goal_{b+f_b};\param_\policy)}{\goal_{b+f_b}}{t}{})^2$
+        \tcc{Step loss}
+        $\Loss(\dots) += (\fwargs{\state_{b}}{\act_{b}}{\goal_{b+1}}{m}{} - \rew_b)^2$ \;
         \tcc{DDPG loss}
+        $\Loss(\dots) += (\fwargs{\state_{b}}{\act_{b}}{\goal_{b+f_b}}{m}{} -
+        \rew_b - \discount\fwargs{\state_{b+1}}{\policy_t(\state_{b+1},
+          \goal_{b+f_b};\param_\policy)}{\goal_{b+f_b}}{\tgt}{})^2$ \;
       }
       Update gradients for $\fw_*$ and $\policy$ using loss $\Loss(\dots)$\;
     }
   }
-  \KwResult{$\policy^*(\state_k, \state_g, \fwcost)$}
+  \KwResult{$\fw_m$}
   \caption{\small Path-reward reinforcement learning}
   \label{alg:floyd-warshall-deep}
 \end{algorithm}

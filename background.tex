@@ -83,20 +83,33 @@ a deep neural network, $\Q_m$:
 \end{align}
 where 
 $\ytgt = \Rew(\state_t, \act_t) + \max_{\act}\discount \Qtgt(\state_{t+1}, \act; \param_{\Qtgt}) $
-, is the \emph{target} and $\Qtgt$ is the target network. The target network is a a slower
-changing copy of the main network that stabilizes learning \cite{mnih2015human}. 
-
-% \citet{MnKaSiNATURE2015} also introduced the idea of \emph{replay buffer}.
+, is the \emph{target} and $\Qtgt$ is the target
+network~\citep{MnKaSiNATURE2015}.
+The target network is a slower
+changing copy of the main network that stabilizes learning.
+\citet{MnKaSiNATURE2015} also employ \emph{replay buffers}
+that store transitions from episodes. During training, these transitions are
+sampled out of order to train the networks in an off-policy manner, avoiding
+correlation in the samples which leads to faster learning.
 % The transitions experienced are not used to update the neural network in order.
 % Instead they are stored in a replay buffer which is then sampled out of order
 % for independent transitions and updating the neural network.
+
 In this work, we use an extension of DQN to continuous action spaces called
 deep deterministic policy-gradients
 (DDPG)~\citep{lillicrap2015continuous}. DDPG approximates the
-policy with a policy network $\pi_{\text{tgt}}$ replacing the $\max$
+policy with a policy network $\policy_{\text{tgt}}(\state; \param_\policy)$ replacing the $\max$
 operator in $\ytgt$. The target thus becomes 
 $ \ytgt = \Rew(\state_t, \act_t) + \discount
-\Qtgt(\state_{t+1}, \pi_{\text{tgt}}(\state_{t+1}); \param_{\Qtgt}) $.
+\Qtgt(\state_{t+1}, \policy_{\text{tgt}}(\state_{t+1}; \param_\policy); \param_{\Qtgt}) $ and the
+loss function changes accordingly
+%
+\newcommand{\policytgt}{\policy_\text{tgt}}%
+\begin{align}
+  \Loss(\param_\fw, \param_\policy) &= \E_{\act_t \sim \policy(\state_t; \param_\policy)}[
+                                      (\Q_m(\state_t, \act_t; \param_\fw) - \ytgt)^2].
+\end{align}
+%
 
 % Assuming the policy to be optimal, the maxima of the second term in the Bellman
 % equation the $\Q$-value at action chosen by the policy at that state:
@@ -118,16 +131,13 @@ $ \ytgt = \Rew(\state_t, \act_t) + \discount
 
 
 \subsection{Multi-goal Reinforcement learning}
-Multi-goal tasks need the specification of a goal state at the start of
-every episode~\citep{plappert2018multi}. Examples include navigation to a
-goal location, and moving a robotic arm's end-actuator to particular 3D
-locations (Fetch-Reach task).
-
-The recent state-of-the-art algorithms for these tasks learn a goal-conditioned value
+Multi-Goal Reinforcement Learning~\citep{plappert2018multi} focuses on problems
+in which agents must traverse to a given goal in every episode which change from
+episode to episode.
+State-of-the-art MGRL algorithms learn a goal-conditioned value
 function (GCVF), $\fwargs{\state}{\act}{\goal}{}{}$, which is defined
-similarly to the
-$\Q$-function (Eq~\ref{eq:q-def}), but with an additional dependence of
-the desired goal specification $\goal \in \Goal$ :
+similar to the $\Q$-function (Eq~\ref{eq:q-def}), but with an additional
+dependence on the desired goal specification $\goal \in \Goal$ :
 %
 \begin{align}
 \fwargs\state\act\goal\policy{} = \E_\policy\left[ \sum_{k=t}^T
@@ -138,38 +148,35 @@ the desired goal specification $\goal \in \Goal$ :
 %
 The structure of the goal specification, $\goal \in \Goal$, can be
 arbitrary. For example, in a robotic
-arm experiment they include the desired position of the end-effector and the
-desired joint angles of the robot.  To ease the learning of
-correspondences between the states and the ``achieved goals'', they are
+arm experiment possible goal specifications include the desired position of the
+end-effector and the desired joint angles of the robot.
+To learn the correspondences between the states and the \emph{achieved goals}, they are
 assumed to be an observable part of the Goal-MDP $[(\state_0, \act_0,
 \goal_0, \rew_0), \dots, (\state_T, \act_T, \goal_T, \rew_T)]$.
 Consequently, the MDP is fully governed by the six tuple $(\State,
 \Action,\Goal, \Trans, \Rew, \discount)$. The reward, $\Rew(\state,\act,
-\goal) : \State \times \Action\times \Goal \rightarrow \R $, and policy,
-$\policy(\state, \goal): \State \times \Goal \rightarrow \Action $, are
-thereby also conditioned on goal information,  
+\goal) : \State \times \Action\times \Goal \rightarrow \R $, and policy
+$\policy(\state, \goal): \State \times \Goal \rightarrow \Action $ are
+thereby also conditioned on goal information.
 
 
-\subsubsection{Hindsight Experience Replay}
-Hindsight Experience Replay (HER) \citep{andrychowicz2017hindsight}
-builds upon this definition of GCVFs.  The main insight is that there is
+\paragraph{Hindsight Experience Replay}
+HER~\citep{andrychowicz2017hindsight}
+builds upon this definition of GCVFs.  The main insight of HER is that there is
 no valuable feedback from the environment when the agent does not reach
-the goal. This is further exacerbated when goal-locations are very
+the goal. This is further exacerbated when goals are
 sparse in the state-space. 
-HER solves this problem by implementing strategies that reuse these failed experiences 
-to extract valuable feedback. They are implemented by recomputing their
-rewards to relabel traversed states from these trajectories as desired
-psuedo-goals.
+HER solves this problem by reusing these failed experiences for learning.
+They recompute reward to relabel states in these experiences as desired pseudo-goals.
 
 In our experiments, we employ HER's \emph{future} strategy for
-pseudo-goal sampling. More specifically two transitions, $t$ and $t+f$, are
-sampled from the same episode in the replay memory. The goal for the
-later transition $\goal_{t+f}$ is assumed to the pseudo-goal for the
-first transition.  A new transition is generated for the time step $t$
-with reward re-computed with $\goal_{t+f}$ as the desired goal,
-$(\state_{t}, \act_t, \state_{t+1}, \Rew(\state_t, \act_t,
-\goal_{t+f})$.
-
+pseudo-goal sampling. More specifically two transitions are
+sampled from the same episode in the replay buffer for times $t$ and $t+f$.
+The achieved goal $\goal_{t+f}$ is assumed as the pseudo-goal.
+An updated transition is generated for the time step $t$
+with reward re-computed as if $\goal_{t+f}$ was the desired goal,
+$(\state_{t}, \act_t, \state_{t+1}, \Rew(\state_t, \act_t, \goal_{t+f}))$.
+Such updated transition are used as samples to learn the GCVF.
 
 
 
