@@ -23,23 +23,20 @@ start states with specified goals. GCVFs, in turn, are used to compute
 % assumed that to learn to achieve goals, goal locations must themselves
 % must be associated with reward. This however is not the case. We
 % introduce ....
-To associate goals with high rewards, these algorithms require the use
-of \emph{goal-rewards}.
-This requirement conditions reward functions on the desired goals, $R(s,a,g)$.
+State-of-the-art MGRL algorithms use \emph{goal-rewards} to associate
+the achievemnt of goals with high reward.
+This conditions reward functions on the desired goals, $R(s,a,g)$.
 For example, in the Fetch-Push task \citep{plappert2018multi} of moving
 a block to a given location on a table, every movement incurs a ``-1''
 reward while reaching the desired goal returns a ``0'' reward. 
 This dependence introduces additional reward resampling steps in
-algorithms like Hindsight Experience Replay (HER) \citep{andrychowicz2017hindsight}. 
+algorithms like Hindsight Experience Replay (HER)
+\citep{andrychowicz2017hindsight}, 
 where failed experiences are
 re-evaluated as succesful by relabelling reached states to be
 pseudo-desired goals. Due to the dependence of the reward function on the goal,
 the relabelling of every pseudo-goal requires an independent
-\emph{reward-recomputation} step, which cannot always be computed
-cheaply. In the Fetch-Push task, if the arm were to be
-surrounded by objects and the reward was proportional to collisions with
-them, reward recomputation would require the separate modelling of
-object collisions and arm dynamics. 
+\emph{reward-recomputation} step which can be expensive. 
 
 %This leads to the
 %requirement of \emph{reward-recomputation}, which is that these reward functions can be
@@ -67,13 +64,13 @@ the student is not incentivized to find specific goal locations (i.e.
 no goal rewards) but is aware of the effort required to travel between
 points around the university. When tasked with
 finding a goal classroom, the student can chain together these
-path efforts to find the least effort path to the
+path efforts to find the least-effort path to the
 classroom. 
 %
-Based on this intuition of least effort paths, we redefine GCVFs to be
+Based on this intuition of least-effort paths, we redefine GCVFs to be
 the expected \emph{path-reward} that is learned for all possible
 start-goal pairs. We  
-introduce a \emph{one-step loss} that assumes single steps paths 
+introduce a \emph{one-step loss} that assumes one step paths 
 to be the maximum reward paths between adjacent pairs.
 Under this interpretation, the \emph{Bellman equation} chooses and chains
 together one-step paths to find longer maximum reward paths. 
@@ -84,7 +81,7 @@ reward computation.
 
 % Detail the Floyd-Warshall contribution
 In this work, we also extend a closely related algorithm, Floyd-Warshall Reinforcement
-Learning (FWRL) \citep{dhiman2018floydwarshall} to use parametric
+Learning (FWRL) \citep{dhiman2018floydwarshall} learn to use parametric
 function approximators instead of tabular functions. Similar to our
 re-definition of GCVFs, FWRL learn a goal-conditioned Floyd-Warshall function
 that represents path rewards instead of future rewards.

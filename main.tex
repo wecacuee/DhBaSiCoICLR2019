@@ -52,18 +52,17 @@ rather than Goal Rewards}
     problems such that the reward formulation depends on the goals,
     associating them with high reward.
     This dependence introduces additional goal reward resampling steps 
-    in algorithms like Hindsight Experience Replay which reuse
+    in algorithms like Hindsight Experience Replay (HER) which reuse
     episodes in which the agent fails to reach the goal by recomputing
     rewards as if reached states were psuedo-desired goals. 
     We propose a reformulation of goal-conditioned value functions for
-    MGRLs that yield a similar algorithm, while
+    MGRL that yields a similar algorithm, while
     removing the dependence of reward functions on the goal.
     Our formulation thus obviates the requirement of reward-recomputation that
     is needed by HER and its extensions.
-    We also extend and
-    evaluate the
-    Floyd-Warshall Reinforcement Learning algorithm from tabular domains to deep
-    neural networks. Our results are competetive with HER while
+    We also extend a closely related algorithm,
+    Floyd-Warshall Reinforcement Learning for tabular domains, to deep
+    neural networks for use as a baseline. Our results are competetive with HER while
     substantially improving sampling efficiency in terms of reward
     computation. 
 \end{abstract}
