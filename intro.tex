@@ -97,11 +97,12 @@ compositionality constraints are already captured by other loss terms.
 In summary, the  contributions of this work are twofold. Firstly, we
 reinterpret goal-conditioned value functions as expected path-rewards
 and introduce one-step loss thereby removing their dependency on
-goal-rewards and reward-resampling. We showcase how this leads to improved sample efficiency in  terms
-of reward computation.
+goal-rewards and reward-resampling. We showcase how this leads to
+improved sample efficiency in  terms of reward computation. We thus
+extend algorithms like HER to domains where reward recomputation is
+expensive or infeasible.
 Secondly, we extend the tabular Floyd-Warshal Reinforcement Learning to
-use deep neural networks.
-
+use deep neural networks. 
 
 %% There is inherent structure in the formulation of these functions
 %% thathas been ignored. Dhiman et al introduced structure in the space
@@ -144,8 +145,8 @@ use deep neural networks.
 \begin{figure}%
   \includegraphics[width=\columnwidth]{./media/task-visuals-from-plappert.pdf}%
   \label{fig:envs}%
-  \caption{\citet{plappert201802multigoalrl} introduce challenging tasks on
-Fetch and Shadow Dextrous hands. We use these tasks for our experiments.
+  \caption{\citet{plappert2018multi} introduce challenging tasks on the
+Fetch robot and the Shadow Dextrous hand. We use these tasks for our experiments.
     Images are taken from the technical report.}%
 \end{figure}%
 % 
