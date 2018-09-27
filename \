@@ -72,7 +72,7 @@ classroom.
 %
 Based on this intuition of least effort paths, we redefine GCVFs to be
 the expected \emph{path-reward} that is learned for all possible
-start-goal pairs. We  
+start-goal pairs. Instead of goal rewards, we  
 introduce a \emph{one-step loss} that assumes single steps paths 
 to be the maximum reward paths between adjacent pairs.
 Under this interpretation, the \emph{Bellman equation} chooses and chains

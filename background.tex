@@ -1,9 +1,9 @@
 \section{Background}
 
-An RL problem is formalized as a Markov Decision Process (MDP)
+An reinforcement learning (RL) problem is formalized as a Markov Decision Process (MDP)
 \citep{sutton1998reinforcement}. A MDP governs
 an evolving sequence of state-action-reward triples $[(\state_0, \act_0,
-\rew_0), \dots, (\state_T, \act_T, \rew_T)]$, that is full governed
+\rew_0), \dots, (\state_T, \act_T, \rew_T)]$, that is fully governed
 by the five tuple $(\State, \Action, \Trans, \Rew, \discount)$, where $\State$ is the
 state space, $\Action$ is the action space, $\Trans(\state,\act) : \State \times \Action
 \rightarrow \State$ is the system dynamics, $\Rew(\state, \act) : \State \times \Action
@@ -38,7 +38,7 @@ an action-value function, $\Q(\state, \act)$:
 where $T$ is the episode length.
 %
 When the policy $\policy$ is optimal, the $\Q$-function satisfies the
-\emph{Bellman equation}.
+\emph{Bellman equation} \citep{bellman1954theory}.
 %which is used to learn the function
 %approximator, $\Q_{*}(\state,\act; \param_\Q)$:
 %
@@ -55,9 +55,6 @@ When the policy $\policy$ is optimal, the $\Q$-function satisfies the
   \label{eq:bellman}
 \end{align}%
 %
-\newcommand{\Qstar}{\Q_{*}}
-\newcommand{\Qtgt}{\Q_{\text{tgt}}}
-\newcommand{\ytgt}{y_t}
 The optimal policy can be computed from $\Q_{*}$ greedily, 
 $\policy_*(\state_t) = \arg \max_{\act \in \Action} \Q_*(\state_t,
 \act)$.
@@ -66,7 +63,7 @@ $\policy_*(\state_t) = \arg \max_{\act \in \Action} \Q_*(\state_t,
 %the $\Q_{*}$-function is approximated, the optimal policy is computed
 %greediliy, $\policy_*(\state_t) = \arg \max_{\act \in \Action}
 %\Q_*(\state_t, \act)$.
-In DQN, \citet{mnih2013playing} formulate a loss function based on 
+In \emph{Deep Q-Networks} (DQN), \citet{mnih2013playing} formulate a loss function based on 
 the Bellman equation to approximate the optimal $\Qstar$-function using
 a deep neural network, $\Q_m$:
 %
@@ -101,7 +98,7 @@ deep deterministic policy-gradients
 policy with a policy network $\policy_{\text{tgt}}(\state; \param_\policy)$ replacing the $\max$
 operator in $\ytgt$. The target thus becomes 
 $ \ytgt = \Rew(\state_t, \act_t) + \discount
-\Qtgt(\state_{t+1}, \policy_{\text{tgt}}(\state_{t+1}; \param_\policy); \param_{\Qtgt}) $ and the
+\Qtgt(\state_{t+1}, \policy_{\text{tgt}}(\state_{t+1}; \param_\policy); \param_{\Qtgt})$ and the
 loss function changes accordingly
 %
 \newcommand{\policytgt}{\policy_\text{tgt}}%
@@ -153,7 +150,7 @@ end-effector and the desired joint angles of the robot.
 To learn the correspondences between the states and the \emph{achieved goals}, they are
 assumed to be an observable part of the Goal-MDP $[(\state_0, \act_0,
 \goal_0, \rew_0), \dots, (\state_T, \act_T, \goal_T, \rew_T)]$.
-Consequently, the MDP is fully governed by the six tuple $(\State,
+Consequently, this Goal-MDP is fully governed by the six tuple $(\State,
 \Action,\Goal, \Trans, \Rew, \discount)$. The reward, $\Rew(\state,\act,
 \goal) : \State \times \Action\times \Goal \rightarrow \R $, and policy
 $\policy(\state, \goal): \State \times \Goal \rightarrow \Action $ are

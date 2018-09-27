@@ -49,22 +49,30 @@ rather than Goal Rewards}
 \begin{abstract}
 % TODO : The term goal is overused
 % TODO : The flow is not there, what are the limitations. why do we do what we do?
-    Multi-goal reinforcement learning (MGRL) addresses the tasks where desired goal
+    Multi-goal reinforcement learning (MGRL) addresses tasks where the desired goal
     state can change for every trial. State-of-the-art algorithms model these
-    problems such that the reward formulation depends on the goal.
-    This dependence is important to associate goal locations with high rewards,
-    but it also introduces additional sampling cost in algorithms like Hindsight
-    Experience Replay. Hindsight experience replay (HER) use episodes when the agent
-    failed to reach the goal by re-sampling rewards as if the the reached states
-    were pseudo-desired-goals.
-    We propose a re-formulation of MGRL that yields to a similar algorithm, but
-    removes the dependence of reward functions on goal.
-    This formulation thus obviates the requirement of reward-recomputation that
+    problems such that the reward formulation depends on the goals,
+    associating them with high reward.
+    %it also introduces additional goal reward sampling steps in algorithms like Hindsight
+    %Experience Replay (HER). HER uses episodes in which the agent
+    %fails to reach the goal by resampling rewards as if the the reached states
+    %were pseudo-desired goals.
+    This dependence introduces additional goal reward resampling steps 
+    in algorithms like Hindsight Experience Replay which reuse
+    episodes in which the agent fails to reach the goal by recomputing
+    rewards as if reached states were psuedo-desired goals. 
+    We propose a reformulation of goal-conditioned value functions for
+    MGRLs that yield a similar algorithm, while
+    removing the dependence of reward functions on the goal.
+    Our formulation thus obviates the requirement of reward-recomputation that
     is needed by HER and its extensions.
-    This futher leads to substantially improved
-    sample efficiency in terms of reward samples. We also extend and evaluate
+    We also extend and
+    evaluate the
     Floyd-Warshall Reinforcement Learning algorithm from tabular domains to deep
-    neural networks.
+    neural networks. Our results are competetive with HER while
+    substantially improving sampling efficiency in terms of reward
+    computation. 
+
 \end{abstract}
 
 

@@ -1,4 +1,4 @@
-\section{Method}
+\section{Path Reward Based GCVFs}
 
 %\section{Goal conditioned value function: Path Reward Formulation}
 In our definition of the GCVF instead of making the reward function depend upon
@@ -50,14 +50,14 @@ This equation differs from Eq~\eqref{eq:bellman-dqn} in the
 terminal step being the step to reach the goal in this, while
 it being the end of episode in the latter.
 Hence, this formulation is equivalent to the end of episode when the goal is reached.
-This re-formulation does not require goal-rewards which in turn obviates the
-requirement for pseudo-goals and reward re-computation.
+This reformulation does not require goal rewards which in turn obviates the
+requirement for pseudo-goals and reward recomputation.
 
 \paragraph{One-Step Loss}
 To enable algorithms like HER to work under this re-formulation we need to
 recognize when the goal is reached~\eqref{eq:bellman-path-b}. This recognition
 is usually done by reception of high goal reward. Instead for this formulation,
-we propose one-step loss to serve this purpose:
+we propose a one-step loss to serve this purpose:
 %
 \begin{align}
       \LossStep(\param_\fw) &= (\fwargs{\state_{l-1}}{\act_{l-1}}{\goal_{l};\param_\fw}{*}{P} - \Rew(\state_{l-1}, \act_{l-1}))^2.
@@ -80,7 +80,7 @@ The resulting algorithm in shown in Alg~\ref{alg:floyd-warshall-deep}.
 
 \subsection{Deep Floyd-Warshall Reinforcement Learning}
 
-The GCVF redefinition and step-loss introduced in this paper are inspired by
+The GCVF redefinition and one step-loss introduced in this paper are inspired by
 the tabular formulation of Floyd-Warshall
 Reinforcement Learning (FWRL)~\citep{dhiman2018floydwarshall}.
 We extend this algorithm to use deep neural networks.

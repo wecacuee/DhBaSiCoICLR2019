@@ -1,11 +1,11 @@
 \section{Experiments}
 \label{sec:experiments}
-We all the environments  introduced in \citet{plappert201802multigoalrl} for our experiments.
+We use all the environments  introduced in \citet{plappert2018multi} for our experiments.
 Broadly the environments fall in two categories, Fetch tasks and Hand tasks.
 
-The Fetch task involves a 7-DOF robotic arm. The four tasks include Reach, Push,
+The Fetch task involves a 7-DOF robotic arm. The four tasks are Reach, Push,
 Slide and PickAndPlace.
-In the Reach task the arm's end-effector is needs to reach the a particular 3D coordinate. 
+In the Reach task the arm's end-effector is to reach the a particular 3D coordinate. 
 In the Push task a block on a table needs to be pushed to a given point on it.
 In the Slide task a puck must be slid to a desired location.
 In the Pick And Place task a block on a table must be picked up and moved to a
@@ -47,21 +47,24 @@ number of reward computations used during training.
 
 \subsection{Hyper-parameters choices}
 Unless specified all our hyper-parameters are identical to the used HER
-implementation~\citep{dhariwal2017baselines}. We note two main changes. Firstly,
+implementation~\citep{dhariwal2017baselines}. We note two main changes
+to HER to make the comparison more fair. Firstly,
 we use a smaller distance threshold.
 The environment used for HER and FWRL returns the goal-reward when the
 achieved goal is within distance threshold of the desired goal. In the absence
-of goal-rewards the distance threshold information is not utilized by our
+of goal-rewards the distance threshold information is not used by our
 method.
-To make the comparisons more fair we reduce the distance threshold to 1cm which
+We reduce the distance threshold to 1cm which
 is reduction by a factor of 5.
 
-Secondly, due to hardware limitations we run all experiments on six core each
+Secondly, due to hardware limitations we run all experiments on six
+cores each
 while HER uses 19, which causes smaller batches to be used compared to the
-published results. This may in-turn lead to differences in the HER results.
+published results. This may in turn lead to differences in the HER results.
 
-However, all experiments are run with the same hyper-parameters and random seeds
-to ensure that all differences are purely due to modifications in the algorithms.
+However, all experiments are run with the same hyper-parameters and
+random seeds to ensure that all variations in performance are purely due
+to differences between the algorithms.
 
 \subsection{Results}
 % Due to space limitations and in the interest of clarity we show a subset our experiments across both platforms that emphasize both strengths and weaknesses of our algorithm.
