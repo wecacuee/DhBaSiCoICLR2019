@@ -2,12 +2,17 @@
 %
 \begin{figure}%
   \def\frac{0.24}
-  % Ours with and without step loss
-  \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-with-without-step-loss/FetchPush-6efc1de-ddpgepoch-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-with-without-step-loss/FetchPush-6efc1de-ddpgepoch-test/success_rate.pdf}%
-  % Ours with and without goal rewards
-  \includegraphics[width=\frac\columnwidth]{media/res/ablate-ours-with-goal-reward/FetchPickAndPlace-dqstepoch-test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/ablate-ours-with-goal-reward/FetchPickAndPlace-dqstepoch-test/ag_g_dist.pdf}%
+  \begin{minipage}[b]{0.5\linewidth}
+    % Ours with and without step loss
+    \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-with-without-step-loss/FetchPush-6efc1de-ddpgepoch-test/ag_g_dist.pdf}%
+    \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-with-without-step-loss/FetchPush-6efc1de-ddpgepoch-test/success_rate.pdf}%
+    \subcaption{(a) Do we }\label{fig:with-and-without-step-loss-a}
+  \end{minipage}
+  \begin{minipage}[b]{0.5\linewidth}
+    % Ours with and without goal rewards
+    \includegraphics[width=\frac\columnwidth]{media/res/ablate-ours-with-goal-reward/FetchPickAndPlace-dqstepoch-test/success_rate.pdf}%
+    \includegraphics[width=\frac\columnwidth]{media/res/ablate-ours-with-goal-reward/FetchPickAndPlace-dqstepoch-test/ag_g_dist.pdf}%
+  \end{minipage}
   {.\tiny\color{blue}\hspace{0.8cm}(a) Distance on Epochs \hspace{1.05cm}(b) Distance on
     reward computes
     \hspace{0.70cm} (c) Success rate on epochs \hspace{0.9cm} (d) Success rate on reward computes}
