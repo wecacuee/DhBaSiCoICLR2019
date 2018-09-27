@@ -22,7 +22,7 @@ not reach the goal, the GCVF is defined to be negative infinity. This first term
 \eqref{eq:qp-def-a} is the expected cumulative reward over
 paths from a given start state to the goal.
 This imposes the constraint that
-cyclical paths in the state space must have negative cumulative reward for the
+cyclical paths in the state space must have negative cumulative reward for 
 \eqref{eq:qp-def-a} to yield finite values. For most practical physical
 problems, this constraints naturally holds if reward is taken to be some measure of
 negative energy expenditure. For example, in the robot arm experiment, moving the
@@ -61,14 +61,15 @@ requirement for pseudo-goals and reward recomputation.
 To enable algorithms like HER to work under this reformulation we need to
 recognize when the goal is reached~\eqref{eq:bellman-path-b}. This recognition
 is usually done by the reception of high goal reward. Instead, we
-use ~\eqref{eq:bellman-path-b} as a \emph{one-step loss} that serves this purpose:
+use ~\eqref{eq:bellman-path-b} as a \emph{one-step loss} that serves
+this purpose which is one of our main contributions:
 %
 \begin{align}
       \LossStep(\param_\fw) &= (\fwargs{\state_{l-1}}{\act_{l-1}}{\goal_{l};\param_\fw}{*}{P} - \Rew(\state_{l-1}, \act_{l-1}))^2.
 \end{align}%
 %
 This loss is based on the assumption that one-step reward is the highest reward
-between adjacent start-goal states and allows us to estimate one-step
+between adjacent start-goal states and allows us to estimate the one-step
 reward between them. Once learned, the learned one step GCVF serves as
 a proxy for the reward to the last step to the goal~\eqref{eq:bellman-path-b}.
 The Bellman equation~\eqref{eq:bellman-path-a}, serves as a one-step rollout
