@@ -41,10 +41,12 @@
   \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-dqst-low_tresh_chosen-low_thresh_alt-dqst/0.001-FetchPushPR-be467dfepoch-test/ag_g_dist.pdf}%
   \subcaption{Distance from goal}\label{fig:distance}
 \end{minipage}
-  \caption{Effects of distance threshold on HER and our method on Fetch Push
-task. Although the success rate decreases as the distance threshold decreases,
-the distance to the goal is not affected. For HER, the distance to the goal
-reaches lower values with smaller distance thresholds.}%
+  \caption{We measure the sensitive of HER and our method to the
+    dsitance-threshold ($\episilon$) with respect to the success-rate
+    and distance-from-goal metrics. Both algorithms success-rate is
+    senstive the threshold while only HER's distance-from-goal is
+    affected by it. 
+}%
   \label{fig:with-different-distance-thresholds}%
 \end{figure}%
 % 
@@ -74,10 +76,12 @@ threshold information that decides whether the agent has reached the goal or
 not. This information is available to HER. To understand the
 sensitivity of our algorithm and HER on this parameter, we vary it over
 0.05 (the original HER value), 0.01 and 0.001 meters
-(Figure~\ref{fig:with-different-distance-thresholds}). Results show that
+(Fig.~\ref{fig:with-different-distance-thresholds}). Results show that
 for the success-rate metric, which is itself a function of this
-parameter, both algorithms are affected equally. For the distance-from-goal,
-only HER is affected. This fits our expectations as set up in 
+parameter, both algorithms are affected equally
+(Fig.~\ref{fig:success-rate}). 
+For the distance-from-goal,
+only HER is affected (Fig.~\ref{fig:distance}). This fits our expectations as set up in 
 section~\ref{sec:hyperparams}.
 
 
