@@ -25,14 +25,6 @@ certain goal orientation.
 Snapshots of all these tasks can be found in Figure~\ref{fig:envs}. Note that
 these tasks do not take visual input, but only joint angles from the arm and the hand.
 
-%
-\begin{figure}%
-  \includegraphics[width=\columnwidth]{./media/task-visuals-from-plappert.pdf}%
-  \label{fig:envs}%
-  \caption{\citet{plappert201802multigoalrl} introduce challenging tasks on
-Fetch and Shadow Dextrous hands. We use these tasks for our experiments.}%
-\end{figure}%
-% 
 
 \subsection{Metrics}
 Similar to prior work, we evaluate all experiments on two metrics: the success
@@ -49,6 +41,9 @@ comparable results of our method to the baselines.
 To emphasize that our method does not require goal-reward
 and reward re-computation, we plot these metrics against
 number of reward computations used during training.
+
+%
+\input{figure_fetch}
 
 \subsection{Hyper-parameters choices}
 Unless specified all our hyper-parameters are identical to the used HER
@@ -82,44 +77,6 @@ Slide task the opposite is true.
 When the number of reward computations is take into account our method learns
 much faster than across all tasks.
 
-%
-\begin{figure}%
-  \def\frac{0.24}
-  \rotatebox{90}{\hspace{2em}\color{blue}{\tiny Fetch Reach}}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchReachPR-v1-dqst/epoch-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchReachPR-v1-dqst/reward_computes-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchReachPR-v1-dqst/epoch-test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchReachPR-v1-dqst/reward_computes-test/success_rate.pdf}\\
-  \rotatebox{90}{\hspace{2em}\color{blue}{\tiny Fetch Push}}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchPushPR-v1-dqst/epoch-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchPushPR-v1-dqst/reward_computes-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchPushPR-v1-dqst/epoch-test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchPushPR-v1-dqst/reward_computes-test/success_rate.pdf}\\
-  \rotatebox{90}{{\tiny\hspace{1em} \color{blue}{Fetch Pick And Place}}}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchPickAndPlacePR-v1-dqst/epoch-test/ag_g_dist.pdf}
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchPickAndPlacePR-v1-dqst/reward_computes-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchPickAndPlacePR-v1-dqst/epoch-test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchPickAndPlacePR-v1-dqst/reward_computes-test/success_rate.pdf}\\
-  \rotatebox{90}{\tiny\hspace{2em}\color{blue}{Fetch Slide}}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchSlidePR-v1-dqst/epoch-test/ag_g_dist.pdf}
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchSlidePR-v1-dqst/reward_computes-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchSlidePR-v1-dqst/epoch-test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-FetchSlidePR-v1-dqst/reward_computes-test/success_rate.pdf}\\
-  {.\tiny\color{blue}\hspace{0.8cm}(a) Distance on Epochs \hspace{1.05cm}(b) Distance on
-    reward computes
-    \hspace{0.70cm} (c) Success rate on epochs \hspace{0.9cm} (d) Success rate on reward computes}
-  \label{fig:path-reward-fetch}%
-  \caption{\TODO{rephrase} We compare our method against HER~\citep{andrychowicz2016learning}
-    and FWRL~\citep{dhiman2018floydwarshall}.
-For Fetch Reach and Push tasks our method achieves comparable performance
-across both metrics, the success rate and the distance to the goal. In the Fetch
-Pick and Place task, our method outperforms the baselines. However, for Fetch
-Slide task the opposite is true.
-When the number of reward computations is take into account our method learns
-much faster than across all tasks.
-  }%
-\end{figure}
-
 \subsubsection{Hand Tasks}
 
 For the Hand tasks the distance to the goal and the success rate show different trends.
@@ -137,43 +94,4 @@ high, but when they fail, they fail with a larger distance to the goal. This is
 in contrast to our method which fails consistently but with still ends up closer
 to the goal. On an average all methods end up showing similar distance from the goal.
 
-\begin{figure}
-  \def\frac{0.24}
-  \rotatebox{90}{{\tiny \hspace{0.5cm} \color{blue}{Hand Reach}}}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandReachPR-v0-dqst/epoch-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandReachPR-v0-dqst/reward_computes-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandReachPR-v0-dqst/epoch-test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandReachPR-v0-dqst/reward_computes-test/success_rate.pdf}\\
-  \rotatebox{90}{{\tiny \hspace{1em} \color{blue}{Hand Block Rotate}}}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulateBlockRotateXYZPR-v0-dqst/epoch-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulateBlockRotateXYZPR-v0-dqst/reward_computes-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulateBlockRotateXYZPR-v0-dqst/epoch-test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulateBlockRotateXYZPR-v0-dqst/reward_computes-test/success_rate.pdf}\\
-  \rotatebox{90}{{\tiny \hspace{0.7cm} \color{blue}{Hand Egg}}}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulateEggFullPR-v0-dqst/epoch-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulateEggFullPR-v0-dqst/reward_computes-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulateEggFullPR-v0-dqst/epoch-test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulateEggFullPR-v0-dqst/reward_computes-test/success_rate.pdf}\\
-  \rotatebox{90}{{\tiny \hspace{0.5cm} \color{blue}{Hand Pen Rotate}}}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulatePenRotate-v0-ddpg/epoch-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulatePenRotate-v0-ddpg/reward_computes-test/ag_g_dist.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulatePenRotate-v0-ddpg/epoch-test/success_rate.pdf}%
-  \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulatePenRotate-v0-ddpg/reward_computes-test/success_rate.pdf}
-  \label{fig:path-reward-hand}%
-  \caption{\TODO{rephrase}We compare our method against HER~\citep{andrychowicz2016learning}
-    and FWRL~\citep{dhiman2018floydwarshall}.
-For the Hand tasks the distance to the goal and the success rate show different trends.
-For the distance metric when plotted against epochs, we get comparable
-performance for all tasks; when plotted for reward computations we outperform
-all baselines.
-Similar trends does not hold for the success rate and we find our method to be
-consistently under-performing than the baselines across all tasks. We note that
-although all algorithms are equally far away from the goal, the success rate of
-baselines is better than our method. We conjecture that this might be because of
-high distance failure cases of the baselines. The baselines success rate is
-high, but when they fail, they fail with a larger distance to the goal. This is
-in contrast to our method which fails consistently but with still ends up closer
-to the goal. On an average all methods end up showing similar distance from the goal.
-}%
-\end{figure}%
-% 
+\input{figure_hand}

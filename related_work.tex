@@ -1,66 +1,79 @@
 \section{Related Work}
 
+Goal-conditioned tasks in reinforcement learning have been addressed in
+two majors ways. The first approach is to use vanilla reinforcement
+learning algorithms that do not explicitly separate state
+representations from goal representations
+\citep{mirowski2016learning,dosovitskiy2016learning,gupta2017cognitive,parisotto2017neural,mirowski2018learning}. 
 
-The recent surge in popularity of reinforcement learning occured with
-the introduction of \emph{Deep Q Networks} which
-learned to play atari video games from raw pixel values while beating
-human players \citep{mnih2013playing}. Subsequently,
-DQNs saw
+The second makes this separation via the use of goal-conditioned value
+functions \citep{foster2002structure,sutton2011horde}.\emph{Universal
+Value Function Appoximators} \cite{schaul2015universal} propose a
+network architecture and a factorization technique that separately
+encodes states and goals leveraging correlations in their structure.
+\emph{Temporal Difference Models} combine model-free
+and model-based RL to gain advantages from both realms. In doing so they
+learn a horizon-dependent GCVF. All these works require the use of
+goal-depndent reward functions that contrasts them from our
+contribution. 
 
-Goal-conditioned value functions have been explored extensively in the
-literature. Our work builds of the formulation of \emph{Universal Value Function
-Approximators}\cite{schaul2015universal}.  
-
-
-\subsection{Experience Replay and Target Networks}
-The use of \emph{experience replay} to learn from off-policy experiences
-and and slower-changing \emph{target
-networks} are fundamental to the succesful operation of DFWRL. Both
-methods were popularized for use in the DRL literature in
-\citet{mnih2015human}'s original DQN work. 
-
-\subsection{Curriculum Learning}
-Curriculum learning, first introduced by \citet{bengio2009curriculum},
-operates on the simple assumption that learning can in complex domains
-can be achieved by first iterating over simpler variants of the problem.
-This work builds of \emph{Hindsight Experience Replay}
-\citep{andrychowicz2017hindsight}, a form of \emph{implicit curriculum}
-wherein past failed experiences are relabelled with goal states that in
-turn significantly accelerates learning. 
+\emph{Hindsight Experience Replay} \cite{andrychowicz2017hindsight}
+propose techniques for resampling state-goal pairs from failed
+experiences and show how this leads to faster learning in the presence
+of sparse rewards. In addition to depending on goal rewards, HER also
+requires the repeated recomputation of the reward function. In contrast,
+we show how removing goal reward removes this such recomputation steps.
+We utilize HER as a baseline in our work. 
 
 
-\subsection{Goal conditioned value functions}
-Several variants of goal-conditioned value functions have been explored
-extensively in the literature
-\citep{sutton2011horde,schaul2015universal}.  Driven by the idea that
-simulataneously learning several tasks leads to better generalizability
-than learning a single tasks \citep{pong2018temporal}, goal-conditioned
-value functions have been shown to possess value in manipulation
-\citep{plappert2018multi,peng2018sim} and navigation domains
-\citep{zhang2017deep,mirowski2018learning}. Aside from Dhiman et. al.,
-while much work has utilized these specialized value functions to learn
-how to solve complicated tasks, we were unable to find any other work
-that leveraged the structure in the space of these functions to
-accelerate and improve learning. 
+Other work that uses the structure in the space of GCVFs to learn is
+\citet{dhiman2018floydwarshall}. This work employs compositionality
+constraints in the space of functions to accelerate learning in a
+tabular domain. While their definition of GCVFs is similar to ours, they
+still require goal-reward and our contributions can be
+seen as extension of their ideas to deep neural networks. 
 
 
-\subsection{Multi-goal Reinforcement Learning Methods (HER/TDM)}
-Learning goal-conditioned value functions have also taked a variety of
-forms. In \emph{model-free} RL, \emph{Hindsight Experience Replay} (HER)
-\citep{andrychowicz2017hindsight} represents a form of \emph{implicit
-curriculum} for training these functions. In HER, previous traversals
-are re-used for training with the goal state relabelled to be a part of
-these state traversals. HER sampling is shown to be highlight effective
-in training goal-conditioned value functions quickly and efficiently and
-is highly influential on our methods. In
-\emph{model-based} RL, \emph{Temporal Difference Models}
-\citep{pong2018temporal} derive a
-connection between model-based and model-free algorithms for
-finite-horizon problems. TDM's define and learn goal and
-horizon-conditioned value functions and showcase improved performance
-over scores and sample efficiencies over model-based baselines while
-retaining the asymptotic performance of model-free RL. Being exclusively
-\emph{model-free} and horizon-independent, DFWRL represents an
-orthogonal direction of research as compared to TDMs. 
+%\subsection{Experience Replay and Target Networks}
+%The use of \emph{experience replay} to learn from off-policy experiences
+%and and slower-changing \emph{target
+%networks} are fundamental to the succesful operation of DFWRL. Both
+%methods were popularized for use in the DRL literature in
+%\citet{mnih2015human}'s original DQN work. 
+%
+%
+%\subsection{Goal conditioned value functions}
+%Several variants of goal-conditioned value functions have been explored
+%extensively in the literature
+%\citep{sutton2011horde,schaul2015universal}.  Driven by the idea that
+%simulataneously learning several tasks leads to better generalizability
+%than learning a single tasks \citep{pong2018temporal}, goal-conditioned
+%value functions have been shown to possess value in manipulation
+%\citep{plappert2018multi,peng2018sim} and navigation domains
+%\citep{zhang2017deep,mirowski2018learning}. Aside from Dhiman et. al.,
+%while much work has utilized these specialized value functions to learn
+%how to solve complicated tasks, we were unable to find any other work
+%that leveraged the structure in the space of these functions to
+%accelerate and improve learning. 
+%
+%
+%\subsection{Multi-goal Reinforcement Learning Methods (HER/TDM)}
+%Learning goal-conditioned value functions have also taked a variety of
+%forms. In \emph{model-free} RL, \emph{Hindsight Experience Replay} (HER)
+%\citep{andrychowicz2017hindsight} represents a form of \emph{implicit
+%curriculum} for training these functions. In HER, previous traversals
+%are re-used for training with the goal state relabelled to be a part of
+%these state traversals. HER sampling is shown to be highlight effective
+%in training goal-conditioned value functions quickly and efficiently and
+%is highly influential on our methods. In
+%\emph{model-based} RL, \emph{Temporal Difference Models}
+%\citep{pong2018temporal} derive a
+%connection between model-based and model-free algorithms for
+%finite-horizon problems. TDM's define and learn goal and
+%horizon-conditioned value functions and showcase improved performance
+%over scores and sample efficiencies over model-based baselines while
+%retaining the asymptotic performance of model-free RL. Being exclusively
+%\emph{model-free} and horizon-independent, DFWRL represents an
+%orthogonal direction of research as compared to TDMs. 
 
 
