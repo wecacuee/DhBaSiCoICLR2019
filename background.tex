@@ -168,13 +168,13 @@ HER solves this problem by reusing these failed experiences for learning.
 They recompute reward to relabel states in these experiences as desired pseudo-goals.
 
 In our experiments, we employ HER's \emph{future} strategy for
-pseudo-goal sampling. More specifically two transitions are
-sampled from the same episode in the replay buffer for times $t$ and $t+f$.
-The achieved goal $\goal_{t+f}$ is assumed as the pseudo-goal.
-An updated transition is generated for the time step $t$
+pseudo-goal sampling. More specifically HER samples, two transitions
+from the same episode in the replay buffer for times $t$ and $t+f$.
+The achieved goal $\goal_{t+f}$ is then assumed as the pseudo-goal.
+The algorithm then generates a new transition for the time step $t$
 with reward re-computed as if $\goal_{t+f}$ was the desired goal,
 $(\state_{t}, \act_t, \state_{t+1}, \Rew(\state_t, \act_t, \goal_{t+f}))$.
-Such updated transition are used as samples to learn the GCVF.
+HER uses this new transition as samples to learn the GCVF.
 
 
 
