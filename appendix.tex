@@ -1,27 +1,4 @@
 \section{Appendix}
 
-\subsection{Notation}
-
-\begin{tabular}{ll}   
-  \toprule
-  Symbol & Meaning\\
-  \midrule
-  $\state \in \State$ & State $\state$ in state space $\State$ \\
-  $\act \in \Action$ & Action $\act$ in Action space $\Action$ \\
-  $\rew \in \R$ & Observed reward \\
-  $\goal \in \Goal$ & Goal $\goal$ in goal space $\Goal$ \\
-  $f_\goal(\state_t): \State \rightarrow \Goal$ & Function to compute achieved goal \\
-  $\Rew(\state, \act) : \State \times \Action \rightarrow \R $ & Reward function \\
-  $\Rew(\state, \goal, \act) : \State \times \Goal \times \Action \rightarrow \R $ & Goal-conditioned Reward function \\
-  $\TransFull$ & Transition function \\
-  $\discount$ & Discount factor \\
-  MDP=$(\State, \Action, \Trans, \Rew, \discount)$& Markov Decision Process \\
-  $\policy(\state): \State \rightarrow \Action $ & Policy function \\
-  $\policy(\state, \goal): \State \times \Goal \rightarrow \Action $ & Goal conditioned Policy function \\
-  $\Q_\policy(\state, \act; \param_\Q) = \E_\policy[ \sum_{k=t}^\infty \discount^{k-t} \Rew(\state_k, \act_k) | \state_t = \state, \act_t = \act ] $ & $Q$-function \\
-  $\Q^*(\state, \act; \param_\Q) = \arg \max_\policy \Q_\policy(\state, \act; \param_\Q)$ & Optimal $Q$-function \\
-  $\fwargs{\state}{\act}{\goal^*}{\policy}{} = \E_\policy[ \sum_{k=t}^\infty \discount^{k-t}\Rew(\state_k, \goal^*, \act_k) | \state_t = \state, \act_t = \act]$ & Goal conditioned Q-function \\
-  \bottomrule
-\end{tabular}
 
 \input{algorithm-her-pr}
