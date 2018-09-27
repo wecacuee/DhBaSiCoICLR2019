@@ -1,10 +1,11 @@
 \section{Background}
 
 A reinforcement learning (RL) problem is formalized as a Markov Decision Process (MDP)
-\citep{sutton1998reinforcement}. A MDP governs
-an evolving sequence of state-action-reward triples $[(\state_0, \act_0,
-\rew_0), \dots, (\state_T, \act_T, \rew_T)]$, that is fully governed
-by the five tuple $(\State, \Action, \Trans, \Rew, \discount)$, where $\State$ is the
+\citep{sutton1998reinforcement}. A MDP is defined by a five tuple $(\State,
+\Action, \Trans, \Rew, \discount)$, that governs
+a sequence of state-action-reward triples $[(\state_0, \act_0,
+\rew_0), \dots, (\state_T, \act_T, \rew_T)]$.
+$\State$ is the
 state space, $\Action$ is the action space, $\Trans(\state,\act) : \State \times \Action
 \rightarrow \State$ is the system dynamics, $\Rew(\state, \act) : \State \times \Action
 \rightarrow \R $ is the reward function and $\discount$ is the discount
@@ -26,7 +27,7 @@ the focus of this work.
 
 \subsection{Deep Reinforcement learning}
 
-A number of reinforcement learning algorithms use parameteric function
+A number of reinforcement learning algorithms use parametric function
 approximators to estimate the return in the form of 
 an action-value function, $\Q(\state, \act)$:
 %
@@ -96,7 +97,8 @@ correlation in the samples and thus leading to faster learning.
 In this work, we use an extension of DQN to continuous action spaces called
 deep deterministic policy-gradients
 (DDPG)~\citep{lillicrap2015continuous}. DDPG approximates the
-policy with a policy network $\policy_{\text{tgt}}(\state; \param_\policy)$ replacing the $\max$
+policy with a policy network $\policy_{\text{tgt}}(\state; \param_\policy)$ that
+replaces the $\max$
 operator in $\ytgt$. The target thus becomes 
 $ \ytgt = \Rew(\state_t, \act_t) + \discount
 \Qtgt(\state_{t+1}, \policy_{\text{tgt}}(\state_{t+1}; \param_\policy); \param_{\Qtgt})$ and the
@@ -130,11 +132,10 @@ loss function changes accordingly:
 
 \subsection{Multi-goal Reinforcement learning}
 Multi-Goal Reinforcement Learning~\citep{plappert2018multi} focuses on problems
-in which agents must traverse to a given goal that changes from
-episode to episode.
+where the desired goal state can change for every episode.
 State-of-the-art MGRL algorithms learn a goal-conditioned value
 function (GCVF), $\fwargs{\state}{\act}{\goal}{}{}$, which is defined
-similar to the $\Q$-function (Eq~\ref{eq:q-def}), but with an additional
+similar to the $\Q$-function \eqref{eq:q-def}, but with an additional
 dependence on the desired goal specification $\goal \in \Goal$ :
 %
 \begin{align}
@@ -146,26 +147,27 @@ dependence on the desired goal specification $\goal \in \Goal$ :
 %
 The structure of the goal specification, $\goal \in \Goal$, can be
 arbitrary. For example, in a robotic
-arm experiment possible goal specifications include the desired position of the
+arm experiment, possible goal specifications include the desired position of the
 end-effector and the desired joint angles of the robot.
-To learn the correspondences between the states and the \emph{achieved goals}, they are
-assumed to be an observable part of the Goal-MDP $[(\state_0, \act_0,
+The states and \emph{achieved goals} are assumed to be an observable part of the
+Goal-MDP to enable the agent to learn the correspondences between them,
+$[(\state_0, \act_0,
 \goal_0, \rew_0), \dots, (\state_T, \act_T, \goal_T, \rew_T)]$.
 Consequently, this Goal-MDP is fully governed by the six tuple $(\State,
 \Action,\Goal, \Trans, \Rew, \discount)$. The reward, $\Rew(\state,\act,
 \goal) : \State \times \Action\times \Goal \rightarrow \R $, and policy
 $\policy(\state, \goal): \State \times \Goal \rightarrow \Action $ are
-thereby also conditioned on goal information.
+also in turn conditioned on goal information.
 
 
 \paragraph{Hindsight Experience Replay}
 HER~\citep{andrychowicz2017hindsight}
-builds upon this definition of GCVFs.  The main insight of HER is that there is
+builds upon this definition of GCVFs \eqref{eq:q-def}.  The main insight of HER is that there is
 no valuable feedback from the environment when the agent does not reach
 the goal. This is further exacerbated when goals are
 sparse in the state-space. 
 HER solves this problem by reusing these failed experiences for learning.
-They recompute reward to relabel states in these experiences as desired pseudo-goals.
+It recomputes a reward for each reached state by relabeling them as pseudo-goals.
 
 In our experiments, we employ HER's \emph{future} strategy for
 pseudo-goal sampling. More specifically HER samples, two transitions

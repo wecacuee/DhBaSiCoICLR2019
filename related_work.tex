@@ -13,24 +13,23 @@ The second approach makes this separation explicit via the use of goal-condition
 functions \citep{foster2002structure,sutton2011horde}. \emph{Universal
 Value Function Appoximators} \citep{schaul2015universal} propose a
 network architecture and a factorization technique that separately
-encodes states and goals, leveraging correlations in their structure.
+encodes states and goals, taking advantage of correlations in their representations.
 \emph{Temporal Difference Models} combine model-free
-and model-based RL to gain advantages from both realms. In doing so, they
-learn a horizon-dependent GCVF. All these works require the use of
+and model-based RL to gain advantages from both realms by defining and learning
+a horizon-dependent GCVF. All these works require the use of
 goal-dependent reward functions and define GCVFs as future-rewards instead of
 path-rewards, contrasting them from our contribution. 
 
-\citet{andrychowicz2017hindsight} propose \emph{Hindsight Experience Replay},
-a technique for resampling state-goal pairs from failed experiences,
-and show how this leads to faster learning in the presence
-of sparse rewards. In addition to depending on goal rewards, HER also
-requires the repeated recomputation of the reward function. In contrast,
-we show how removing goal rewards removes the need for such
-recomputations.
-We utilize HER as a baseline in our work. 
+Unlike our approach, \citet{andrychowicz2017hindsight} propose \emph{Hindsight Experience Replay},
+a technique for resampling state-goal pairs from failed experiences; which leads
+to faster learning in the presence of sparse rewards. In addition to depending
+on goal rewards, HER also requires the repeated recomputation of the reward
+function. In contrast, we show how removing goal rewards removes the need for
+such recomputations. We utilize HER as a baseline in our work.
 
-Other work that uses the structure of the space of GCVFs to learn is
-\citet{dhiman2018floydwarshall}. This work employs compositionality constraints
+\citet{dhiman2018floydwarshall} also use the structure of the space of GCVFs to
+learn.
+This work employs compositionality constraints
 in the space of these functions to accelerate learning in a tabular domain. While
 their definition of GCVFs is similar to ours, they still require
 goal-rewards and do not employ one-step loss. We extend their
