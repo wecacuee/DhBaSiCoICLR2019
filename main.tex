@@ -47,16 +47,10 @@ rather than Goal Rewards}
 
 \maketitle
 \begin{abstract}
-% TODO : The term goal is overused
-% TODO : The flow is not there, what are the limitations. why do we do what we do?
     Multi-goal reinforcement learning (MGRL) addresses tasks where the desired goal
     state can change for every trial. State-of-the-art algorithms model these
     problems such that the reward formulation depends on the goals,
     associating them with high reward.
-    %it also introduces additional goal reward sampling steps in algorithms like Hindsight
-    %Experience Replay (HER). HER uses episodes in which the agent
-    %fails to reach the goal by resampling rewards as if the the reached states
-    %were pseudo-desired goals.
     This dependence introduces additional goal reward resampling steps 
     in algorithms like Hindsight Experience Replay which reuse
     episodes in which the agent fails to reach the goal by recomputing
@@ -72,7 +66,6 @@ rather than Goal Rewards}
     neural networks. Our results are competetive with HER while
     substantially improving sampling efficiency in terms of reward
     computation. 
-
 \end{abstract}
 
 

@@ -1,6 +1,6 @@
 \section{Background}
 
-An reinforcement learning (RL) problem is formalized as a Markov Decision Process (MDP)
+A reinforcement learning (RL) problem is formalized as a Markov Decision Process (MDP)
 \citep{sutton1998reinforcement}. A MDP governs
 an evolving sequence of state-action-reward triples $[(\state_0, \act_0,
 \rew_0), \dots, (\state_T, \act_T, \rew_T)]$, that is fully governed
@@ -20,7 +20,8 @@ the return to be finite for infinite horizons.
 Reinforcement learning is typically formulated in single goal
 contexts. More recently there has been interest in multi-goal
 problems
-\citep{andrychowicz2017hindsight,pong2018temporal,plappert2018multi}.
+\citep{andrychowicz2017hindsight,pong2018temporal,plappert2018multi}, which is
+the focus of this work.
 
 
 \subsection{Deep Reinforcement learning}
@@ -129,7 +130,7 @@ loss function changes accordingly
 
 \subsection{Multi-goal Reinforcement learning}
 Multi-Goal Reinforcement Learning~\citep{plappert2018multi} focuses on problems
-in which agents must traverse to a given goal in every episode which change from
+in which agents must traverse to a given goal that change from
 episode to episode.
 State-of-the-art MGRL algorithms learn a goal-conditioned value
 function (GCVF), $\fwargs{\state}{\act}{\goal}{}{}$, which is defined
