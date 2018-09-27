@@ -23,11 +23,12 @@
   {.\tiny\color{blue}\hspace{0.8cm}(a) Distance on Epochs \hspace{1.05cm}(b) Distance on
     reward computes
     \hspace{0.70cm} (c) Success rate on epochs \hspace{0.9cm} (d) Success rate on reward computes}
-  \caption{We compare our method against HER~\citep{andrychowicz2016learning}
-    and FWRL~\citep{dhiman2018floydwarshall} and get comparable performance for
-    Fetch Reach and Push tasks. For Pick and Place task, our method works the
-    best, while for Slide task baselines are better.
-    When the number of reward computations is take into account our method learns
-    much faster than across all tasks.}%
+    \caption{For the fetch tasks, we compare our method (red) against HER (blue) ~\citep{andrychowicz2016learning}
+    and FWRL (green) ~\citep{dhiman2018floydwarshall} for the distance-from-goal
+    and success rate metrics. Furthermore both metrics are plotted
+    against two progress measures, the number of training epochs and the number of reward
+    computations. Except for the Fetch Slide task, we get comparable or
+    better performance across the metrics and progress measures. 
+    }%
   \label{fig:fetch-results}%
 \end{figure}
