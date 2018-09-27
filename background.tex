@@ -17,7 +17,7 @@ maximizes the expected cumulative
 reward over time, $R_t = \sum_{k=t}^{\infty} \discount^{k-t}\rew_{k}$, called the
 \emph{return}. The discount factor, $\discount < 1$, forces
 the return to be finite for infinite horizons.  
-Reinforcement learning is typically formulated in single goal
+Reinforcement learning is typically formulated in single-goal
 contexts. More recently there has been interest in multi-goal
 problems
 \citep{andrychowicz2017hindsight,pong2018temporal,plappert2018multi}, which is
@@ -83,12 +83,12 @@ where
 $\ytgt = \Rew(\state_t, \act_t) + \max_{\act}\discount \Qtgt(\state_{t+1}, \act; \param_{\Qtgt}) $
 , is the \emph{target} and $\Qtgt$ is the target
 network~\citep{MnKaSiNATURE2015}.
-The target network is a slower
-changing copy of the main network that stabilizes learning.
+The target network is a slower-changing
+copy of the main network that stabilizes learning.
 \citet{MnKaSiNATURE2015} also employ \emph{replay buffers}
 that store transitions from episodes. During training, these transitions are
 sampled out of order to train the networks in an off-policy manner, avoiding
-correlation in the samples which leads to faster learning.
+correlation in the samples and thus leading to faster learning.
 % The transitions experienced are not used to update the neural network in order.
 % Instead they are stored in a replay buffer which is then sampled out of order
 % for independent transitions and updating the neural network.
@@ -100,7 +100,7 @@ policy with a policy network $\policy_{\text{tgt}}(\state; \param_\policy)$ repl
 operator in $\ytgt$. The target thus becomes 
 $ \ytgt = \Rew(\state_t, \act_t) + \discount
 \Qtgt(\state_{t+1}, \policy_{\text{tgt}}(\state_{t+1}; \param_\policy); \param_{\Qtgt})$ and the
-loss function changes accordingly
+loss function changes accordingly:
 %
 \newcommand{\policytgt}{\policy_\text{tgt}}%
 \begin{align}
@@ -130,7 +130,7 @@ loss function changes accordingly
 
 \subsection{Multi-goal Reinforcement learning}
 Multi-Goal Reinforcement Learning~\citep{plappert2018multi} focuses on problems
-in which agents must traverse to a given goal that change from
+in which agents must traverse to a given goal that changes from
 episode to episode.
 State-of-the-art MGRL algorithms learn a goal-conditioned value
 function (GCVF), $\fwargs{\state}{\act}{\goal}{}{}$, which is defined

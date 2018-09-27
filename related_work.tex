@@ -1,39 +1,39 @@
 \section{Related Work}
 
 Goal-conditioned tasks in reinforcement learning have been approached in two
-ways depending upon whether the algorithm explicitly separates state and goal
+ways, depending upon whether the algorithm explicitly separates state and goal
 representations.
 The first approach is to use vanilla reinforcement
 learning algorithms that do not explicitly make this separation
 \citep{mirowski2016learning,dosovitskiy2016learning,gupta2017cognitive,parisotto2017neural,mirowski2018learning}.
-These algorithms end up depending up on neural network architectures to
+These algorithms depend up on neural network architectures to
 carry the burden of learning the separated representations.
 
 The second approach makes this separation explicit via the use of goal-conditioned value
 functions \citep{foster2002structure,sutton2011horde}. \emph{Universal
 Value Function Appoximators} \citep{schaul2015universal} propose a
 network architecture and a factorization technique that separately
-encodes states and goals leveraging correlations in their structure.
+encodes states and goals, leveraging correlations in their structure.
 \emph{Temporal Difference Models} combine model-free
-and model-based RL to gain advantages from both realms. In doing so they
+and model-based RL to gain advantages from both realms. In doing so, they
 learn a horizon-dependent GCVF. All these works require the use of
 goal-dependent reward functions and define GCVFs as future-rewards instead of
-paths rewards which contrasts them from our contribution. 
+path-rewards, contrasting them from our contribution. 
 
-\emph{Hindsight Experience Replay} \citep{andrychowicz2017hindsight}
-propose a technique for resampling state-goal pairs from failed
-experiences and show how this leads to faster learning in the presence
+\citet{andrychowicz2017hindsight} propose \emph{Hindsight Experience Replay},
+a technique for resampling state-goal pairs from failed experiences,
+and show how this leads to faster learning in the presence
 of sparse rewards. In addition to depending on goal rewards, HER also
 requires the repeated recomputation of the reward function. In contrast,
 we show how removing goal rewards removes the need for such
 recomputations.
 We utilize HER as a baseline in our work. 
 
-Other work that uses the structure in the space of GCVFs to learn is
+Other work that uses the structure of the space of GCVFs to learn is
 \citet{dhiman2018floydwarshall}. This work employs compositionality constraints
 in the space of these functions to accelerate learning in a tabular domain. While
 their definition of GCVFs is similar to ours, they still require
-goal-rewards and do not employ the use of one-step loss. We extend their
+goal-rewards and do not employ one-step loss. We extend their
 work to deep neural networks.
 
 

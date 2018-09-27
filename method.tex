@@ -1,7 +1,7 @@
-\section{Path Reward Based GCVFs}
+\section{Path Reward-Based GCVFs}
 
 %\section{Goal conditioned value function: Path Reward Formulation}
-In our definition of the GCVF instead of making the reward function depend upon
+In our definition of the GCVF, instead of making the reward function depend upon
 the goal, we count accumulated rewards over a path, \emph{path-rewards},  only if the goal is reached. This makes
 the dependence on the goal explicit instead  of implicit to the reward formulation.
 Mathematically,
@@ -31,27 +31,30 @@ would translate to generating infinite energy .
 In all our experiments with this formulation, we use a constant
 reward of -1 for all states, $\Rew^P(\state, \act) = -1 \, \forall \state, \act$.
 
-For the cases when the agent does reach the goal \eqref{eq:qp-def-a},
+For the cases when the agent does reach the goal at time step $l$ \eqref{eq:qp-def-a},
 the Bellman equation takes the following form:
 %
 \begin{subnumcases}{
   \fwargs{\state_t}{\act_t}{\goal^*}*P =}
       \Rew^P(\state_t, \act_t) + \discount \max_{\act \in \Action}
       \fwargs{\state_{t+1}}\act{\goal^*}*P 
-      & $\text{ if } t < l-1 \text{ s. t. } \goal_l = \goal^*$
+      & $\text{ if } t < l-1$
       \label{eq:bellman-path-a}
       \\
       \Rew^P(\state_{l-1}, \act_{l-1})
-      & $\text{ if } t = l-1 \text{ s. t. } \goal_l = \goal^*$
+      & $\text{ if } t = l-1$
       \label{eq:bellman-path-b}.
 \end{subnumcases}
 % 
-This equation differs from Eq~\eqref{eq:bellman-dqn} in that the
-terminal step is now the step to reach the goal instead of being
-the time step at which the episode ends.
+Notice that terminal step in this equation is the step to reach the goal.
+This differs from Equation~\eqref{eq:bellman-dqn}, where the terminal step
+is the step at which the episode ends.
+%This equation differs from Eq~\eqref{eq:bellman-dqn} in that the
+%terminal step is now the step to reach the goal instead of being
+%the time step at which the episode ends.
 This formulation is equivalent to the end of episode occuring
 immediately when the goal is reached.
-This reformulation does not require goal rewards which in turn obviates the
+This reformulation does not require goal rewards, which in turn obviates the
 requirement for pseudo-goals and reward recomputation.
 
 \paragraph{One-Step Loss}
@@ -76,7 +79,7 @@ We modify an implementation of HER to include the step-loss term and disable goa
 rewards for our experiments.
 As in HER, we use the DDPG loss $\LossDDPG$ while
 using the ``future'' goal sampling strategy described in the paper.
-The resulting algorithm is shown in Alg~\ref{alg:floyd-warshall-deep}.
+The resulting algorithm is shown in Algorithm~\ref{alg:floyd-warshall-deep}.
 \input{algorithm-her-pr}
 
 \subsection{Deep Floyd-Warshall Reinforcement Learning}
@@ -102,13 +105,12 @@ the sum of optimal $\Q_*$ values via any intermediate state-goal pair $(\state_{
 \end{align}%
 % 
 
-We translate these constraints into loss terms and they are added to the
-ddpg loss $\LossDDPG$ and one-step loss $\LossStep$.
+We translate these constraints into loss terms and add them to the
+DDPG loss $\LossDDPG$ and one-step loss $\LossStep$.
 Taking cue from \citet{mnih2015human}, we do
 not repeat the the main online network $\Q_{m}$ in the loss term. We use
-a target
-network $\Qtgt$ and split the constraint into two loss terms. One loss term acts
-as a lower bound $\LossLo$ and the other acts as the upper bound $\LossUp$:
+a target network $\Qtgt$ and split the constraint into two loss terms. One loss term acts
+as a lower bound $\LossLo$ and the other acts as an upper bound $\LossUp$:
 %
 \begin{align}
   \LossLo &= \text{ReLU}[
@@ -129,8 +131,8 @@ Note that the above terms differ only by choice of the target and main network.
 \paragraph{FWRL Sampling}
 We augment HER sampling to additionally get the intermediate state-goal pair
 $(\state_{w}, \goal_{w})$.
-Once, a transition $(\state_t, \act_t, \rew_t, \state_{t+1})$ and a
-future goal $\goal_{t+f}$ has been sampled from the same episode, we sample
+Once a transition $(\state_t, \act_t, \rew_t, \state_{t+1})$ and a
+future goal $\goal_{t+f}$ have been sampled from the same episode, we sample
 another intermediate state and goal pair $(\state_{w}, \goal_{w})$ such that
 $t \le w \le t + f$.
 % 
