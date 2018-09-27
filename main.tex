@@ -43,20 +43,24 @@
 
 \maketitle
 \begin{abstract}
-    Multi-goal reinforcement learning addresses the tasks where goal
-    specifications are required. State-of-the-art methods in this field,
-    utilize goal-conditioned value functions in their operation.
-    Estimating these functions operate on the assumption that the
-    achievement of goal states are tied with large reward. Our first
-    contribution is the redefinition of these functions as expected
-    cumulative path rewards that allows for equally efficient learning
-    in the absence of these goal rewards. This formulation of the
-    goal-less learning of goal-conditioned value functions obviates the
-    requirement of reward-recomputation that is needed by state-of-the-art MGRL
-    algorithms. This futher leads to substantially improved reward
-    sample complexity which is our second contribution. Our third
-    contribution is the extension of the Floyd-Warshall Reinforcement
-    Learning algorithm from tabular domains to deep neural networks. 
+% TODO : The term goal is overused
+% TODO : The flow is not there, what are the limitations. why do we do what we do?
+    Multi-goal reinforcement learning (MGRL) addresses the tasks where desired goal
+    state can change for every trial. State-of-the-art algorithms model these
+    problems such that the reward formulation depends on the goal.
+    This dependence is important to associate goal locations with high rewards,
+    but it also introduces additional sampling cost in algorithms like Hindsight
+    Experience Replay. Hindsight experience replay (HER) use episodes when the agent
+    failed to reach the goal by re-sampling rewards as if the the reached states
+    were pseudo-desired-goals.
+    We propose a re-formulation of MGRL that yields to a similar algorithm, but
+    removes the dependence of reward functions on goal.
+    This formulation thus obviates the requirement of reward-recomputation that
+    is needed by HER and its extensions.
+    This futher leads to substantially improved
+    sample efficiency in terms of reward samples. We also extend and evaluate
+    Floyd-Warshall Reinforcement Learning algorithm from tabular domains to deep
+    neural networks.
 \end{abstract}
 
 
