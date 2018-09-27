@@ -8,7 +8,6 @@
   % Ours with and without goal rewards
   \includegraphics[width=\frac\columnwidth]{media/res/ablate-ours-with-goal-reward/FetchPickAndPlace-dqstepoch-test/success_rate.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/ablate-ours-with-goal-reward/FetchPickAndPlace-dqstepoch-test/ag_g_dist.pdf}%
-  \label{fig:with-and-without-step-loss}%
   \caption{
     Effects of adding the goal-reward or removing the step-loss to our method.
     The left two plots on Fetch Push task show that the step loss is critical to the working of our
@@ -16,6 +15,7 @@
     The right two plots on Fetch Pick and Place task show that goal-rewards do not help much in raising the
     performance of our method. This shows that one-step loss captures the
     information that is equivalent to the providing the goal-rewards.}
+  \label{fig:with-and-without-step-loss}%
 \end{figure}%
 % 
 
@@ -26,11 +26,11 @@
   \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-dqst-low_tresh_chosen-low_thresh_alt-ddpg/0.05-be0910cepoch-test/ag_g_dist.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-dqst-low_tresh_chosen-low_thresh_alt-dqst/0.001-FetchPushPR-be467dfepoch-test/success_rate.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-dqst-low_tresh_chosen-low_thresh_alt-dqst/0.001-FetchPushPR-be467dfepoch-test/ag_g_dist.pdf}%
-  \label{fig:with-different-distance-thresholds}%
   \caption{Effects of distance threshold on HER and our method on Fetch Push
 task. Although the success rate decreases with decrease in distance threshold,
 the distance to the goal is not affected by it. For HER the distance to the goal
 reaches lower values with smaller distance thresholds.}%
+  \label{fig:with-different-distance-thresholds}%
 \end{figure}%
 % 
 
