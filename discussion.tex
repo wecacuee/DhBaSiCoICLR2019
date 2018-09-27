@@ -7,7 +7,7 @@
     % Ours with and without step loss
     \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-with-without-step-loss/FetchPush-6efc1de-ddpgepoch-test/ag_g_dist.pdf}%
     \includegraphics[width=\frac\columnwidth]{media/res/ablate-ddpg-with-without-step-loss/FetchPush-6efc1de-ddpgepoch-test/success_rate.pdf}\\
-    \subcaption{Do we really need the step loss?}
+    \subcaption{Do we really need the step-loss?}
     \label{fig:with-and-without-step-loss-a}
   \end{minipage}
   \begin{minipage}[b]{0.5\linewidth}
@@ -19,12 +19,12 @@
     \label{fig:with-and-without-step-loss-b}
   \end{minipage}
   \caption{
-    Effects of adding the goal-reward or removing the step-loss to our method.
-    The left two plots on Fetch Push task show that the step loss is critical to the working of our
-    method in the absence of goal rewards.
-    The right two plots on Fetch Pick and Place task show that goal-rewards do not help much in raising the
-    performance of our method. This shows that one-step loss captures the
-    information that is equivalent to the providing the goal-rewards.}
+      (a) Effects of removing the step-loss from our methods. Results
+      show that it is a criticial component to learning in the absence
+      of goal rewards.  
+      (b) Adding goal rewards to our algorithm that does have an effect
+      further displaying how they are avoidable. 
+    }
   \label{fig:with-and-without-step-loss}%
 \end{figure}%
 % 
@@ -55,14 +55,16 @@ experiments on different tasks. We ask the following questions:
 \paragraph{How important is the step loss?}
 %
 We choose the Fetch-Push task for this experiment.
-We run our algorithm with no goal reward and without the step loss on Fetch Push
-task. Results show that our algorithm fails to reach the goal when the
-step-loss is remove (Fig.~\ref{fig:with-and-without-step-loss}).
+We run our algorithm with no goal reward and without the step loss on
+this task. Results show that our algorithm fails to reach the goal when the
+step-loss is removed (Fig.~\ref{fig:with-and-without-step-loss-a})
+showing it's necessity.
 
 \paragraph{What happens the goal-reward is also available to our method?}
 We run this experiment on the Fetch PickAndPlace task. We find that
 goal-rewards do not effect the performance of our algorithm further
-solidifying the avoidability of goal-reward (Fig~\ref{fig:with-and-without-step-loss}).
+solidifying the avoidability of goal-reward
+(Fig~\ref{fig:with-and-without-step-loss-b}).
 
 \paragraph{How sensitive is HER and our method to the distance-threshold?}
 In the absence of goal-rewards, our algorithm is not to able capture distance
@@ -71,8 +73,8 @@ not. This information is available to HER. To understand the
 sensitivity of our algorithm and HER on this parameter, we vary it over
 0.05 (the original HER value), 0.01 and 0.001 meters
 (Figure~\ref{fig:with-different-distance-thresholds}). Results show that
-for the success-rate metric,which is itself a function of this
-parameter, both algorithms affected equally. For the distance-from-goal,
+for the success-rate metric, which is itself a function of this
+parameter, both algorithms are affected equally. For the distance-from-goal,
 only HER is affected. This fits our expectations as set up in 
 section~\ref{sec:hyperparams}.
 
