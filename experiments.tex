@@ -66,14 +66,12 @@ weaknesses of our algorithm.
 
 \subsubsection{Fetch Tasks}
 
-For three out of the four Fetch tasks our method achieves comparable performance
+For Fetch Reach and Push tasks our method achieves comparable performance
 across both metrics, the success rate and the distance to the goal. In the Fetch
 Pick and Place task, our method outperforms the baselines. However, for Fetch
 Slide task the opposite is true.
 When the number of reward computations is take into account our method learns
 much faster than across all tasks.
-
-\subsubsection{Hand Tasks}
 
 %
 \begin{figure}%
@@ -102,14 +100,33 @@ much faster than across all tasks.
     reward computes
     \hspace{0.70cm} (c) Success rate on epochs \hspace{0.9cm} (d) Success rate on reward computes}
   \label{fig:path-reward-fetch}%
-  \caption{Our method is able achieve similar performance even without the
-goal rewards. Since our method without goal-rewards does not need reward
-recomputation, we vastly outperform other methods in terms of reward sample
-complexity.}%
+  \caption{\TODO{rephrase} We compare our method against HER~\citep{andrychowicz2016learning}
+    and FWRL~\citep{dhiman2018floydwarshall}.
+For Fetch Reach and Push tasks our method achieves comparable performance
+across both metrics, the success rate and the distance to the goal. In the Fetch
+Pick and Place task, our method outperforms the baselines. However, for Fetch
+Slide task the opposite is true.
+When the number of reward computations is take into account our method learns
+much faster than across all tasks.
+  }%
 \end{figure}
 
 \subsubsection{Hand Tasks}
 
+For the Hand tasks the distance to the goal and the success rate show different trends.
+
+For the distance metric when plotted against epochs, we get comparable
+performance for all tasks; when plotted for reward computations we outperform
+all baselines.
+
+Similar trends does not hold for the success rate and we find our method to be
+consistently under-performing than the baselines across all tasks. We note that
+although all algorithms are equally far away from the goal, the success rate of
+baselines is better than our method. We conjecture that this might be because of
+high distance failure cases of the baselines. The baselines success rate is
+high, but when they fail, they fail with a larger distance to the goal. This is
+in contrast to our method which fails consistently but with still ends up closer
+to the goal. On an average all methods end up showing similar distance from the goal.
 
 \begin{figure}
   \def\frac{0.24}
@@ -134,10 +151,20 @@ complexity.}%
   \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulatePenRotate-v0-ddpg/epoch-test/success_rate.pdf}%
   \includegraphics[width=\frac\columnwidth]{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulatePenRotate-v0-ddpg/reward_computes-test/success_rate.pdf}
   \label{fig:path-reward-hand}%
-  \caption{Effect of path reward on convergence in case of different algorithms
-on Hand tasks. Our method is able achieve similar performance even without the
-goal rewards. Since our method without goal-rewards does not need reward
-recomputation, we vastly outperform other methods in terms of reward sample
-complexity.}%
+  \caption{\TODO{rephrase}We compare our method against HER~\citep{andrychowicz2016learning}
+    and FWRL~\citep{dhiman2018floydwarshall}.
+For the Hand tasks the distance to the goal and the success rate show different trends.
+For the distance metric when plotted against epochs, we get comparable
+performance for all tasks; when plotted for reward computations we outperform
+all baselines.
+Similar trends does not hold for the success rate and we find our method to be
+consistently under-performing than the baselines across all tasks. We note that
+although all algorithms are equally far away from the goal, the success rate of
+baselines is better than our method. We conjecture that this might be because of
+high distance failure cases of the baselines. The baselines success rate is
+high, but when they fail, they fail with a larger distance to the goal. This is
+in contrast to our method which fails consistently but with still ends up closer
+to the goal. On an average all methods end up showing similar distance from the goal.
+}%
 \end{figure}%
 % 
