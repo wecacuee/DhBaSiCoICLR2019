@@ -2,7 +2,7 @@
 
 %\section{Goal conditioned value function: Path Reward Formulation}
 In our definition of the GCVF instead of making the reward function depend upon
-the goal, we count accumulated rewards over a path \emph{only if} the goal is reached. This makes
+the goal, we count accumulated rewards over a path, \emph{path-rewards},  only if the goal is reached. This makes
 the dependence on the goal explicit instead  of implicit to the reward formulation.
 Mathematically,
 %
@@ -22,12 +22,12 @@ not reach the goal, the GCVF is defined to be negative infinity. This first term
 \eqref{eq:qp-def-a} is the expected cumulative reward over
 paths from a given start state to the goal.
 This imposes the constraint that
-cyclical paths in the state space must have negative cumulative reward, for the
+cyclical paths in the state space must have negative cumulative reward for the
 \eqref{eq:qp-def-a} to yield finite values. For most practical physical
 problems, this constraints naturally holds if reward is taken to be some measure of
 negative energy expenditure. For example, in the robot arm experiment, moving the
 arm must expend energy (negative reward). Achieving a positive reward cycle
-would translate to generating infinite energy.
+would translate to generating infinite energy .
 In all our experiments with this formulation, we use a constant
 reward of -1 for all states, $\Rew^P(\state, \act) = -1 \, \forall \state, \act$.
 
@@ -46,36 +46,37 @@ the Bellman equation takes the following form:
       \label{eq:bellman-path-b}.
 \end{subnumcases}
 % 
-This equation differs from Eq~\eqref{eq:bellman-dqn} in the
-terminal step being the step to reach the goal in this, while
-it being the end of episode in the latter.
-Hence, this formulation is equivalent to the end of episode when the goal is reached.
+This equation differs from Eq~\eqref{eq:bellman-dqn} in that the
+terminal step is now the step to reach the goal instead of being
+the time step at which the episode ends.
+This formulation is equivalent to the end of episode occuring
+immediately when the goal is reached.
 This reformulation does not require goal rewards which in turn obviates the
 requirement for pseudo-goals and reward recomputation.
 
 \paragraph{One-Step Loss}
-To enable algorithms like HER to work under this re-formulation we need to
+To enable algorithms like HER to work under this reformulation we need to
 recognize when the goal is reached~\eqref{eq:bellman-path-b}. This recognition
-is usually done by reception of high goal reward. Instead for this formulation,
-we propose a one-step loss to serve this purpose:
+is usually done by the reception of high goal reward. Instead, we
+use ~\eqref{eq:bellman-path-b} as a \emph{one-step loss} that serves this purpose:
 %
 \begin{align}
       \LossStep(\param_\fw) &= (\fwargs{\state_{l-1}}{\act_{l-1}}{\goal_{l};\param_\fw}{*}{P} - \Rew(\state_{l-1}, \act_{l-1}))^2.
 \end{align}%
 %
 This loss is based on the assumption that one-step reward is the highest reward
-between adjacent start-goal state and allows us to estimate one-step path reward
-for all start and goal states. Once learned, the learned one step GCVF serves as
+between adjacent start-goal states and allows us to estimate one-step
+reward between them. Once learned, the learned one step GCVF serves as
 a proxy for the reward to the last step to the goal~\eqref{eq:bellman-path-b}.
 The Bellman equation~\eqref{eq:bellman-path-a}, serves as a one-step rollout
-to combine rewards over a shortest path to the goal.
+to combine rewards to find maximum reward paths to the goal.
 
 
 We modify an implementation of HER to include the step-loss term and disable goal
 rewards for our experiments.
 As in HER, we use the DDPG loss $\LossDDPG$ while
-using ``future'' goal sampling strategy described in the paper.
-The resulting algorithm in shown in Alg~\ref{alg:floyd-warshall-deep}.
+using the ``future'' goal sampling strategy described in the paper.
+The resulting algorithm is shown in Alg~\ref{alg:floyd-warshall-deep}.
 \input{algorithm-her-pr}
 
 \subsection{Deep Floyd-Warshall Reinforcement Learning}
@@ -83,7 +84,7 @@ The resulting algorithm in shown in Alg~\ref{alg:floyd-warshall-deep}.
 The GCVF redefinition and one step-loss introduced in this paper are inspired by
 the tabular formulation of Floyd-Warshall
 Reinforcement Learning (FWRL)~\citep{dhiman2018floydwarshall}.
-We extend this algorithm to use deep neural networks.
+We extend this algorithm to use with deep neural networks.
 Unfortunately, the algorithm itself does not show significant improvement over
 the baselines. However, the intuitions gained in its implementation led to
 the contributions of this paper. 
@@ -103,8 +104,9 @@ the sum of optimal $\Q_*$ values via any intermediate state-goal pair $(\state_{
 
 We translate these constraints into loss terms and they are added to the
 ddpg loss $\LossDDPG$ and one-step loss $\LossStep$.
-Taking cue from \citet{MnKaSiNATURE2015}, we do
-not repeat the main online network $\Q_{m}$ in the loss term. We use target
+Taking cue from \citet{mnih2015human}, we do
+not repeat the the main online network $\Q_{m}$ in the loss term. We use
+a target
 network $\Qtgt$ and split the constraint into two loss terms. One loss term acts
 as a lower bound $\LossLo$ and the other acts as the upper bound $\LossUp$:
 %
@@ -130,7 +132,7 @@ $(\state_{w}, \goal_{w})$.
 Once, a transition $(\state_t, \act_t, \rew_t, \state_{t+1})$ and a
 future goal $\goal_{t+f}$ has been sampled from the same episode, we sample
 another intermediate state and goal pair $(\state_{w}, \goal_{w})$ such that
-$t \le im \le t + f$.
+$t \le w \le t + f$.
 % 
 % \begin{align}
 %   \LossTrieq &= |

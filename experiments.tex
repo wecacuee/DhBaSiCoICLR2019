@@ -1,29 +1,29 @@
 \section{Experiments}
 \label{sec:experiments}
-We use all the environments  introduced in \citet{plappert2018multi} for our experiments.
-Broadly the environments fall in two categories, Fetch tasks and Hand tasks.
+We use the environments introduced in \citet{plappert2018multi} for our experiments.
+Broadly the environments fall in two categories, Fetch and Hand tasks.
+Our results show that learning is possible across all environments
+without the requirement of goal-reward.
 
-The Fetch task involves a 7-DOF robotic arm. The four tasks are Reach, Push,
+The Fetch tasks involve a simulation of the Fetch robot's 7-DOF robotic arm. The four tasks are Reach, Push,
 Slide and PickAndPlace.
 In the Reach task the arm's end-effector is tasked to reach the a particular 3D coordinate. 
 In the Push task a block on a table needs to be pushed to a given point on it.
 In the Slide task a puck must be slid to a desired location.
-In the Pick And Place task a block on a table must be picked up and moved to a
+In the PickAndPlace task a block on a table must be picked up and moved to a
 3D coordinate.
 
-The Hand tasks uses simulation of Shadow dexterous hand to manipulate objects of
-different shapes and sizes. These tasks include HandReach,
+The Hand tasks use a simulation of the Shadow dexterous hand to manipulate objects of
+different shapes and sizes. These tasks are HandReach,
 HandManipulateBlockRotateXYZ, HandManipulateEggFull and HandManipulatePenRotate.
-The HandReach task needs the finger tips to reach a given configuration.
-In the HandManipulateBlockRotateXYZ, the a cubic block needs to be rotated to a
-desired orientation in the Hand.
-For HandManipulateEggFull an eggs needs to be moved and rotated to a given
-position and orientation.
-To complete the HandManipulatePenRotate task an pen needs to be rotated to a
-certain goal orientation.
+In HandReach the hand's finger tips need to reach a given configuration.
+In the HandManipulateBlockRotateXYZ, the hand needs to rotate a cubic
+block to a desired orientation.
+For HandManipulateEggFull repeats this orientation tasks with an egg.
+To HandManipulatePenRotate does so with a pen.
 
 Snapshots of all these tasks can be found in Figure~\ref{fig:envs}. Note that
-these tasks do not take visual input, but only joint angles from the arm and the hand.
+these tasks use joint angles, not visual input.
 
 
 \subsection{Metrics}
@@ -32,8 +32,8 @@ rate and the average distance to the goal. The success rate is defined as the
 fraction of episodes in which the agent is able to reach the goal within a
 pre-defined threshold region.
 % $\frac{1}{E}\sum_{e,t} \mathbbm{1}_{\|\goal_t - \goal^*\|_2 < \epsilon}$.
-The distance of the goal is euclidean distance of the
-achieved goal from the desired goal.
+The metric \emph{distance of the goal} is the euclidean distance between
+the achieved goal and the desired goal.
 % $\|\goal_t - \goal^*\|_2$.
 These metrics are plotted against the number of training epochs showing
 comparable results of our method to the baselines.
