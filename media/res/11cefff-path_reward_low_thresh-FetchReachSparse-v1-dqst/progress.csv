@@ -1,0 +1,2 @@
+stats_g/mean,test/success_rate,test/episode,stats_o/std,stats_g/std,train/success_rate,epoch,test/reward_compute_count,train/reward_compute_count,train/critic_loss,test/ag_g_dist,train/episode,stats_o/mean,test/mean_Q
+0.8799607,0.016666666666666666,20.0,0.031784452,0.09990846,0.0,0,1000.0,1000.0,0.07127328,0.18849687,20.0,0.26386756,-1.2787458
