@@ -35,6 +35,7 @@ For the cases when the agent does reach the goal at time step $l$ \eqref{eq:qp-d
 the Bellman equation takes the following form:
 %
 \begin{subnumcases}{
+    \label{eq:bellman-path}
   \fwargs{\state_t}{\act_t}{\goal^*}*P =}
       \Rew^P(\state_t, \act_t) + \discount \max_{\act \in \Action}
       \fwargs{\state_{t+1}}\act{\goal^*}*P 
@@ -72,15 +73,31 @@ This loss is based on the assumption that one-step reward is the highest reward
 between adjacent start-goal states and allows us to estimate the one-step
 reward between them. Once learned, it serves as
 a proxy for the reward to the last step to the goal~\eqref{eq:bellman-path-b}.
-The Bellman equation~\eqref{eq:bellman-path-a}, serves as a one-step rollout
+The Bellman equation~\eqref{eq:bellman-path}, serves as a one-step rollout
 to combine rewards to find maximum reward paths to the goal.
+
+One-step loss is different from the terminal step
+of Q-Learning because one-step loss is applicable to every transition unlike the
+terminal step. However, one-step loss can be thought of as Q-Learning where
+every transition is a one-step episode where the reached goal is the pseudo
+goal.
+
+One-step loss also different from the terminal condition in
+\citet{kaelbling1993learning}. \citet{kaelbling1993learning} defines
+$\fwargs{.}{.}{.}{*}{P}$ similar to Eq~\eqref{eq:bellman-path}
+except the terminal condition is defined as $\fwargs{\state_t}{\act}{\goal*}{*}{P}
+= 0$ when $\goal_t = \goal^*$. Under the stated assumptions, the two definitions
+are equivalent but one-step loss is slightly advantageous.
+One-step loss can be applied to every transition unlike
+the \cite{kaelbling1993learning} terminal condition which can be only applied
+when $\goal_t = \goal$.
 
 
 We modify an implementation of HER to include the step-loss term and disable goal
 rewards for our experiments.
 As in HER, we use the DDPG loss $\LossDDPG$ while
 using the ``future'' goal sampling strategy described in the paper.
-The details of the resulting algorithm are shown as psuedo-code in
+The details of the resulting algorithm are shown as pseudo-code in
 Algorithm~\ref{alg:floyd-warshall-deep} in the Appendix.
 
 \subsection{Deep Floyd-Warshall Reinforcement Learning}

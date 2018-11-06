@@ -1,4 +1,11 @@
 \section{Appendix}
 
+The Algorithm~\cite{alg:floyd-warshall-deep} is different from
+HER~\cite{andrychowicz2016learning} because it contains additional step-loss
+term $\LossStep$ at line number 17 which allows the algorithm to learn even when
+the rewards received are independent of desired goal.
+
+The algorithm is also different from Floyd-Warshall Reinforcement learning
+because it does not contain $\LossUp$ and $\LossLo$ terms. 
 
 \input{algorithm-her-pr}

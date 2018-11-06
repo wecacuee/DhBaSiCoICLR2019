@@ -3,7 +3,10 @@
 We use the environments introduced in \citet{plappert2018multi} for our experiments.
 Broadly the environments fall in two categories, Fetch and Hand tasks.
 Our results show that learning is possible across all environments
-without the requirement of goal-reward.
+without the requirement of goal-reward. More specifically, the learning happens
+even when reward given to our algorithm is agent is always ``-1'' as opposed to
+the HER formulation where a special goal-reward of ``0'' is needed for learning
+to happen.
 
 The Fetch tasks involve a simulation of the Fetch robot's 7-DOF robotic arm. The four tasks are Reach, Push,
 Slide and PickAndPlace.

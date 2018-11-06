@@ -57,6 +57,7 @@ When the policy $\policy$ is optimal, the $\Q$-function satisfies the
   \label{eq:bellman}
 \end{align}%
 %
+The $\Q_*()$ function can be learned using Q-learning algorithm~\citep{watkins1992qlearning}.
 The optimal policy can be computed from $\Q_{*}$ greedily, 
 $\policy_*(\state_t) = \arg \max_{\act \in \Action} \Q_*(\state_t,
 \act)$.
@@ -86,7 +87,7 @@ $\ytgt = \Rew(\state_t, \act_t) + \max_{\act}\discount \Qtgt(\state_{t+1}, \act;
 network~\citep{MnKaSiNATURE2015}.
 The target network is a slower-changing
 copy of the main network that stabilizes learning.
-\citet{MnKaSiNATURE2015} also employ \emph{replay buffers}
+\citet{MnKaSiNATURE2015} also employ \emph{replay buffers}~\citep{lin1993reinforcement}
 that store transitions from episodes. During training, these transitions are
 sampled out of order to train the networks in an off-policy manner, avoiding
 correlation in the samples and thus leading to faster learning.
