@@ -23,12 +23,13 @@ start states with specified goals. GCVFs, in turn, are used to compute
 % assumed that to learn to achieve goals, goal locations must themselves
 % must be associated with reward. This however is not the case. We
 % introduce ....
-State-of-the-art MGRL algorithms use \emph{goal-rewards} to associate
-the achievement of goals with high reward.
-This conditions reward functions on the desired goals.
+To learn GCVFs, MGRL algorithms use \emph{goal-reward},
+defined as the relatively higher reward recieved on reaching the desired
+goal state.
+This makes the reward function dependent on the desired goal.
 For example, in the Fetch-Push task \citep{plappert2018multi} of moving
 a block to a given location on a table, every movement incurs a ``-1''
-reward while reaching the desired goal returns a ``0'' reward. 
+reward while reaching the desired goal returns a ``0'' goal-reward. 
 This dependence introduces additional reward resampling steps in
 algorithms like Hindsight Experience Replay (HER)
 \citep{andrychowicz2017hindsight}, where
@@ -56,16 +57,24 @@ the relabelling of every pseudo-goal requires an independent
 %goal classroom, the student can then use this learned path efforts to
 %find least effort paths to the classroom. 
 %
-In this paper, we demonstrate that goal-rewards are 
-avoidable. Let us consider an example to motivate this. Consider a student who has moved
-to a new university. To learn about the campus, the student explores it
-randomly with no specific goal in mind. The key intuition here is that
-the student is not incentivized to find specific goal locations (i.e.
-no goal-rewards) but is aware of the effort required to travel between
-points around the university. When tasked with
-finding a goal classroom, the student can chain together these
-path efforts to find the least-effort path to the
-classroom. 
+In this paper, we demonstrate that \emph{goal-rewards are not needed to
+learn GCVFs}. For the Fetch-Push task,
+our algorithm learns even when ''-1'' reward is recieved on moving the block is moved to the
+given location on the table. 
+This goes counter to the intuitions that drive reward
+formulations in traditional RL. Given the standard RL objective of
+maximizing future reward, not associating the goal with relatively
+higher reward is not required due to subtleties associated with the
+specification of goal states as input. 
+
+Let us consider an example to motivate this. Consider a student
+who has moved to a new university. To learn about the campus, the
+student explores it randomly with no specific goal in mind. The key
+intuition here is that the student is not incentivized to find specific
+goal locations (i.e.  no goal-rewards) but is aware of the effort
+required to travel between points around the university. When tasked
+with finding a goal classroom, the student can chain together these path
+efforts to find the least-effort path to the classroom. 
 %
 Based on this intuition of least-effort paths, we redefine GCVFs to be
 the expected \emph{path-reward} that is learned for all possible
