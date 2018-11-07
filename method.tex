@@ -80,7 +80,7 @@ to combine rewards to find maximum reward paths to the goal.
 One-step loss is different from the terminal step
 of Q-Learning because one-step loss is applicable to every transition unlike the
 terminal step. However, one-step loss can be thought of as Q-Learning where
-every transition is a one-step episode where the reached goal is the pseudo
+every transition is a one-step episode where the achieved goal is the pseudo
 goal.
 
 One-step loss also different from the terminal condition in
@@ -88,10 +88,10 @@ One-step loss also different from the terminal condition in
 $\fwargs{.}{.}{.}{*}{P}$ similar to Eq~\eqref{eq:bellman-path}
 except the terminal condition is defined as $\fwargs{\state_t}{\act}{\goal*}{*}{P}
 = 0$ when $\goal_t = \goal^*$. Under the stated assumptions, the two definitions
-are equivalent but one-step loss is slightly advantageous.
-One-step loss can be applied to every transition unlike
+are equivalent but one-step loss is advantageous as 
+it can be applied to every transition unlike
 the \cite{kaelbling1993learning} terminal condition which can be only applied
-when $\goal_t = \goal$.
+when $\goal_t = \goal^*$.
 
 
 We modify an implementation of HER to include the step-loss term and disable goal

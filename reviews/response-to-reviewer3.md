@@ -10,9 +10,9 @@ Our reward formulation is different from that of Hindsight Experience Replay
 (HER). In HER, the agent receives -1 reward for all state transitions except on
 reaching the goal when it receives 0 reward. In contrast, for our reward
 formulation the agent receives -1 reward for all state transitions including
-when agent reaches the goal. In other words, the agent never receives the 0
-*goal-reward*. We use the term goal-reward to mean any special reward that agent
-receives on reaching the goal. 
+when agent reaches and continues to stay at the goal.  In other words, the
+agent never receives the 0 *goal-reward*. We use the term goal-reward to mean
+any special reward that agent receives on reaching the goal. 
 
 Our reward formulation is atypical with respect to conventional Reinforcement Learning
 (RL). Conventional RL is formulated with the objective to maximize reward. Hence
@@ -32,14 +32,15 @@ Clarity:
    algorithm uses Eq (3) + L_step as shown in the pseudo-code. Another difference
    is due to reward formulation. Because our rewards are independent of reaching
    the goal, we do not need to recompute rewards. We have added the description
-   about these differences in the appendix to highlight these differences.
+   about these differences in the appendix to highlight them.
 
 2. We have introduced the requested citations at appropriate places in the
    paper. 
 
    Since Kaelbling 1993 introduced the idea of FWRL before Dhiman et. al. 2018,
    we replace the attributions accordingly in the paper. We further add
-   discussion points specific to their algorithm in the Related Work section.
+   discussion points specific to their algorithm in the Related Work and One-Step Loss
+   section.
 
 Novelty and Significance
 1. The shortest path perspective is not our contribution. Our contribution is
@@ -52,7 +53,7 @@ Novelty and Significance
    current state is same as the goal state. Also note that just like HER, our
    episodes are of fixed length and do not terminate on reaching the goal.
 
-   To further this in the paper, we have added reward structure
+   To further clarify this in the paper, we have added reward structure
    details to the Introduction (section 1, paragraph 3) and the
    Experiments section (section 5, end of paragraph 1).
 
@@ -75,15 +76,15 @@ Novelty and Significance
    translates to DG*(s_t, a_t, g_{t+1}) = -1, for all transitions (s_t, a_t ->
    g_{t+1}) i.e. it removes the dependence of checking s=g. Although it serves
    the same purpose of terminal condition in recursive definition but the
-   condition is mathematically different and requires slightly different
-   assumption.
+   condition is mathematically different and requires the different
+   assumption that one-step path is the highest reward path between s_t and g_{t+1}. 
    
    Similar to HER, our goal states are not absorbing/terminal. Instead the
    episodes are of fixed number of steps and the agent is encouraged to stay in
    the goal state for as long as possible. This is how the replay buffer is
    populated and how the average episode reward is computed. However, in the
    path-reward formulation the objective maximized is equivalent to treating
-   this fixed time step episode problem as if the episodes are terminating on
+   this fixed length episode problem as if the episodes are terminating on
    reaching the goal.
    
  
@@ -102,7 +103,7 @@ Overall quality:
 We have two contributions. (a) Showing that goal conditioned value functions can
 be learned without using goal rewards. We do this by introducing the one-step
 loss function that can be considered to be one-step-episode Q-Learning. As far
-as we are aware, this a novel contribution to the Multi-Goal Reinforcement
+as we are aware, this a novel contribution to Multi-Goal Reinforcement
 Learning (b) The extension of Kaelbling 1993 [1] to deep learning domain.
 
 
