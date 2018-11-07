@@ -1,11 +1,16 @@
 \section{Appendix}
 
-The Algorithm~\cite{alg:floyd-warshall-deep} is different from
+Our algorithm~\ref{alg:floyd-warshall-deep} is different from
 HER~\cite{andrychowicz2016learning} because it contains additional step-loss
 term $\LossStep$ at line number 17 which allows the algorithm to learn even when
-the rewards received are independent of desired goal.
+the rewards received are independent of desired goal. Also in HER sampling (line
+13), the algorithm recomputes the rewards because the goal is replaced with a
+pseudo-goal. Our algorithm does not need reward recomputation because the reward
+formulation does not depend on the goal and is not affected by choice of
+pseudo-goal.
 
-The algorithm is also different from Floyd-Warshall Reinforcement learning
-because it does not contain $\LossUp$ and $\LossLo$ terms. 
+Our algorithm is also different from Floyd-Warshall Reinforcement learning
+because it does not contain $\LossUp$ and $\LossLo$ terms and contains the
+additional $\LossStep$.
 
 \input{algorithm-her-pr}

@@ -57,24 +57,26 @@ the relabelling of every pseudo-goal requires an independent
 %goal classroom, the student can then use this learned path efforts to
 %find least effort paths to the classroom. 
 %
-In this paper, we demonstrate that \emph{goal-rewards are not needed to
-learn GCVFs}. For the Fetch-Push task,
-our algorithm learns even when ''-1'' reward is recieved on moving the block is moved to the
-given location on the table. 
-This goes counter to the intuitions that drive reward
-formulations in traditional RL. Given the standard RL objective of
-maximizing future reward, not associating the goal with relatively
-higher reward is not required due to subtleties associated with the
-specification of goal states as input. 
+In this paper, we demonstrate that \emph{goal-rewards are not needed to learn
+GCVFs}. For the Fetch-Push task, we demonstrate that ``0'' goal-reward is not
+needed to learn the GCVFs. The GVCFs are learned even when the ``0'' goal-reward
+is replaced by the ``-1'' goal-independent reward. This reward formulation is
+atypical in conventional RL. Conventional RL algorithms maximize cumulative
+reward. Hence a high reward is used to specify the desired goal---the
+goal-reward. However, this goal-reward is not necessary in goal-conditioned RL
+because the goal is already specified at the start of every episode.
+We use this idea, to propose a goal-conditioned RL algorithm which learns to
+reach goals without goal-rewards. We believe that this counter-intuitive
+result is important for understanding goal-conditioned RL.
 
-Let us consider an example to motivate this. Consider a student
-who has moved to a new university. To learn about the campus, the
-student explores it randomly with no specific goal in mind. The key
-intuition here is that the student is not incentivized to find specific
-goal locations (i.e.  no goal-rewards) but is aware of the effort
-required to travel between points around the university. When tasked
-with finding a goal classroom, the student can chain together these path
-efforts to find the least-effort path to the classroom. 
+Let us consider another example to motivate the redundancy of goal-rewards.
+Consider a student who has moved to a new campus. To learn about the campus,
+the student explores it randomly with no specific goal in mind. The key
+intuition here is that the student is not incentivized to find specific goal
+locations (i.e. no goal-rewards) but is aware of the effort required to travel
+between points around the university. When tasked with finding a goal classroom,
+the student can chain together these path efforts to find the least-effort path
+to the classroom.
 %
 Based on this intuition of least-effort paths, we redefine GCVFs to be
 the expected \emph{path-reward} that is learned for all possible

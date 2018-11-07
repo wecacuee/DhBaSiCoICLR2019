@@ -28,12 +28,11 @@ function. In contrast, we show how removing goal-rewards removes the need for
 such recomputations. We utilize HER as a baseline in our work.
 
 \citet{kaelbling1993learning} also use the structure of the space of GCVFs to
-learn.
-This work employs compositionality constraints
-in the space of these functions to accelerate learning in a tabular domain. While
-their definition of GCVFs is similar to ours, they still require
-goal-rewards and do not employ one-step loss. We extend their
-work to deep neural networks.
+learn. This work employs compositionality constraints in the space of these
+functions to accelerate learning in a tabular domain. While their definition of
+GCVFs is similar to ours, the terminal condition is different. We describe this
+difference in Section~\ref{sec:method}. We also extend their
+tabular formulation to deep neural networks and evaluate it against the baselines.
 
 
 %\subsection{Experience Replay and Target Networks}
