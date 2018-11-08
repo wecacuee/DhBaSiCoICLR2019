@@ -25,11 +25,6 @@ ymin=\distymin,xmin=0,ymax=\distymax,xmax=\succxmax,
   height=\axisheight,
   ytick=\empty,
   legend pos=north east]
-% these constants can be read from \pathprefix */params.json
-\def\T{50}
-\def\ncycles{10}
-\def\rolloutB{2}
-\def\batch{256}
   \addplot table [x expr={\thisrow{epoch}*\ncycles*\rolloutB*\T}, y=test/ag_g_dist, col sep=comma] {\pathprefix PR-\envversion-dqst/progress.csv};
   \addlegendentry{Ours};
   \addplot table [x expr={\thisrow{epoch}*\ncycles*\rolloutB*\T + \thisrow{epoch}*\ncycles*\batch}, y=test/ag_g_dist, col sep=comma] {\pathprefix -\envversion-ddpg/progress.csv};
@@ -63,11 +58,6 @@ name=\nameprefix SuccRew,
   height=\axisheight,
   ytick=\empty,
   legend pos=\rewlegendpos]
-% these constants can be read from \pathprefix PR-\envversion-dqst/params.json
-\def\T{50}
-\def\ncycles{10}
-\def\rolloutB{2}
-\def\batch{256}
 \def\xexprPR{\thisrow{epoch}*\ncycles*\rolloutB*\T}
 \def\xexprGoalRew{\thisrow{epoch}*\ncycles*\rolloutB*\T + \thisrow{epoch}*\ncycles*\batch}
 \def\ycol{test/success_rate}

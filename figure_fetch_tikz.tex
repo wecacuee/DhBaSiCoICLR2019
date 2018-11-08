@@ -2,6 +2,11 @@
 \scalebox{0.5}{%
 \begin{minipage}[t]{0.55\linewidth}
 \begin{tikzpicture}
+  % these constants can be read from \pathprefix */params.json
+  \def\T{50}
+  \def\ncycles{50}
+  \def\rolloutB{2}
+  \def\batch{256}
   \def\extrapropsaxisdistepoch{xlabel=Epochs}
   \def\extrapropsaxissuccepoch{xlabel=Epochs},
   \def\extrapropsaxisdistrew{xlabel=Reward Computations},
@@ -18,6 +23,7 @@
     \def\succxmax{5e4}
     \def\succymax{1}
     \def\rewlegendpos{south east}
+    \def\ncycles{10}
     \def\nameprefix{FetchReach}
     \def\fullname{Fetch Reach}
     \def\distymax{0.25}
@@ -32,7 +38,7 @@
     \begingroup
     \def\rewlegendpos{south east}
     \def\distxmax{21}
-    \def\succxmax{6e4}
+    \def\succxmax{30e4}
     \def\succymax{1}
     \def\nameprefix{FetchPush}
     \def\fullname{Fetch Push}
@@ -48,7 +54,7 @@
     \def\rewlegendpos{south east}
     \def\distxmax{33}
     \def\distymax{0.25}
-    \def\succxmax{10e4}
+    \def\succxmax{50e4}
     \def\succymax{1}
     \def\nameprefix{FetchPickAndPlace}
     \def\fullname{Fetch Pick And Place}
@@ -63,7 +69,7 @@
     \def\rewlegendpos{north west}
     \def\distxmax{200}
     \def\distymax{0.50}
-    \def\succxmax{20e4}
+    \def\succxmax{100e4}
     \def\succymax{0.15}
     \def\nameprefix{FetchSlide}
     \def\fullname{Fetch Slide}
