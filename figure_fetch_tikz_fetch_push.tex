@@ -1,0 +1,79 @@
+\def\pathprefix{media/res/6efc1de-path_reward_low_thresh_chosen-FetchPush}
+\def\distymax{0.25}
+  \begin{axis}[ymin=0,xmin=0, ymax=\distymax,xmax=21,
+  name=FetchPushDistEpoch,
+  xlabel=Epochs,
+  width=1.0\columnwidth,
+  height=0.70\columnwidth,
+  ylabel=Distance from goal (m),
+  legend pos=north east]
+  \addplot table [x=epoch, y=test/ag_g_dist, col sep=comma] {\pathprefix PR-v1-dqst/progress.csv};
+  \addlegendentry{Ours};
+  \addplot table [x=epoch, y=test/ag_g_dist, col sep=comma] {\pathprefix -v1-ddpg/progress.csv};
+  \addlegendentry{HER};
+  \addplot table [x=epoch, y=test/ag_g_dist, col sep=comma] {\pathprefix -v1-fwrl/progress.csv};
+  \addlegendentry{FWRL};
+  \end{axis}
+  \begin{axis}[at={(FetchPushDistEpoch.south east)},
+name=FetchPushDistRew,
+ymin=0,xmin=0,ymax=\distymax,xmax=6e4,
+  xlabel=Reward Computations,
+  width=1.0\columnwidth,
+  height=0.70\columnwidth,
+  ytick=\empty,
+  legend pos=north east]
+% these constants can be read from \pathprefix */params.json
+\def\T{50}
+\def\ncycles{10}
+\def\rolloutB{2}
+\def\batch{256}
+  \addplot table [x expr={\thisrow{epoch}*\ncycles*\rolloutB*\T}, y=test/ag_g_dist, col sep=comma] {\pathprefix PR-v1-dqst/progress.csv};
+  \addlegendentry{Ours};
+  \addplot table [x expr={\thisrow{epoch}*\ncycles*\rolloutB*\T + \thisrow{epoch}*\ncycles*\batch}, y=test/ag_g_dist, col sep=comma] {\pathprefix -v1-ddpg/progress.csv};
+  \addlegendentry{HER};
+  \addplot table [x expr={\thisrow{epoch}*\ncycles*\rolloutB*\T + \thisrow{epoch}*\ncycles*\batch}, y=test/ag_g_dist, col sep=comma] {\pathprefix -v1-fwrl/progress.csv};
+  \addlegendentry{FWRL};
+\end{axis}
+  \begin{axis}[at={($(FetchPushDistRew.south east) + (30,0)$)},
+name=FetchPushSuccEpoch,
+ymin=0,xmin=0,ymax=1,xmax=21,
+  xlabel=Epoch,
+ylabel=Success Rate (test),
+  width=1.0\columnwidth,
+  height=0.70\columnwidth,
+  legend pos=south east]
+% these constants can be read from \pathprefix PR-v1-dqst/params.json
+\def\xcol{epoch}
+\def\ycol{test/success_rate}
+  \addplot table [x=\xcol, y=\ycol, col sep=comma] {\pathprefix PR-v1-dqst/progress.csv};
+  \addlegendentry{Ours};
+  \addplot table [x=\xcol, y=\ycol, col sep=comma] {\pathprefix -v1-ddpg/progress.csv};
+  \addlegendentry{HER};
+  \addplot table [x=\xcol, y=\ycol, col sep=comma] {\pathprefix -v1-fwrl/progress.csv};
+  \addlegendentry{FWRL};
+\end{axis}
+  \begin{axis}[at={(FetchPushSuccEpoch.south east)},
+ymin=0,xmin=0,ymax=1,xmax=6e4,
+name=FetchPushSuccRew,
+  xlabel=Reward Computations,
+  width=1.0\columnwidth,
+  height=0.70\columnwidth,
+  ytick=\empty,
+  legend pos=south east]
+% these constants can be read from \pathprefix PR-v1-dqst/params.json
+\def\T{50}
+\def\ncycles{10}
+\def\rolloutB{2}
+\def\batch{256}
+\def\xexprPR{\thisrow{epoch}*\ncycles*\rolloutB*\T}
+\def\xexprGoalRew{\thisrow{epoch}*\ncycles*\rolloutB*\T + \thisrow{epoch}*\ncycles*\batch}
+\def\ycol{test/success_rate}
+
+  \addplot table [x expr=\xexprPR, y=\ycol, col sep=comma] {\pathprefix PR-v1-dqst/progress.csv};
+  \addlegendentry{Ours};
+  \addplot table [x expr=\xexprGoalRew, y=\ycol, col sep=comma] {\pathprefix -v1-ddpg/progress.csv};
+  \addlegendentry{HER};
+  \addplot table [x expr=\xexprGoalRew, y=\ycol, col sep=comma] {\pathprefix -v1-fwrl/progress.csv};
+  \addlegendentry{FWRL};
+\end{axis}
+LaTeX/MPS finished at Wed Nov  7 18:01:26

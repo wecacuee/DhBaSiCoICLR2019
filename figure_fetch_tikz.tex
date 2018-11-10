@@ -1,0 +1,92 @@
+\begin{figure}
+\scalebox{0.5}{%
+\begin{minipage}[t]{0.55\linewidth}
+\begin{tikzpicture}
+  \def\extrapropsaxisdistepoch{xlabel=Epochs}
+  \def\extrapropsaxissuccepoch{xlabel=Epochs},
+  \def\extrapropsaxisdistrew{xlabel=Reward Computations},
+  \def\extrapropsaxissuccrew{xlabel=Reward Computations},
+  \def\fwrlsuffix{fwrl}
+  \def\envversion{v1}
+  \def\distymin{0}
+  \def\scopexshift{0.05\columnwidth}
+  \def\scopeyshift{-0.3\columnwidth}
+  \begin{scope}[local bounding box=fetchreach]
+    %\input{figure_fetch_tikz_fetch_reach}
+    \begingroup
+    \def\distxmax{16}
+    \def\succxmax{5e4}
+    \def\succymax{1}
+    \def\rewlegendpos{south east}
+    \def\nameprefix{FetchReach}
+    \def\fullname{Fetch Reach}
+    \def\distymax{0.25}
+    \def\pathprefix{media/res/6efc1de-path_reward_low_thresh_chosen-FetchReach}
+    \input{figure_fetch_tikz_plot_row}
+    \endgroup
+    \node[fit=(FetchReachName) (FetchReachSuccRew)] (fetchreach) {}; 
+  \end{scope}
+  \begin{scope}[shift={($(fetchreach.south west)+(0.05\columnwidth, \scopeyshift)$)},
+    local bounding box=fetchpush]
+    %\input{figure_fetch_tikz_fetch_push}
+    \begingroup
+    \def\rewlegendpos{south east}
+    \def\distxmax{21}
+    \def\succxmax{6e4}
+    \def\succymax{1}
+    \def\nameprefix{FetchPush}
+    \def\fullname{Fetch Push}
+    \def\distymax{0.25}
+    \def\pathprefix{media/res/6efc1de-path_reward_low_thresh_chosen-FetchPush}
+    \input{figure_fetch_tikz_plot_row}
+    \endgroup
+    \node[fit=(FetchPushName) (FetchPushSuccRew)] (fetchpush) {}; 
+  \end{scope}
+  \begin{scope}[shift={($(fetchpush.south west)+(0.05\columnwidth, \scopeyshift)$)},
+    local bounding box=fetchpickandplace]
+    \begingroup
+    \def\rewlegendpos{south east}
+    \def\distxmax{33}
+    \def\distymax{0.25}
+    \def\succxmax{10e4}
+    \def\succymax{1}
+    \def\nameprefix{FetchPickAndPlace}
+    \def\fullname{Fetch Pick And Place}
+    \def\pathprefix{media/res/6efc1de-path_reward_low_thresh_chosen-FetchPickAndPlace}
+    \input{figure_fetch_tikz_plot_row}
+    \endgroup
+    \node[fit=(FetchPickAndPlaceName) (FetchPickAndPlaceSuccRew)] (fetchpickandplace) {}; 
+  \end{scope}
+  \begin{scope}[shift={($(fetchpickandplace.south west)+(0.05\columnwidth, \scopeyshift)$)},
+    local bounding box=fetchslide]
+    \begingroup
+    \def\rewlegendpos{north west}
+    \def\distxmax{200}
+    \def\distymax{0.50}
+    \def\succxmax{20e4}
+    \def\succymax{0.15}
+    \def\nameprefix{FetchSlide}
+    \def\fullname{Fetch Slide}
+    \def\pathprefix{media/res/6efc1de-path_reward_low_thresh_chosen-FetchSlide}
+    \def\extrapropsaxisdistepoch{xlabel=Epochs}
+    \def\extrapropsaxissuccepoch{xlabel=Epochs},
+    \def\extrapropsaxisdistrew{xlabel=Reward Computations},
+    \def\extrapropsaxissuccrew{xlabel=Reward Computations},
+    \input{figure_fetch_tikz_plot_row}
+    \endgroup
+    \node[fit=(FetchSlideName) (FetchSlideSuccRew)] (fetchpickandplace) {}; 
+  \end{scope}
+\end{tikzpicture}
+%\end{figure}%
+%\end{wrapfigure}%
+\end{minipage}%
+}
+\caption{For the Fetch tasks, we compare our method (red) against HER (blue) ~\citep{andrychowicz2016learning}
+  and FWRL (green) ~\citep{kaelbling1993learning} on the distance-from-goal
+  and success rate metrics. Both metrics are plotted
+  against two progress measures: the number of training epochs and the number of reward
+  computations. Except for the Fetch Slide task, we achieve comparable or
+  better performance across the metrics and progress measures. 
+}%
+\label{fig:fetch-results}%
+\end{figure}

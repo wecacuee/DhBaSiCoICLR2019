@@ -1,0 +1,81 @@
+\def\axisheight{0.6\columnwidth}
+\node [rotate=90,align=center,text width=0.4\columnwidth]
+(\nameprefix Name) {\color{blue}\scriptsize \fullname};
+\begin{axis}[at={($(\nameprefix Name.south west) + (30, 0)$)},
+  ymin=\distymin,xmin=0, ymax=\distymax,xmax=\distxmax,
+  name=\nameprefix DistEpoch,
+  width=1.0\columnwidth,
+  height=\axisheight,
+  ylabel=Distance from goal (m),
+  legend pos=north east,
+  \extrapropsaxisdistepoch,
+  ]
+  \addplot table [x=epoch, y=test/ag_g_dist, col sep=comma] {\pathprefix PR-\envversion-dqst/progress.csv};
+  \addlegendentry{Ours};
+  \addplot table [x=epoch, y=test/ag_g_dist, col sep=comma] {\pathprefix -\envversion-ddpg/progress.csv};
+  \addlegendentry{HER};
+  \addplot table [x=epoch, y=test/ag_g_dist, col sep=comma] {\pathprefix -\envversion-\fwrlsuffix/progress.csv};
+  \addlegendentry{FWRL};
+  \end{axis}
+  \begin{axis}[at={(\nameprefix DistEpoch.south east)},
+name=\nameprefix DistRew,
+ymin=\distymin,xmin=0,ymax=\distymax,xmax=\succxmax,
+  \extrapropsaxisdistrew,
+  width=1.0\columnwidth,
+  height=\axisheight,
+  ytick=\empty,
+  legend pos=north east]
+% these constants can be read from \pathprefix */params.json
+\def\T{50}
+\def\ncycles{10}
+\def\rolloutB{2}
+\def\batch{256}
+  \addplot table [x expr={\thisrow{epoch}*\ncycles*\rolloutB*\T}, y=test/ag_g_dist, col sep=comma] {\pathprefix PR-\envversion-dqst/progress.csv};
+  \addlegendentry{Ours};
+  \addplot table [x expr={\thisrow{epoch}*\ncycles*\rolloutB*\T + \thisrow{epoch}*\ncycles*\batch}, y=test/ag_g_dist, col sep=comma] {\pathprefix -\envversion-ddpg/progress.csv};
+  \addlegendentry{HER};
+  \addplot table [x expr={\thisrow{epoch}*\ncycles*\rolloutB*\T + \thisrow{epoch}*\ncycles*\batch}, y=test/ag_g_dist, col sep=comma] {\pathprefix -\envversion-\fwrlsuffix/progress.csv};
+  \addlegendentry{FWRL};
+\end{axis}
+  \begin{axis}[at={($(\nameprefix DistRew.south east) + (30,0)$)},
+name=\nameprefix SuccEpoch,
+ymin=0,xmin=0,ymax=\succymax,xmax=\distxmax,
+  \extrapropsaxissuccepoch,
+ylabel=Success Rate (test),
+  width=1.0\columnwidth,
+  height=\axisheight,
+  legend pos=\rewlegendpos]
+% these constants can be read from \pathprefix PR-\envversion-dqst/params.json
+\def\xcol{epoch}
+\def\ycol{test/success_rate}
+  \addplot table [x=\xcol, y=\ycol, col sep=comma] {\pathprefix PR-\envversion-dqst/progress.csv};
+  \addlegendentry{Ours};
+  \addplot table [x=\xcol, y=\ycol, col sep=comma] {\pathprefix -\envversion-ddpg/progress.csv};
+  \addlegendentry{HER};
+  \addplot table [x=\xcol, y=\ycol, col sep=comma] {\pathprefix -\envversion-\fwrlsuffix/progress.csv};
+  \addlegendentry{FWRL};
+\end{axis}
+  \begin{axis}[at={(\nameprefix SuccEpoch.south east)},
+ymin=0,xmin=0,ymax=\succymax,xmax=\succxmax,
+name=\nameprefix SuccRew,
+  \extrapropsaxissuccrew,
+  width=1.0\columnwidth,
+  height=\axisheight,
+  ytick=\empty,
+  legend pos=\rewlegendpos]
+% these constants can be read from \pathprefix PR-\envversion-dqst/params.json
+\def\T{50}
+\def\ncycles{10}
+\def\rolloutB{2}
+\def\batch{256}
+\def\xexprPR{\thisrow{epoch}*\ncycles*\rolloutB*\T}
+\def\xexprGoalRew{\thisrow{epoch}*\ncycles*\rolloutB*\T + \thisrow{epoch}*\ncycles*\batch}
+\def\ycol{test/success_rate}
+
+  \addplot table [x expr=\xexprPR, y=\ycol, col sep=comma] {\pathprefix PR-\envversion-dqst/progress.csv};
+  \addlegendentry{Ours};
+  \addplot table [x expr=\xexprGoalRew, y=\ycol, col sep=comma] {\pathprefix -\envversion-ddpg/progress.csv};
+  \addlegendentry{HER};
+  \addplot table [x expr=\xexprGoalRew, y=\ycol, col sep=comma] {\pathprefix -\envversion-\fwrlsuffix/progress.csv};
+  \addlegendentry{FWRL};
+\end{axis}

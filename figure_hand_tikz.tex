@@ -1,0 +1,92 @@
+\begin{figure}
+\scalebox{0.5}{%
+  \begin{minipage}{0.55\linewidth}
+\begin{tikzpicture}
+  \def\fwrlsuffix{fwrl}
+  \def\envversion{v0}
+  \def\scopexshift{0.05\columnwidth}
+  \def\scopeyshift{-0.3\columnwidth}
+  \def\succxmax{5e4}
+  \def\succymax{1}
+  \def\distxmax{49}
+  \def\distymax{1}
+  \def\distymin{0}
+  \def\rewlegendpos{south east}
+  \def\extrapropsaxisdistepoch{xlabel=Epochs}
+  \def\extrapropsaxissuccepoch{xlabel=Epochs},
+  \def\extrapropsaxisdistrew{xlabel=Reward Computations},
+  \def\extrapropsaxissuccrew{xlabel=Reward Computations},
+  \begin{scope}[local bounding box=handreach]
+    \begingroup
+    \def\distymax{0.099}
+    \def\distymin{0.02}
+    \def\nameprefix{HandReach}
+    \def\fullname{Hand Reach}
+    \def\pathprefix{media/res/6efc1de-path_reward_low_thresh_chosen-HandReach}
+    \input{figure_fetch_tikz_plot_row}
+    \endgroup
+    \node[fit=(HandReachName) (HandReachSuccRew)] (handreach) {}; 
+  \end{scope}
+  \begin{scope}[shift={($(handreach.south west)+(0.05\columnwidth, \scopeyshift)$)},
+    local bounding box=handblock]
+    \begingroup
+    \def\succymax{0.6}
+    \def\distymax{1.1}
+    \def\distymin{0.4}
+    \def\rewlegendpos{north west}
+    \def\nameprefix{HandBlock}
+    \def\fullname{ManipulateBlockRotateXYZ}
+    \def\pathprefix{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulateBlockRotateXYZ}
+    \input{figure_fetch_tikz_plot_row}
+    \endgroup
+    \node[fit=(HandBlockName) (HandBlockSuccRew)] (handblock) {}; 
+  \end{scope}
+  \begin{scope}[shift={($(handblock.south west)+(0.05\columnwidth, \scopeyshift)$)},
+    local bounding box=handegg]
+    \begingroup
+    \def\succymax{0.25}
+    \def\distymax{1.1}
+    \def\distymin{0.4}
+    \def\rewlegendpos{north west}
+    \def\nameprefix{HandEgg}
+    \def\fullname{ManipulateEggFull}
+    \def\pathprefix{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulateEggFull}
+    \input{figure_fetch_tikz_plot_row}
+    \endgroup
+    \node[fit=(HandEggName) (HandEggSuccRew)] (handegg) {}; 
+  \end{scope}
+  \begin{scope}[shift={($(handegg.south west)+(0.05\columnwidth, \scopeyshift)$)},
+    local bounding box=handpen]
+    \begingroup
+    \def\extrapropsaxisdistepoch{xlabel=Epochs}
+    \def\extrapropsaxissuccepoch{xlabel=Epochs},
+    \def\extrapropsaxisdistrew{xlabel=Reward Computations},
+    \def\extrapropsaxissuccrew{xlabel=Reward Computations},
+    \def\succymax{0.25}
+    \def\distymax{1.1}
+    \def\distymin{0.6}
+    \def\nameprefix{HandPen}
+    \def\rewlegendpos{north west}
+    \def\fullname{PenRotate}
+    %\def\pathprefix{media/res/6efc1de-path_reward_low_thresh_chosen-HandManipulatePenRotate}
+    \def\fwrlsuffix{qlst}
+    \def\pathprefix{media/res/be467df-path_reward_low_thresh_alt-HandManipulatePenRotate}
+    \input{figure_fetch_tikz_plot_row}
+    \endgroup
+    \node[fit=(HandPenName) (HandPenSuccRew)] (handpen) {}; 
+  \end{scope}
+\end{tikzpicture}%
+%\end{figure}%
+%\end{wrapfigure}%
+\end{minipage}%
+}
+  \caption{For the hand tasks, we compare our method (red) against HER (blue) ~\citep{andrychowicz2016learning}
+    and FWRL (green) ~\citep{kaelbling1993learning} for the distance-from-goal
+    and success rate metrics. Furthermore, both metrics are plotted
+    against two progress measures, the number of training epochs and the number of reward
+    computations. Measured by distance from the goal, our method performs comparable to or
+    better than the baselines for both progress measurements. For the success rate,
+    our method underperforms against the baselines. 
+}%
+  \label{fig:hand-results}%
+\end{figure}%

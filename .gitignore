@@ -6,4 +6,7 @@ main.pdf
 main.aux
 main.log
 main.out
+main-figure?.dep
+main-figure?.dpth
+main-figure?.log
 q.log

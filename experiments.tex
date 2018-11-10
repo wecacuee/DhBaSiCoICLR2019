@@ -1,5 +1,6 @@
 \section{Experiments}
 \label{sec:experiments}
+
 We use the environments introduced in \citet{plappert2018multi} for our experiments.
 Broadly the environments fall in two categories, Fetch and Hand tasks.
 Our results show that learning is possible across all environments
@@ -28,6 +29,7 @@ HandManipulatePenRotate, it does so with a pen.
 Snapshots of all these tasks can be found in Figure~\ref{fig:envs}. Note that
 these tasks use joint angles, not visual input.
 
+\input{figure_fetch_tikz}
 
 \subsection{Metrics}
 Similar to prior work, we evaluate all experiments on two metrics: the success
@@ -49,7 +51,6 @@ training. This includes both the episode rollouts and the reward recomputations
 during HER sampling.
 
 %
-\input{figure_fetch}
 
 \subsection{Hyper-parameters choices} \label{sec:hyperparams}
 Unless specified, all our hyper-parameters are identical to the ones
@@ -106,4 +107,4 @@ We conjecture that this might be the result of
 high-distance failure cases of the baselines, i.e. when the baselines
 fail, they do so at larger distances from the goal. In contrast, we
 assume our method's success and failure cases are closer together. 
-\input{figure_hand}
+\input{figure_hand_tikz}

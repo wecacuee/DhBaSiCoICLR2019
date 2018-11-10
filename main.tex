@@ -15,6 +15,27 @@
 \usepackage{booktabs}
 \usepackage{bbm}
 \usepackage{cases}
+\usepackage{pgfplots}
+\usepackage{tikz}
+%%% Make sure that LaTeX is allowed to use external commends with
+%%% -enable-write18 or -shell-escape
+\usetikzlibrary{external}\tikzexternalize
+\usetikzlibrary{calc,fit,positioning}
+\tikzset{mark size=1,
+  font={\sffamily\tiny}}
+\pgfplotsset{compat=1.13}
+\pgfplotscreateplotcyclelist{better color list}{%
+red,blue,black,brown,teal,orange,violet,cyan,green!70!black,magenta,gray}
+\pgfplotsset{
+  cycle list name=better color list,
+  every axis plot/.append style={line width=0.2pt},
+  ylabel near ticks,
+  xlabel near ticks,
+  major tick length={0.5mm},
+  tick align=outside,
+  tick label style={font=\fontsize{1.5}{4}\selectfont},
+  legend cell align=left,
+  legend style={fill=none}}
 \usepackage{subcaption}
 \frenchspacing  %Required
 \setlength{\pdfpagewidth}{8.5in}  %Required
