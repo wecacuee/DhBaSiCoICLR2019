@@ -1,0 +1,20 @@
+\begin{figure}
+\begin{tikzpicture}
+  \def\resultsdir{media/res}
+  \begin{axis}
+\addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/38f4625-FetchSlide-v1-qlst-future/progress.csv};
+\addlegendentry{$\LossDDPG + \LossStep + \LossLo + \LossUp$};
+\addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/38f4625-FetchSlide-v1-qste-future/progress.csv};
+\addlegendentry{$\LossDDPG + \LossStep + \LossTrieq$};
+\addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/38f4625-FetchSlide-v1-fwrl-future/progress.csv};
+\addlegendentry{$\LossDDPG + \LossLo + \LossUp$};
+\addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/38f4625-FetchSlide-v1-dqst-future/progress.csv};
+\addlegendentry{$\LossDDPG + \LossStep$};
+\addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/38f4625-FetchSlide-v1-dqte-future/progress.csv};
+\addlegendentry{$\LossDDPG + \LossTrieq$};
+\addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/38f4625-FetchSlide-v1-ddpg-future/progress.csv};
+\addlegendentry{$\LossDDPG$};
+\end{axis}
+\end{tikzpicture}
+\caption{Different combinations of loss functions.}
+\end{figure}%

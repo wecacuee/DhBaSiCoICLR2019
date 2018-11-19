@@ -1,0 +1,39 @@
+%\begin{figure}
+%\begin{wrapfigure}[19]{r}{0.5\columnwidth}
+\begin{minipage}[t]{0.45\linewidth}
+\begin{tikzpicture}
+  \def\resultsdir{media/res}
+  \begin{axis}[ymin=0,xmin=0,
+  xlabel=Epochs,
+  width=1.0\columnwidth,
+  height=0.70\columnwidth,
+  every axis plot/.append style={line width=1.0pt},
+  legend style={fill=none,font=\sffamily\fontsize{3.5}{4}\selectfont},
+  ylabel=Success Rate (test),
+  legend pos=north west]
+\addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/3f1eafe-FetchPush-v1-qlst-future/progress.csv};
+\addlegendentry{HER $+ \LossStep + \LossLo + \LossUp$};
+\addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/3f1eafe-FetchPush-v1-stfw-future/progress.csv};
+\addlegendentry{HER - $\LossDDPG + \LossStep + \LossLo + \LossUp$};
+\addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/3f1eafe-FetchPush-v1-fwrl-future/progress.csv};
+\addlegendentry{HER $ + \LossLo + \LossUp$};
+% This experiment did not run full. Replaced with same parameters.
+%\addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/3f1eafe-FetchPush-v1-dqst-future/progress.csv};
+%\addlegendentry{HER $ + \LossStep$};
+\addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/be0910c-her_fwrl_path_reward-FetchPush-v1-dqst/progress.csv};
+\addlegendentry{HER $ + \LossStep$};
+\addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/3f1eafe-FetchPush-v1-stlo-future/progress.csv};
+\addlegendentry{HER $ + \LossLo$};
+\addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/3f1eafe-FetchPush-v1-stup-future/progress.csv};
+\addlegendentry{HER $ + \LossUp$};
+\addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/3f1eafe-FetchPush-v1-ddpg-future/progress.csv};
+\addlegendentry{HER};
+\end{axis}
+\end{tikzpicture}
+\caption{Ablation on loss functions for Fetch Push task. The
+  Floyd-Warshall inspired loss functions $\LossLo$ and $\LossUp$ do not help
+  much. $\LossStep$ helps a little but only in conjunction with HER~\cite{andrychowicz2016learning}.}
+\label{fig:loss-ablation}
+%\end{figure}%
+%\end{wrapfigure}%
+\end{minipage}

@@ -1,0 +1,411 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title class="presentationtitle"></title>
+		<meta name="author" content="Vikas Dhiman">
+
+		<link rel="stylesheet" href="reveal.js/css/reveal.css">
+		<link rel="stylesheet" href="./reveal.js/css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet"
+              href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+		<link rel="stylesheet" href="index.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+        <script>
+          document.presentationtitle = "Learning to reach goals without goal rewards";
+          document.presentationauthor = "Vikas Dhiman";
+        </script>
+	</head>
+	<body>
+  <div style="display:none" >
+  \(
+% Vector
+\newcommand{\vect}[1]{\mathbf{#1}}
+\newcommand{\hvect}[1]{\bar{\vect{#1}}}
+% unit vector
+\newcommand{\uvect}[1]{\hat{\vect{#1}}}
+% Field
+\newcommand{\field}[1]{\mathbb{#1}}
+% Trace
+\def\act{a}
+\def\actt{\act_t}
+\newcommand\acttT{\vect{\act}_{t:\epiT}}
+\newcommand{\epiT}{T}
+\newcommand{\spawnP}{P_{\text{spawn}}}
+% Map
+\def\mapsym{x}
+\def\map{\vect{\mapsym}}
+\newcommand{\est}[1]{\hat{#1}}
+\newcommand{\mapest}{\est{\vect{x}}}
+% Measurement or observation
+\newcommand{\meas}{z}
+\newcommand{\measurements}{\vect{\meas}_{1:t}}
+\newcommand{\meast}[1][t]{\meas_{#1}}
+% Pose
+\newcommand{\pose}{g}
+\newcommand{\poset}[1][t]{\pose_{#1}}
+\newcommand{\posetn}{\pose_{t+1}}
+\newcommand{\posetp}{\pose_{t-1}}
+\newcommand{\poses}{\vect{\pose}_{1:t}}
+\newcommand{\posest}{\est{\pose}}
+\newcommand{\posestt}{\est{\pose}_t}
+% Pose goal 
+\newcommand{\posegoal}{d}
+
+% DRL
+\newcommand{\rlstate}{s}
+\newcommand{\rlstatet}{\rlstate_t}
+\newcommand{\rlstatetp}{\rlstate_{t-1}}
+\newcommand{\rlstatehist}{\rlstate_{1:t-1}}
+\newcommand{\rlstatetn}{\rlstate_{t+1}}
+\def\ObsProb{P_o}
+\def\TransP{P_{T}}
+
+\newcommand{\unaryminus}{-}
+\newcommand{\prevtime}{1:t\unaryminus1}
+\newcommand{\pastposes}{\vect{\pose}_{\prevtime}}
+\newcommand{\pastmeas}{\vect{\meas}_{\prevtime}}
+\newcommand{\pastobs}{\pastmeas, \pastposes}
+
+% 3D pose of the cars and ego motion
+\newcommand{\pos}[2]{\ObjMu^{#1}({#2})}
+\newcommand{\ori}[2]{\ObjR^{#1}(#2)}
+\newcommand{\state}[2]{\mathbf{s}^{#1}(#2)}
+
+\newcommand{\robp}{p}
+\newcommand{\robq}{q}
+\newcommand{\imgp}[1]{\hvect{#1}}
+\newcommand{\imgpp}{\imgp{\robp}}
+\newcommand{\imgpq}{\imgp{\robq}}
+\newcommand{\posD}[1]{\vect{#1}}
+\newcommand{\posDp}{\posD{\robp}}
+\newcommand{\ptD}{\posDp} % FIXME: conflicts with \map, this should be \posDp
+\newcommand{\impt}{\imgp{\ptD}}
+\newcommand{\BB}{\mathbf{B}}
+\newcommand{\imBB}{\imgp{\BB}}
+\newcommand{\bb}{\imBB}
+\newcommand{\camO}{\mathbf{p}^c}
+\newcommand{\camR}{\bm{\omega}^c}
+
+% 3D tracks on car $i$ in its own coordinate frame
+\newcommand{\tracklets}{\mathbf{X}^{i}_o}
+\newcommand{\tracklet}[1]{\ptD^{i}_{#1}}
+% track projections on camera
+\newcommand{\trackpit}[2]{\impt_{#1}(#2)}
+\newcommand{\trackp}[1]{\impt_j(#1)}
+\newcommand{\trackpj}[1]{\impt_j(#1)}
+% Unclassified track point projected on camera
+\newcommand{\ucTrackp}{\impt(t)}
+\newcommand{\Energy}[1]{\mathcal{E}^{it}_{\text{#1}}}
+\newcommand{\pEnergy}[1]{\mathcal{E}^{ijt}_{\text{#1}}}
+% Weighted energy
+\newcommand{\WEnergy}[1]{\lambda_{\text{#1}}\Energy{#1}}
+\newcommand{\WpEnergy}[1]{\lambda_{\text{#1}}\pEnergy{#1}}
+\newcommand{\EnergyCol}{\mathcal{E}^{ijt}_{\text{col}}}
+\newcommand{\WEnergyCol}{\lambda_{\text{col}}\EnergyCol}
+
+\newcommand{\EnergyBBoxNoOcc}{\Energy{detectNoOcc}}
+\newcommand{\EnergyBBox}{\Energy{detect}}
+\newcommand{\EnergyTrack}{ \pEnergy{track}}
+\newcommand{\EnergyTrackNoOcc}{\pEnergy{trackNoOcc}}
+\newcommand{\EnergyLane}{\Energy{lane}}
+\newcommand{\EnergySize}{\Energy{size}}
+\newcommand{\EnergyDyn}{\Energy{dyn}}
+\newcommand{\EnergyDynHol}{\Energy{dyn-hol}}
+\newcommand{\EnergyDynOri}{\Energy{dyn-ori}}
+\newcommand{\EnergyDynVel}{\Energy{dyn-vel}}
+
+
+
+\def\E{\mathbb{E}}%
+\newcommand{\bpmsg}[4]{\mu^{#4}_{#1\rightarrow#2}(#3)}
+\newcommand{\msg}[3]{\mu_{#1#2}(#3)}
+\newcommand{\discount}{\gamma}
+
+\newcommand{\Loo}{Latency-1:\textgreater1}
+
+\newcommand{\Loss}{\mathcal{L}}
+\newcommand{\LossText}[1]{\Loss_{\text{#1}}}
+\newcommand{\LossDDPG}{\LossText{ddpg}}
+\newcommand{\LossStep}{\LossText{step}}
+\newcommand{\LossLo}{\LossText{lo}}
+\newcommand{\LossUp}{\LossText{up}}
+\newcommand{\LossTrieq}{\LossText{trieq}}
+
+\newcommand{\tgt}{\text{tgt}}
+\newcommand{\Qstar}{\Q_{*}}
+\newcommand{\Qtgt}{\Q_{\text{tgt}}}
+\newcommand{\ytgt}{y_t}
+\newcommand{\Q}{Q}
+\newcommand{\state}{s}
+\newcommand{\Rew}{R}
+\newcommand{\Action}{\mathcal{A}}
+\newcommand{\fwcost}{Q}
+\newcommand{\fw}{\fwcost}
+\newcommand{\policy}{\pi}
+\newcommand{\fwargs}[5]{\fw_{#4}^{#5}\left({#1}, {#2}, {#3}\right)}
+\newcommand{\goal}{g}
+\newcommand{\param}{\theta}
+\newcommand{\problemobjective}{\begin{align}
+    \vect{\act}_{1:\epiT} &= \arg \max_{\vect{\act}_{1:\epiT}} \E \left[\left.
+    \discount^{k}\mathbb{1}_{\|\posegoal - \pose_k\|_2 \le \epsilon}
+    \right|
+    \vect{\meas}_{1:\epiT} \right]
+    \end{align}}
+  \)
+  </div>
+        <div class="reveal">
+			<div class="slides">
+<!-- Start of slides -->
+<section id="title-slide" class="center">
+    <div style="width:50%;margin:auto">
+    <h2 class="presentationtitle" ></h2>
+    </div>
+  <h3 class="presentationauthor" ></h3>
+  <p>Shurjo Banerjee</p>
+  <p>Jeff Siskind</p>
+  <p>Jason Corso</p>
+</section>
+
+<section class="center">
+  <h2>Problem</h2>
+  <iframe class="slide-play" width="740" height="415" src="https://www.youtube.com/embed/8Np3eC_PTFo?rel=0&amp;controls=0&amp;showinfo=0&end=42" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  <cite data-key="Plappert et al. (2018)"></cite>
+</section>
+
+<section class="center">
+  <h2>Hindsight Experience Replay</h2>
+  <iframe class="slide-play" width="740" height="415" src="https://www.youtube.com/embed/8Np3eC_PTFo?rel=0&amp;controls=0&amp;showinfo=0&start=58&end=93" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</section>
+
+<style>
+ .table_2x2 .row {
+     width:100%;
+     height:275px;
+ }
+ .table_2x2 .column {
+     display:inline-block;
+     width:45%;
+     height:100%
+ }
+
+ .table_2x2 .column img {
+     height:80%;
+     top:0;
+     margin-bottom:0;
+ }
+</style>
+<section>
+  <h2>Formulation</h2>
+  <div class="table_2x2">
+    <div class="row">
+      <h3>Goal based rewards</h3>
+      <div class="fragment">
+      \begin{align}
+      \fwargs\state\act\goal\policy{} = \E_\policy\left[ \sum_{k=t}^T
+      \discount^{k-t} \Rew(\state_k, \act_k, \goal)
+      \middle| \state_t = \state, \act_t = \act \right] .
+      \end{align}
+      </div>
+      <div class="fragment">
+      \begin{align}
+      \Q_{*}(\state_t, \act_t, \goal)
+      &=
+      \begin{cases}
+      \Rew(\state_t, \act_t, \goal) + \discount \max_{\act \in \Action}
+      \Q_{*}(\state_{t+1}, \act, \goal)
+      & \text{ if } t < T
+      \\
+      \Rew(\state_T, \act_T, \goal) & \text{ if } t = T
+      \end{cases}.
+      \end{align}
+      </div>
+    </div>
+    <div class="row">
+      <h3 class="fragment">Path based rewards</h3>
+      <div class="fragment">
+        \begin{align}
+        \fwargs\state\act{\goal^*}\policy{P} &=
+        \begin{cases}
+        \E_{\policy}\left[ \sum_{k=t}^{l-1} \discount^{k-t} \Rew^P(\state_k, \act_k)
+        \middle| \state, \act, \goal_l = \goal^* \right]
+        & \text{ if } \exists \,l \text{ such that } \goal_l = \goal^*
+        \\
+        -\infty & \text{otherwise},
+        \end{cases}
+        \end{align}
+      </div>
+      <div class="fragment">
+      \begin{align}
+      \fwargs{\state_t}{\act_t}{\goal^*}*P &=
+      \begin{cases}
+      \Rew^P(\state_t, \act_t) + \discount \max_{\act \in \Action}
+      \fwargs{\state_{t+1}}\act{\goal^*}*P
+      &\text{ if } t < l-1, \goal_l = \goal^*
+      \\
+      \Rew^P(\state_{l-1}, \act_{l-1})
+      & \text{ if } t = l-1, \goal_l = \goal^*
+      \end{cases}
+      \end{align}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="center">
+  <h2 >Path based rewards</h2>
+  \begin{align}
+  \fwargs{\state_t}{\act_t}{\goal^*}*P &=
+  \begin{cases}
+  \Rew^P(\state_t, \act_t) + \discount \max_{\act \in \Action}
+  \fwargs{\state_{t+1}}\act{\goal^*}*P
+  &\text{ if } t < l-1, \goal_l = \goal^*
+  \\
+  \Rew^P(\state_{l-1}, \act_{l-1})
+  & \text{ if } t = l-1, \goal_l = \goal^*
+  \end{cases}
+  \end{align}
+  <h2>Step loss</h2>
+  \begin{align}
+  \LossStep(\param_\fw) &= (\fwargs{\state_{l-1}}{\act_{l-1}}{\goal_{l};\param_\fw}{*}{P} - \Rew(\state_{l-1}, \act_{l-1}))^2.
+  \end{align}
+</section>
+
+<section class="center">
+  <h2>Results</h2>
+  <img src="./media/results.png"/>
+</section>
+
+<section class="center">
+  <h2>Is Step Loss necessary</h2>
+  <img src="media/steploss.png"/>
+</section>
+
+<section class="center">
+  <h2>Are Goal Rewards necessary</h2>
+  <img src="media/goalrewards.png"/>
+</section>
+
+<section class="center">
+  <h2>Effect of distance threshold</h2>
+  <img src="media/distancethresh.png"/>
+</section>
+
+<section class="center">
+  <h2>Dynamic Goals (Kaelbling; 2018)</h2>
+
+  <div class="table_2x2">
+    <div class="fragment">
+      \begin{align}
+            \fwargs{\state_{t}}{\act_t}{\goal_{w}}{*}{}
+            + \fwargs{\state_{w}}{\policy_*(\state_{w}, \goal_{t+f};\param_\policy)}{\goal_{t+f}}{*}{}
+            \ge \fwargs{\state_{t}}{\act_t}{\goal_{t+f}}{*}{}.
+      \end{align}
+    </div>
+    <div class="fragment">
+      \begin{align}
+      \LossLo &= \text{ReLU}[
+      \fwargs{\state_{t}}{\act_t}{\goal_{w}}{\tgt}{}
+      + \fwargs{\state_{w}}{\policy_t(\state_{w}, \goal_{t+f};\param_\policy)}{\goal_{t+f}}{\tgt}{}
+      - \fwargs{\state_{t}}{\act_t}{\goal_{t+f}}{m}{}
+      ]^2
+      \end{align}
+    </div>
+    <div class="fragment">
+      \begin{align}
+      \LossUp &= \text{ReLU}[
+      \fwargs{\state_{t}}{\act_t}{\goal_{w}}{m}{}
+      + \fwargs{\state_{w}}{\policy_t(\state_{w}, \goal_{t+f};\param_\policy)}{\goal_{t+f}}{\tgt}{}
+      - \fwargs{\state_{t}}{\act_t}{\goal_{t+f}}{\tgt}{}
+      ]^2.
+      \end{align}
+    </div>
+  </div>
+</section>
+
+<section class="center">
+  <ul style="display:none">
+    <li id="Plappert et al. (2018)">
+      Multi-Goal Reinforcement Learning: Challenging Robotics Environments and
+      Request for Research. Matthias Plappert and Marcin Andrychowicz and Alex
+      Ray and Bob McGrew and Bowen Baker and Glenn Powell and Jonas Schneider
+      and Josh Tobin and Maciek Chociej and Peter Welinder and Vikash Kumar and
+      Wojciech Zaremba. ArXiV 2018. 1802.09464
+    </li>
+      <li id="<b>Dh</b>RyCo IROS 2013">
+Mutual localization: Two camera relative 6-dof pose estimation from reciprocal fiducial observation. V Dhiman, J Ryde, JJ Corso. IROS 2013
+      </li>
+      <li id="Ku<b>Dh</b>Co AAAI 2014">
+          Learning Compositional Sparse Models of Bimodal Percepts. S Kumar, V Dhiman, JJ Corso AAAI, 2014
+      </li>
+      <li id="Ry<b>Dh</b>Pl IROS 2013">
+          Voxel planes: Rapid visualization and meshification of point cloud ensembles.
+           J Ryde, V Dhiman, R Platt IROS, 2013
+      </li>
+      <li id="<b>Dh</b>KuDaCo ICRA 2014">
+          Modern MAP inference methods for accurate and fast occupancy grid mapping on higher order factor graphs. V Dhiman, A Kundu, F Dellaert, JJ Corso ICRA 2014
+      </li>
+      <li id="Ch<b>Dh</b> US Patent 2017">
+          Continuous occlusion models for road scene understanding M Chandraker, V Dhiman. US Patent 9,821,813, 2017
+      </li>
+      <li id="<b>Dh</b>TrChCo CVPR 2016">
+          A continuous occlusion model for road scene understanding V Dhiman, QH Tran, JJ Corso, M Chandraker. CVPR 2016
+      </li>
+      <li id="<b>Dh</b>BaGrSiCo NIPS Wkshp 2017">
+          A Critical Investigation of DRL for Navigation V Dhiman, S Banerjee, B Griffin, JM Siskind, JJ Corso NIPS DRL Workshop, 2017.
+      </li>
+      <li id="Ku<b>Dh</b>KoCo PAMI 2017">
+          Learning Compositional Sparse Bimodal Models S Kumar, V Dhiman, PA Koch, JJ Corso. PAMI, 2017.
+      </li>
+      <li id="Mirowski ICLR 2017">
+          (Mirowski et al. 2017) Learning to navigate in complex environments. In ICLR 2017. 
+      </li>
+  </ul>
+  <h2>Bibliography</h2>
+  <ul id="bibliography" style="font-size:80%;text-align:left;padding-left:5%">
+  </ul>
+</section>
+
+<!-- Backup slides -->
+
+<!-- Extra slides -->
+<!-- End of slides -->
+
+<!-- Start of Footer -->
+<div  style="position:absolute; left:0; bottom:10px; width:100%">
+  <div id="footer" ><!-- place holder for footer -->
+  </div>
+  <div style="display:flex; justify-content: space-between; width:100%">
+  <img src="media/umich.png" style="padding-left:10px;height:20px;vertical-align:middle" />
+  <div style="font-size: 12px; opacity:0.8; margin: auto;"><span class="presentationtitle"></span>  - <span class="presentationauthor" ></span>  </div>
+  <div style="font-size: 12px; opacity:0.8"> &nbsp; </div>
+  </div>
+</div>
+<div style="clear: both;"></div>
+<!-- End of Footer -->
+            </div> <!-- class="slides" -->
+		</div> <!-- class="reveal"-->
+
+		<script src="reveal.js/lib/js/head.min.js"></script>
+		<script src="reveal.js/js/reveal.js"></script>
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          "TeX" : { extensions: ["AMSmath.js", "color.js"] },
+          "HTML-CSS" : {scale : 80 }
+          });
+        </script>
+        <script src="index.js" > </script>
+    </body>
+</html>

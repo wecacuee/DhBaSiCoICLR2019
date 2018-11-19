@@ -1,0 +1,35 @@
+%\begin{figure}
+%\begin{wrapfigure}[16]{r}{0.5\columnwidth}
+\begin{minipage}[t]{0.45\linewidth}
+\newcommand{\xcol}{epoch}
+%\newcommand{\ycol}{test/ag_g_dist}
+\newcommand{\ycol}{test/success_rate}
+\begin{tikzpicture}
+  \def\resultsdir{media/res}
+  \begin{axis}[ymin=0,xmin=0,
+  xlabel=Epochs,
+  width=1.0\columnwidth,
+  height=0.70\columnwidth,
+  ylabel=Success Rate (test),
+  every axis plot/.append style={line width=1.0pt},
+  legend style={fill=none,font=\sffamily\fontsize{3.5}{4}\selectfont},
+  legend pos=south east]
+\addplot table [x=\xcol, y=\ycol, col sep=comma] {\resultsdir/be0910c-her_fwrl_path_reward-FetchPush-v1-dqst/progress.csv};
+\addlegendentry{HER $+\LossStep$};
+\addplot table [x=\xcol, y=\ycol, col sep=comma] {\resultsdir/be0910c-her_fwrl_path_reward-FetchPushPR-v1-dqst/progress.csv};
+\addlegendentry{HER - Goal reward $+\LossStep$};
+\addplot table [x=\xcol, y=\ycol, col sep=comma] {\resultsdir/be0910c-her_fwrl_path_reward-FetchPushPR-v1-ddpg/progress.csv};
+\addlegendentry{HER - Goal rewards};
+\addplot table [x=\xcol, y=\ycol, col sep=comma] {\resultsdir/be0910c-her_fwrl_path_reward-FetchPush-v1-ddpg/progress.csv};
+\addlegendentry{HER};
+\end{axis}
+\end{tikzpicture}
+\caption{Even when the Goal rewards are removed from
+  HER~\cite{andrychowicz2016learning} training, the HER
+  is able to learn only if the $\LossStep$ is added again.
+  (HER-Goal Rewards+$\LossStep$) is our proposed method.
+}
+\label{fig:path-rewards}
+%\end{figure}%
+%\end{wrapfigure}%
+\end{minipage}

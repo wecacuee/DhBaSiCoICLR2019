@@ -1,63 +1,39 @@
-Thanks for the detailed review.
+> The main contribution of the paper appears to be ...  equal to the reward at that timestep.
 
-It is not clear what is the source of confusion of this reviewer. 
-This reviewer thinks
-1. One-step loss forces Q function to correctly incorporate the termination
-   condition when goals are achieved
-2. The one-step loss is fundamentally same as "sparse reward" in HER, which the
-   reviewer defines as an indicator function whether the transition achieves the
-   resampled goal.
-3. How is our formulation a task dependent detail?
-4. Avoiding recomputation is not important because it is cheap.
+The one-step loss is, in fact, incorporated for every transition between states, not just the termination condition when the goal is achieved. An alternative perspective of one-step loss is one-step-episode Q-Learning. In other words, the one-step loss function is equivalent to treating every state transition as a full episode and the terminating condition. In the paper we have updated the "one-step loss" section to include this perspective. 
 
-> The main contribution of the paper appears to be the addition of what the authors refer to as a "step loss", which in this case enforces the Q function to correctly incorporate the termination condition when goals are achieved. I.E. the discounted sum of future rewards for states that achieve termination should be exactly equal to the reward at that timestep.
+> It's not clear to me how this is fundamentally different than HER ... the transition achieves the resampled goal.
 
-You got it right, except the one-step loss is incorporated for every transition not just the final transition when goal is achieved.
+All our comparisons are already with "sparse reward" R(s,a,g) = (0 if s == g else -1) implementation of HER. As far as we can understand, in your proposed formulation the reward should be R(s,a,g) = (1 if s == g else 0) which is shifted by a constant factor. The sparse reward formulation still possesses the unnecessary dependence on the goal whose redundancy and removal is the emphasis of our work.
 
-> It's not clear to me how this is fundamentally different than HER. One possible "sparse reward" implementation of HER involves no reward function recomputation at all, instead simply replacing the scalar reward and termination flag for resampled transitions with the indicator function for whether the transition achieves the resampled goal.
+> Is this not essentially identical to the proposal in this paper? ... deserves an entire paper.
 
-All our comparisons are with "sparse reward" implementation of HER. We do not
-compare against dense reward implementation of HER. What I understand from your
-formulation is that reward should be R(s,a,g) = R(s,a) + R(s,g), where 
-R(s,g) = (1 if s == g else 0). Whenever the goal location changes, R(s,g) will always be
-easy to compute no matter how expensive R(s,a) is.
+No, this is not identical to the paper. At no point in our algorithm do we check the condition s == g. The proposed one-step loss that learns one-step reward Q(s_t, a_t, g=s_{t+1}) = r_t as we apply one-step loss to every transition. One-step loss is therefore task independent. As mentioned previously, this can also be thought of as one-step hindsight experience replay where the achieved goal at every step is treated as the desired goal.
 
-> Is this not essentially identical to the proposal in this paper? I would consider this a task-dependent implementation detail for an application of HER rather than a research contribution that deserves an entire paper.
+> The authors claim the main advantage here is avoiding recomputation of the reward function for resampled goals ... worth avoiding?
 
-No, this is not identical to the paper. At no point in our algorithm we check
-the condition s == g. The proposed one-step loss that learns one-step reward 
-Q(s_t, a_t, g=s_{t+1}) = r_t is independent of whether the goal has been reached
-or not, because we apply the one-step loss to every transition.
-This principle is not tasks-dependent but task independent.
-This can also be thought of as one-step hindsight experience replay where the
-achieved goal is treated as the desired goal.
+In machine learning, the sample complexity is always distinguished from computation complexity. The only case where the two are comparable is when the samples are generated from simulations which is, admittedly, true for our experiments. However, our proposed improvement is general enough to be applicable to non-simulation experiments.
 
-> The authors claim the main advantage here is avoiding recomputation of the reward function for resampled goals.
-> I do not find this particularly compelling, given that all of the evaluations are done in low-dimensional state space: reward recomputation here is just a low-dimensional euclidean distance computation followed by a simple threshold.
-> In a world where we're doing millions of forward and backward passes of large matrix multiplications, is this a savings that really requires investigation?
-> It is somewhat telling that the results are compared primarily in terms of "# of reward function evaluations" rather than wall time. If the savings were significant, I expect a wall time comparison would be more compelling.
-> Maybe the authors can come up with a situation in which reward recomputation is truly expensive and worth avoiding?
+It is a consequence of this task-dependent reward formulation that it can be re-sampled cheaply, hence, the computational cost is improvement is marginal. But we eliminate a redundancy common to the HER algorithm and its derivatives. With the massive popularity of HER (107 citations and counting), we believe that this is a worthwhile contribution to bring to the attention of the RL community. 
 
-In machine learning, the sample complexity is evaluated separately from
-computation complexity. Only when the samples are generated from simulation can
-the sample complexity be compared with computational complexity. It is a
-consequence of simulation reward function can be re-sampled (or recomputed). 
-It is a consequence of this particular reward formulation that it can be
-computed cheaply.
-Suppose the algorithm is being applied to a real robot instead. The robot gets
-negative reward on hitting an obstacle like the table. The reward
-re-sampling in this case is equivalent of repeating the experiment.
+Consider the example of an agent navigating a maze where the goal is specified in the form of an image. The semantic comparison of the observed image with the goal image is an expensive operation that will require separate training for goal-dependent reward formulation [1]. However, in our proposed formulation, the comparison operation (s == g) in the reward formulation is not needed thereby eliminating the need of another learning module. 
 
 
 > All of the experiments in this paper use a somewhat unusual task setup where every timestep has a reward of -1. 
-Not all the experiments. Only the experiments "without goal rewards" labeled
-("Ours"). The reward structure for HER is R=(0 if s==g else -1). 
+
+This unusual reward formulation is possible because of our contribution (one-step loss). Hence, it is only true for the experiments that are referred to with "Ours" label. All the baselines (HER and FWRL) and "Ours (goal rewards)" operate on the reward structure for HER which is R=(0 if s==g else -1).
+
 > Have the authors considered other reward structures, such as the indicator function R=(1 if s==g else 0) or a distance-based dense reward?
-We have one experiment where we run experiment with the reward structure R=(0 if s==g else -1).
-
-
 > Would this proposal work in these cases? If not, how significant is a small change to HER if it can only work for one specific reward function?
-It works with multiple kind of reward functions.
 
+We have considered and we are advocating against such reward structures because of their goal dependence. In fact in one experiment we run our algorithm with the reward structure R=(0 if s==g else -1) which is equivalent to yours with a constant shift. These results can be found in Fig. 4(b), labeled as "Ours (goal rewards)". 
 
-What doesn't this reviewer get?
+Distance-based dense reward is by definition goal dependent. Our contribution is to eliminate this dependence. RL on dense rewards is easier than sparse rewards. Hence, we do not believe that distance-based reward adds much to our contribution. We do note that our method does work with goal based sparse rewards(Fig. 4b) and hence we would expect to continue to work with dense rewards. 
+
+> The reconsideration of Floyd-Warshall RL ... recommend this for publication.
+
+We analyze FWRL and added the ablation study of loss function in Appendix Figure 6.
+It is clear that FWRL inspired loss function do not contribute to better
+learning. Instead, they hurt the performance. We think this is because Bellman inspired loss already captures the information that FWRL inspired constraints intend to capture.
+
+[1] Nikolay Savinov, Alexey Dosovitskiy, Vladlen Koltun. "Semi-Parametric Topological Memory for Navigation". In ICLR 2018
