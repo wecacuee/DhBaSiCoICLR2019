@@ -1,5 +1,15 @@
 Thanks for the detailed review.
 
+It is not clear what is the source of confusion of this reviewer. 
+This reviewer thinks
+1. One-step loss forces Q function to correctly incorporate the termination
+   condition when goals are achieved
+2. The one-step loss is fundamentally same as "sparse reward" in HER, which the
+   reviewer defines as an indicator function whether the transition achieves the
+   resampled goal.
+3. How is our formulation a task dependent detail?
+4. Avoiding recomputation is not important because it is cheap.
+
 > The main contribution of the paper appears to be the addition of what the authors refer to as a "step loss", which in this case enforces the Q function to correctly incorporate the termination condition when goals are achieved. I.E. the discounted sum of future rewards for states that achieve termination should be exactly equal to the reward at that timestep.
 
 You got it right, except the one-step loss is incorporated for every transition not just the final transition when goal is achieved.
@@ -49,3 +59,5 @@ We have one experiment where we run experiment with the reward structure R=(0 if
 > Would this proposal work in these cases? If not, how significant is a small change to HER if it can only work for one specific reward function?
 It works with multiple kind of reward functions.
 
+
+What doesn't this reviewer get?
