@@ -1,6 +1,6 @@
 \begin{figure}
 \begin{tikzpicture}
-  \def\resultsdir{media/res}
+  \def\resultsdir{DhBaSiCoICLR2019/media/res}
   \begin{axis}
 \addplot table [x=epoch, y=test/success_rate, col sep=comma] {\resultsdir/38f4625-FetchSlide-v1-qlst-future/progress.csv};
 \addlegendentry{$\LossDDPG + \LossStep + \LossLo + \LossUp$};
